@@ -1,0 +1,34 @@
+impl Solution {
+    pub fn backspace_compare(s: String, t: String) -> bool {
+        //Set up 2 string builders
+        let mut s_built: String = String::from("");
+        let mut t_built: String = String::from("");
+
+        //Build s_built according to the backspace rule
+        for letter in s.chars() {
+            //If letter is a backspace
+            if letter == '#' {
+                //Pop the last letter off s_built
+                s_built.pop();
+            }else{
+                //Push it into s_built
+                s_built.push(letter);
+            }
+        }
+
+        //Build t_built according to the backspace rule
+        for letter in t.chars() {
+            //If letter is a backspace
+            if letter == '#' {
+                //Pop the last letter off t_built
+                t_built.pop();
+            }else{
+                //Push it into t_built
+                t_built.push(letter);
+            }
+        }
+
+        //Return whether s and t are the same after backspaces are applied
+        return s_built == t_built;
+    }
+}

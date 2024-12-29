@@ -1,0 +1,35 @@
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        //Initialize a carry flag
+        //We will be treating this as an addition problem
+        //where we are adding zero, but carrying into the 1s place
+        bool carry = true;
+        
+        //Iterate through the digits 
+        //from least significant to most significant
+        //adding the carry
+        for(int i = digits.size()-1; i >= 0; i--){
+            //If the carry is 0
+            //then calculate the digit's new value
+            //and set the carry flag accordingly
+            //else there was nothing to carry and there never will be again
+            //so break
+            if(carry){
+                carry = digits[i] == 9;
+                digits[i] = (carry)?0:digits[i]+1;
+            }else{
+                break;
+            }
+        }    
+        
+        //If we carried over the end of the number [9,9,...,9,9]
+        //then insert a 1 at the front
+        if(carry){
+            digits.insert(digits.begin(),1);
+        }
+        
+        //Return the modified digits
+        return digits;
+    }
+};

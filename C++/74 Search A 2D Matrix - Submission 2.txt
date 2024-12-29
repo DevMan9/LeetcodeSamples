@@ -1,0 +1,38 @@
+class Solution {
+public:
+    bool searchMatrix(std::vector<std::vector<int>>& matrix, int target) {
+        //Store the height and width for easy access
+        int height = (int)matrix.size();
+        int width = (int)matrix[0].size();
+
+        //Initialize a row variab;e to the last row in the matrix
+        //We are iterating in the reverse direction because it is easier to tell
+        //when we have reached the row that may contain the target
+        int row = height-1;
+        
+        //Iterate through the rows until we find the first row with an 
+        //element smaller than target
+        while(row>0){
+            if(matrix[row][0]<=target){
+                break;
+            }
+            row--;
+        }
+        
+        //Initialize a column variable
+        int column = 0;
+        
+        //Iterate through the column to check for target
+        while(column < width){
+            //If target is found
+            //then return truel
+            if(matrix[row][column]==target){
+                return true;
+            }
+            column++;
+        }
+        
+        //Target was not found
+        return false;
+    }
+};

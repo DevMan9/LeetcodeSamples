@@ -1,0 +1,12 @@
+/**
+ * @param {character[]} s
+ * @return {void} Do not return anything, modify s in-place instead.
+ */
+var reverseString = function(s) {
+    let end = s.length-1;
+    for(let index = 0; index < s.length/2; index++){
+        let tmp = s[index];
+        s[index] = s[end-index];
+        s[end-index] = tmp;
+    }
+};

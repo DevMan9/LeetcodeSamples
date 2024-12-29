@@ -1,0 +1,45 @@
+public class Solution {
+    public int ProjectionArea(int[][] grid) {
+        //Store the dimension of the grid for ease of access
+        int dim = grid.Length;
+
+        //Create 2 arrays to store the maxes of each row and column
+        int[] row_max = new int[dim];
+        int[] col_max = new int[dim];
+
+        //Initialize a variable to store the total area
+        int area = 0;
+        
+        //Iterate the entire grid
+        for(int row = 0; row < dim; row++){
+            for(int col = 0; col < dim; col++){
+                //Store the current grid value for ease of access
+                int cell = grid[row][col];
+
+                //If the cell has a value
+                if (cell != 0){
+                    //Then increment the area
+                    area+=1;
+
+                    //If this cell is greater than the current row_max
+                    if(cell > row_max[row]){
+                        //Then overwrite the current row_max
+                        row_max[row] = cell;
+                    }
+                    //Same for col_max
+                    if(cell > col_max[col]){
+                        col_max[col] = cell;
+                    }
+                }
+            }
+        }
+        
+        //Add the maxes of the rows and columns
+        for(int index = 0; index < dim; index++){
+            area+=row_max[index] + col_max[index];
+        }
+
+        //Return the total projected area
+        return area;
+    }
+}

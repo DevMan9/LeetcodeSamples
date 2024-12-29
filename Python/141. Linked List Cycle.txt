@@ -1,0 +1,32 @@
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def hasCycle(self, head):
+        """
+        :type head: ListNode
+        :rtype: bool
+        """
+
+        #Create a set to track which node we encounter during traversal.
+        nodes = set()
+
+        #Traverse the list
+        while head != None:
+            #If we encountered this node before,
+            if head in nodes:
+                #Then return true
+                return True
+            
+            #Add this node to the set of nodes we already encountered
+            nodes.add(head)
+
+            #Move to the next node
+            head = head.next
+
+        #We never encountered the same node twice
+        #So there is no loop
+        return False

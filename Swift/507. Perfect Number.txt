@@ -1,0 +1,72 @@
+class Solution {
+    func checkPerfectNumber(_ num: Int) -> Bool {
+        //Apparently all known perfect numbers follow:
+        //(2^(p-1))*((2^p)-1) when p is mersenne prime
+        //And all numbers up to 10^8 have been checked
+        //So we're going to use that fact
+
+        //First, we're going to find a p
+        //such that (2^(p-1))*((2^p)-1) >= num
+        //Initialize a variable to store p
+        var p = 2
+
+        //Initialize a varaible to store the test
+        //We will need access to test a couple times
+        //so instead of recalculating test each time
+        //we will just store it
+        //(we get 1 when p is 1)
+        var test = 6
+
+        //find a p such that (2^(p-1))*((2^p)-1) >= num
+        //using repeat to ensure 
+        while test < num {
+            p += 1
+            //(2^(p-1))*((2^p)-1) but using bit shifts
+            test = (1 << (p - 1)) * ((1 << p) - 1)
+        }
+
+        //If num is not equal to test
+        //Then it does not take the form:
+        //(2^(p-1))*((2^p)-1)
+        if test != num {
+            return false
+        }
+
+        //If p is divisible by 2
+        //Then p is not prime
+        //Unless it is 2 :P
+        if p & 1 == 0 && p != 2{
+            return false
+        }
+
+        //Calculate the square root of p
+        let sqr: Int = Int(sqrt(Double(p)))
+        
+        //Test p for primality
+        //by filtering out 2 separatly, we can skip half the potential divisors
+        for divisor in stride(from: 3, through: sqr, by: 2) {
+            if p % divisor == 0 {
+                //p was not prime
+                return false
+            }
+        }
+
+        //Calculate the mersenne number p
+        let m = (1<<p) - 1
+
+        //Calculate the square root of m
+        let sqr2: Int = Int(sqrt(Double(m)))        
+
+        //Test m for primality
+        //because m is 2^p-1, it can't be divisible by 2 so we can skip that
+        for divisor in stride(from: 3, through: sqr2, by: 2) {
+            if m % divisor == 0 {
+                //m was not prime
+                return false
+            }
+        }
+
+        //num is a perfect number
+        return true
+    }
+}

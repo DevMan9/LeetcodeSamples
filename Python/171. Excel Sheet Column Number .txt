@@ -1,0 +1,40 @@
+class Solution(object):
+    def titleToNumber(self, columnTitle):
+        """
+        :type columnTitle: str
+        :rtype: int
+        """
+
+        #Initialize an index variable
+        index = 0
+
+        #Store the length of the columnTitle for ease of access
+        columnTitleLength = len(columnTitle)
+
+        #The old base characters stored in a string.
+        oldBase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+        #The old base to convert from
+        oldBaseLength = len(oldBase)
+
+        #Initialize a dictionary to store the value of each character in the oldBase
+        oldBaseDict = dict()
+
+        #Store the value of each character in the dictionary
+        while index < oldBaseLength:
+            oldBaseDict[oldBase[index]] = index + 1
+            index+=1
+
+        #Initialize the return variable
+        ret = 0
+
+        #Reset the index
+        index = 0
+
+        #Iterate over the columnTitle, converting it to base 10
+        while index < columnTitleLength:
+            ret = ret * 26 + oldBaseDict[columnTitle[index]]
+            index += 1
+
+        #Return the columnTitle in base 10
+        return ret

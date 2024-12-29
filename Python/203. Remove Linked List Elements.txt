@@ -1,0 +1,37 @@
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def removeElements(self, head, val):
+        """
+        :type head: ListNode
+        :type val: int
+        :rtype: ListNode
+        """
+
+        #Initialize a node preceding the list
+        #This makes handling edge cases 
+        #where we are removing the first element in the list easier
+        true_head = ListNode(-1,head)
+
+        #Initialize a variable to store the previous node while we iterate
+        prev = true_head
+
+        #Iterate the list until we reach the end
+        while head is not None:
+            #If the current value needs to be removed
+            if head.val == val:
+                #Then set the previous node to point to the node after this one
+                prev.next = head.next
+            else:
+                #Only move the previous node forward
+                #if we didn't remove the current node
+                prev = prev.next
+            
+            #Move to the next node in the list
+            head = head.next
+
+        #Return the list
+        return true_head.next

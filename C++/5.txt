@@ -1,0 +1,29 @@
+class Solution {
+public:
+    std::string biggestPalindrome(std::string s, int index, bool mode){
+        int ret = 0;
+        int add = 0;
+        if(mode){
+            add = 1;
+        }
+        int j = 0;
+        while(index-j>=0&&index+j+add<s.length()&&s[index+j+add]==s[index-j]){
+            j++;
+        }
+        ret = 2*j-(1-add);
+        return s.substr(index-ret/2+add,ret);
+    }
+    
+    string longestPalindrome(string s) {
+        std::string ret = "";
+        for(int i = 0;i<s.length();i++){
+            for(int j = 0;j<2;j++){
+                std::string p = biggestPalindrome(s, i, j==1);
+                if(p.length()>ret.length()){
+                    ret = p;
+                }
+            }
+        }
+        return ret;
+    }
+};

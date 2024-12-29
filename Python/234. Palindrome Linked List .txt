@@ -1,0 +1,74 @@
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def isPalindrome(self, head):
+        """
+        :type head: ListNode
+        :rtype: bool
+        """
+
+        #We will find the middle of the list by moving through it with 2 pointers
+        #one will move twice the speed of the other
+        slow = head
+        fast = head
+
+        #This flag will be used to move the slow pointer every other iteration
+        #Effectively moving it half the speed of the fast one
+        slow_flag = False
+
+        #Iterate through the list until we reach the last node
+        while fast.next is not None:
+            #Increment fast
+            fast = fast.next
+
+            #Only increment slow when the slow_flag is set
+            if slow_flag:
+                slow = slow.next
+
+            #Switch the slow_flag
+            slow_flag = not slow_flag
+        #End while
+
+        #If the slow_flag is set,
+        #then there are an even number of elements in the list
+        if slow_flag:
+            #Insert an element into the middle of the list to make things simpler
+            joint = ListNode(-1,slow.next)
+            slow.next = joint
+            slow = joint
+        else:
+            joint = slow
+
+        #We will be reversing the second half of the list 
+        #to effectivly make two lists which we can compare
+
+        #Prepare to reverse the second half
+        prev = joint
+        slow = slow.next
+
+        #Iterate the remainder of the list and reverse it
+        while slow is not None:
+            nxt = slow.next
+            slow.next = prev
+            prev = slow
+            slow = nxt
+
+        #Now we iterate from the front and back of the list simultaneously
+        #to check if the list is a palindrome
+        #Joint was previously set to be the exact middle of the original list
+        #So we can use that as an end point
+        #fast is already set to be the end of the list 
+        #so we will use that for reverse traversal
+        while head is not joint:
+            #If the current values at the
+            if head.val != fast.val:
+                return False
+            #Inrement the front and back
+            head = head.next
+            fast = fast.next
+
+        #All values were palindromic
+        return True

@@ -1,0 +1,95 @@
+std::vector<std::vector<int>> insert(std::vector<std::vector<int>>& intervals, std::vector<int>& newInterval) {
+        //If there are no intervals
+        //Just return the newInterval in a vector
+        if(intervals.size()==0){
+            return {newInterval};
+        }
+        
+        //Initialize 2 variables to track the insert locations of the
+        //begining and ending of the newInterval
+        int insert_begin = 2*intervals.size();
+        int insert_end = 2*intervals.size();
+
+        //Since the input intervals is guaranteed that none overlap
+        //and is sorted
+        //we can treat it as a 1D vector where 
+        //{start[0],end[0],start[1],end[1]...start[n],end[n]}
+        //Itereate through intervals to find where the 
+        //begining of newInterval should be inserted
+        for(int i = 0; i < intervals.size(); i++){
+            if(newInterval[0]<=intervals[i][0]){
+                insert_begin = i*2;
+                break;
+            }
+            if(newInterval[0]<=intervals[i][1]){
+                insert_begin = i*2+1;
+                break;
+            }
+        }
+
+        //Itereate through intervals to find where the 
+        //end of newInterval should be inserted
+        for(int i = 0; i < intervals.size(); i++){
+            if(newInterval[1]<intervals[i][0]){
+                insert_end = i*2;
+                break;
+            }
+            if(newInterval[1]<intervals[i][1]){
+                insert_end = i*2+1;
+                break;
+            }
+        }
+
+        //If insert_begin and insert_end are equal
+        //then either newInterval is 
+        //a subiterval of an interval already in intervals
+        //or a fully unique interval
+        if(insert_begin==insert_end){
+            //If insert_begin is even
+            //then is completely unique and should be inserted
+            //so insert newInterval into intervals at insert_begin/2
+            if(!(insert_begin%2)){
+                intervals.insert(intervals.begin()+insert_begin/2, newInterval);
+            }
+            
+            //Return intervals
+            return intervals;
+        }
+
+        //Initialize a return vector
+        std::vector<std::vector<int>> ret;
+
+        //Push all intervals before newInterval
+        //that do not overlap newInterval into the return vector
+        for(int i = 0; i < insert_begin/2; i++){
+            ret.push_back(intervals[i]);
+        }
+
+        //If insert_begin is odd
+        //Then newInterval begins in intervals[insert_begin/2][0]
+        //We will be modifying newInterval to cover every interval it overlaps
+        //[1,3],[5,10]  ->  [1,3],[5,10]
+        // [2  ,  7]    ->  [1   ,   10]
+        if(insert_begin%2){
+            newInterval[0] = intervals[insert_begin/2][0];
+        }
+        
+        //If insert_begin is odd
+        //Then newInterval ends in intervals[insert_end/2][1]
+        if(insert_end%2){
+            newInterval[1] = intervals[insert_end/2][1];
+        }
+
+        //Push newInterval into the return vector
+        ret.push_back(newInterval);
+
+        //Push all intervals after newInterval
+        //that do not overlap newInterval into the return vector
+        for(int i = insert_end/2+insert_end%2; i < intervals.size(); i++){
+            ret.push_back(intervals[i]);
+        }
+
+        //Return the return vector
+        return ret;
+    }
+};

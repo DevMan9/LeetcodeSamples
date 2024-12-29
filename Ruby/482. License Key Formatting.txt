@@ -1,0 +1,18 @@
+# @param {String} s
+# @param {Integer} k
+# @return {String}
+def license_key_formatting(s, k)
+    #Convert s to a more workable format by 
+    #removing "-", 
+    #reversing it, 
+    #and putting it to uppercase
+    s = s.split("-").join().reverse.upcase
+
+    #Make an array and map k characters from s into each index 
+    #with the last index holding the remainder of letters
+    #Then join the strings with "-" and unreverse it
+    s = (0..((s.length-1) / k)).map{|i| s[i * k,k]}.join("-").reverse
+
+    #Return the formatted key
+    return s
+end

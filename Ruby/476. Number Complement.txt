@@ -1,0 +1,25 @@
+# @param {Integer} num
+# @return {Integer}
+def find_complement(num)
+    #Initialize the return variable
+    ret = 0
+
+    #Initialize a bit mask
+    #We will be building the complement bit by bit
+    bit = 1
+
+    #Repeat until num is 0
+    while num != 0
+        #Flip the current bit in num and store it in ret
+        ret |= (num ^ 0xffffffff) & bit
+
+        #Zero the current bit in num
+        num &= bit ^ 0xffffffff
+
+        #Move to the next bit
+        bit <<= 1
+    end
+
+    #Return the complement
+    return ret
+end

@@ -1,0 +1,18 @@
+(define/contract (sort-array-by-parity-ii nums)
+  (-> (listof exact-integer?) (listof exact-integer?))
+    ;Filter out the even numbers
+    (define evens (filter even? nums))
+
+    ;Filter out the odd numbers
+    (define odds (filter odd? nums))
+
+    ;Create a new list of pairs of even and odd numbers
+    ;This will produce: (from [0,2,4] and [1,3,5])
+    ;[[0,1]
+    ; [2,3]
+    ; [4,5]]
+    (define pairs (map cons evens odds))
+
+    ;When these pairs are flattened, they will produce the desired result
+    (flatten pairs)
+  )

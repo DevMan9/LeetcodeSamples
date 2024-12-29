@@ -1,0 +1,66 @@
+class Solution {
+public:
+    bool isValidSudoku(std::vector<std::vector<char>>& board) {
+        //initialize sets for each check
+        //we will be checking "in parallel"
+        std::unordered_set<char> h_set,b_set,v_set;
+        
+        //loop through each possible set
+        for(int i = 0;i<9;i++){
+            //reset the check sets
+            h_set.clear();
+            b_set.clear();
+            v_set.clear();
+            
+            //loop through each element in each possible set
+            for(int j = 0;j<9;j++){
+                //initialize some variables for getting
+                //the current char in each set
+                char h_char,b_char,v_char;
+            
+                //get the current character from the horizontal set
+                h_char = board[i][j];
+                
+                //get the the current character from the vertical set
+                v_char = board[j][i];
+                
+                //get the current character from the box set
+                b_char = board[(i/3)*3+j/3][3*(i%3)+j%3];
+            
+                //check if the current horizonal character is valid
+                //if it is, add it to the horizontal check set
+                //else return false;
+                if(h_char!='.'){
+                    if(h_set.count(h_char)){
+                        return false;
+                    }else{
+                        h_set.insert(h_char);
+                    }
+                }
+                
+                //check if the current vertical character is valid
+                //if it is, add it to the vertical check set
+                //else return false;
+                if(v_char!='.'){
+                    if(v_set.count(v_char)){
+                        return false;
+                    }else{
+                        v_set.insert(v_char);
+                    }
+                }
+                
+                //check if the current box character is valid
+                //if it is, add it to the box check set
+                //else return false;
+                if(b_char!='.'){
+                    if(b_set.count(b_char)){
+                        return false;
+                    }else{
+                        b_set.insert(b_char);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+};

@@ -1,0 +1,17 @@
+# @param {Integer[]} nums
+# @return {Integer[]}
+def find_disappeared_numbers(nums)
+    #Create an array of nums [1...nums.length]
+    #step1 = Array.new(nums.length){|index| index + 1}
+
+    #Convert the array into a set.
+    #This will give us access to the .subtract function
+    #step2 = step1.to_set
+
+    #Remove all elements in nums from the set
+    #step3 = step2.subtract(nums)
+
+    #Convert the set back to an array
+    #step4 = step3.to_a
+    return Array.new(nums.length){|index| index + 1}.to_set.subtract(nums).to_a
+end

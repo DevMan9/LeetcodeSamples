@@ -1,0 +1,73 @@
+class Solution {
+public:
+    //A function which converts capital characters to lowercase, and non-alphanumeric characters to -1 (technically '\377').
+    char rectify(char c){
+        //If the character is already lower-alphanumeric, then return it as is
+        if((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')){
+            return c;
+
+        //If the character is a capital letter, convert it to lowercase and
+        //return that
+        }else if(c >= 'A' && c <= 'Z'){
+            //A character is just a number so 
+            //we can calculate which capital letter it is by (c - 'A')
+            //then we can add that to the root of the lowercase alphabet by
+            //adding 'a' back on.
+            return c - 'A' + 'a';
+        }
+
+        //If the character is not alphanumeric
+        //return -1
+        return -1;
+    }
+
+    bool isPalindrome(std::string s) {
+        //Initialize 2 variables to store the first and last indicies of the string
+        long begin = 0;
+        long end = s.length()-1;
+        
+        //Iterate through the input string 
+        //comparing the first and last alphanumeric characters
+        //If the characters do not match, then the string is not a palindrome.
+        while(begin<end){
+            //Attempt to convert the first character to lower-alphanumeric 
+            char b = rectify(s[begin]);
+
+            //If the first character could not be converted (was not alphanumeric)
+            //Then skip this character and retry.
+            if(b==-1){
+                begin++;
+                continue;
+            }
+
+            //Attempt to convert the lest character to lower-alphanumeric
+            char e = rectify(s[end]);
+
+            //If the last character could not be converted (was not alphanumeric)
+            //Then skip this character and retry.
+            if(e==-1){
+                end--;
+                continue;
+            }
+
+            //If the first and last characters (when converted to lower-alphanumeric)
+            //are not equal,
+            //Then the input string is not a palindrome
+            if(b!=e){
+                return false;
+            }
+
+            //The current first and last characters matched
+
+            //Move to the next first character
+            begin++;
+
+            //Move to the previous last character
+            end--;
+        }
+        
+        //Every character matched
+        //So return true
+        return true;
+    }
+};

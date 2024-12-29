@@ -1,0 +1,71 @@
+class Solution {
+public:
+    bool isInterleave(std::string s1, std::string s2, std::string s3) {
+        //Store the lengths for ease of access
+        long s1_length = s1.length();
+        long s2_length = s2.length();
+        long s3_length = s3.length();
+        
+        //If the concatenation of s1 and s2 
+        //does not produce a string with the same length as s3
+        //then s3 cannot be an interleave of s1 and s2
+        if(s1_length + s2_length != s3_length){
+            return false;
+        }
+
+        //Initialize a table to store valid substring interleaves
+        //table[n,m] represenst whether 
+        //the first n+m characters of s3 is an interleave of 
+        //the first n characters of s1 and
+        //the first m characters of s2
+        //for example:
+        //s1 = "aabcc"
+        //s2 = "dbbca"
+        //s3 = "aadbbcbcac"
+        //table[2,3] = interleave("aa","dbb","aadbb")
+        std::vector<std::vector<bool>> table(s1_length+1,std::vector<bool>(s2_length+1,false));
+
+        //Inititalize the origin to true
+        //This case handles "", "", ""
+        table[0][0] = true;
+
+        //Iterate through the first column of the table
+        //set table[i][0] to true until 
+        //the ith characters in s1 and s3 do not match
+        for(int i = 1; i <= s1_length; i++){
+            if(s1[i-1]==s3[i-1]){
+                table[i][0] = true;
+            }else{
+                break;
+            }
+        }
+
+        //Iterate through the first column of the table
+        //set table[0][i] to true until 
+        //the ith characters in s2 and s3 do not match
+        for(int i = 1; i <= s2_length; i++){
+            if(s2[i-1]==s3[i-1]){
+                table[0][i] = true;
+            }else{
+                break;
+            }
+        }
+
+        //Iterate the remaider of the table
+        for(int s1_index = 1; s1_index <= s1_length; s1_index++){
+            for(int s2_index = 1; s2_index <= s2_length; s2_index++){
+                //The next character from s1 matches the next character from s3
+                bool s1_match = s1[s1_index-1]==s3[s1_index+s2_index-1]&&table[s1_index-1][s2_index];
+                //The next character from s2 matches the next character from s3
+                bool s2_match = s2[s2_index-1]==s3[s1_index+s2_index-1]&&table[s1_index][s2_index-1];
+                
+                //There is a path from [0][0] to the current index
+                table[s1_index][s2_index] = s1_match || s2_match;
+            }
+        }
+
+        //Return the bottom right of the table
+        //This represents the full interleave of s1 and s2
+        return table[s1_length][s2_length];
+    }
+};

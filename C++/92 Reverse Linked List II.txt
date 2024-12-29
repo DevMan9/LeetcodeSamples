@@ -1,0 +1,102 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        //If left and right are equal
+        //then reversing it will accomplish nothing
+        //Same goes for if the list is empty
+        //so return head
+        if(left==right||head==nullptr){
+            return head;
+        }
+
+        //Initialize a variable to store the true_head of the list
+        //This makes edge cases where we need to 
+        //reverse the beginning of the list easier
+        ListNode* true_head = new ListNode(-1,head);
+        
+        //Initialize variables to store key locations in the list
+        //Beginning of the list
+        ListNode* first_end;
+        //In between these two is the first break
+        ListNode* rev_head;
+        //This is the portion of the list to be reversed
+        ListNode* rev_end;
+        //In between these two is the second break
+        ListNode* rest;
+        //Rest of the list
+
+        
+        //Initialize 2 nodes to store the previous node and the current node
+        //as we iterate through the list
+        ListNode* prev = true_head;
+        //We are using rest here as opposed to a spcific iterator 
+        //because after iterating rest will be exactly where we need it anyway
+        rest = true_head;
+
+        //Calculate the distance from left to right
+        //Instead of counting up to each, we're going to count each down to zero
+        //This just saves some decrements
+        //and storing it back to right saves a variable
+        right-=left-1;
+
+        //Iterate to the left breakpoint
+        while(left > 0){
+            //Store the current node as the previous node
+            prev = rest;
+            
+            //Move to the next node
+            rest = rest->next;
+            
+            //Decrement the left counter
+            left--;
+        }
+
+        //Store the nodes on either side of the break
+        first_end = prev;
+        rev_head = rest;
+
+        //Iterate to the right breakpoint reversing the nodes along the way
+        while (right > 0) {
+            //Store the next node as we are about to overwrite it
+            ListNode* next = rest->next;
+            
+            //Point the current node to the previous node
+            rest->next = prev;
+            
+            //Store the current node as the previous node
+            prev = rest;
+            
+            //Move to the next node
+            rest = next;
+            
+            //Decrement the right counter
+            right--;
+        }
+
+        //Store the node just before the right breakpoint
+        rev_end = prev;
+        //Rest is already exactly where it needs to be
+
+        //The section to be reversed has already been reversed
+        //We just need to clean up the links
+        //We want the head of the reversed section to point to the rest of the list
+        rev_head->next = rest;
+        
+        //We also want the first section of the list to 
+        //point to the end of the revsered section
+        first_end->next = rev_end;
+
+        //Return the head of the list
+        return true_head->next;
+    }
+};

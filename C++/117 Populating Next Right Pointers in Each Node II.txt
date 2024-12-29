@@ -1,0 +1,71 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+    Node* next;
+
+    Node() : val(0), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val, Node* _left, Node* _right, Node* _next)
+        : val(_val), left(_left), right(_right), next(_next) {}
+};
+*/
+
+class Solution {
+public:
+    //A helper function which modifies a given output variable to produce a
+    //levelOrder vector of the given tree
+    //index stores the depth of a given node
+    void levelOrder(Node* root, vector<vector<Node*>>& out, int index) {
+        //If the root is a valid node
+        //then add the root's value to the output vector at the given index
+        if(root){
+            //Add enough elements to the output vector
+            //so that root can be added at index without error
+            while(index >= out.size()){
+                out.push_back({});
+            }
+            //Push the root value into the vector at the given index
+            out[index].push_back(root);
+            
+            //Do the same for the left and right branches
+            //but with an increased index
+            levelOrder(root->left,out,index+1);
+            levelOrder(root->right,out,index+1);
+        }
+    }
+    
+    vector<vector<Node*>> levelOrder(Node* root) {
+        //Initialize the output vector
+        vector<vector<Node*>> out;
+        
+        //Populate the output vector with the values from the input tree
+        //in levelOrder
+        levelOrder(root,out,0);
+        
+        //Return the output vector
+        return out;
+    }
+    
+    Node* connect(Node* root) {
+        if(root){
+            //Genearate a level order vector of the tree
+            //(Based on problem 102. Binary Tree Level Order Traversal)
+            vector<vector<Node*>> order = levelOrder(root);
+            
+            //using the level order
+            //Simply link up the levels
+            for(vector<Node*> vec : order){
+                for(int i = 0; i < vec.size()-1; i++){
+                    vec[i]->next = vec[i+1];
+                }
+            }
+        }
+        return root;
+    }
+};

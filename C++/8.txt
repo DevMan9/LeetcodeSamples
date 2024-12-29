@@ -1,0 +1,106 @@
+class Solution {
+public:
+    int myAtoi(string s) {
+        int state = 0;
+        long wet = 0;
+        bool sign = false;
+        bool overflow = false;
+        for(int i = 0;i<s.length()&&state!=3;i++){
+            // std::cout<<state<<", "<<s[i]<<std::endl;
+                switch(state){
+                    case 0:
+                        switch(s[i]){
+                            case ' ':
+                                // std::cout<<"-Whitespace found, do nothing"<<std::endl;
+                                break;
+                            case '0':
+                            case '1':
+                            case '2':
+                            case '3':
+                            case '4':
+                            case '5':
+                            case '6':
+                            case '7':
+                            case '8':
+                            case '9':
+                                // std::cout<<"-Digit found, changing state from 0 to 2"<<std::endl;
+                                state = 2;
+                                wet = wet*10+((int)s[i]-48);
+                                break;
+                            case '-':
+                                sign = true;
+                            case '+':
+                                // std::cout<<"-Sign found, changing state from 0 to 1"<<std::endl;
+                                state = 1;
+                                break;
+                            default:
+                                state = 3;
+                                break;
+                        }
+                        break;
+                    case 1:
+                        switch (s[i]) {
+                            case '0':
+                            case '1':
+                            case '2':
+                            case '3':
+                            case '4':
+                            case '5':
+                            case '6':
+                            case '7':
+                            case '8':
+                            case '9':
+                                wet = wet*10+((int)s[i]-48);
+                                state = 2;
+                                break;
+                                
+                            default:
+                                // std::cout<<"-Digit expected but "<<s[i]<<" was found"<<std::endl;
+                                state = 3;
+                                break;
+                        }
+                        break;
+                    case 2:
+                        switch (s[i]) {
+                            case '0':
+                            case '1':
+                            case '2':
+                            case '3':
+                            case '4':
+                            case '5':
+                            case '6':
+                            case '7':
+                            case '8':
+                            case '9':
+                                wet = wet*10+((int)s[i]-48);
+//                                std::cout<<"-Digit found, do nothing"<<std::endl;
+                                break;
+                                
+                            default:
+//                                std::cout<<"-number terminated"<<std::endl;
+                                state = 3;
+                                break;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                if(wet > 0b01111111111111111111111111111111){
+                    state = 3;
+                    overflow = true;
+                }
+            }
+    if(overflow){
+        if(sign){
+            wet = 0b10000000000000000000000000000000;
+        }else{
+            wet = 0b01111111111111111111111111111111;
+        }
+    }else{
+        if(sign){
+            wet = 0 - wet;
+        }
+    }
+        return wet;
+    }
+};

@@ -1,0 +1,85 @@
+class Solution {
+public:
+    int numDistinct(std::string s, std::string t) {
+        //Calculate the working range of the two strings
+        //This range is the difference between the lengths of the two strings
+        //When tabulating, there is a point on the x and the y axis where
+        //there are no additional possible subsequences
+        //For example:
+        //s = "abbc"
+        //t = "abc"
+        //[1,0,0,0]
+        //[1,1,0,0]
+        //[0,1,1,0]
+        //[0,0,2,0]
+        //[0,0,0,2]
+        //can be condesed to
+        //[1,1,1,0]
+        //[1,1,2,2]
+        int working_range = s.length()-t.length();
+        
+        //If the working_range is negative
+        //then there are no subsequences because t is longer than s
+        if(working_range < 0){
+            return 0;
+        }
+        //If you wanted to, 
+        //you could implement a specialized string match 
+        //when working_range is 1
+        //since the lengths of s and t are the same, 
+        //there can only be 1 subsequence
+        //but the rest of the algorithm will catch that anyway
+
+        //Initialize a table for storing the 
+        //number of subsequences at previous iterations
+        //We use long here to handle the majority overflows
+        //because Leetcode aborts on unhandled overflows
+        //However, because the function is expected to return an integer
+        //any overflows during the calculation will not affect the final result
+        //UNLESS the result was going to overflow anyway
+        std::vector<std::vector<long>> table(working_range+1,std::vector<long>(t.length()+1,0));
+
+        
+        //Initialize the first column with 1
+        //This reprepresents mathcing no characters from t, but skipping
+        //as many chars as we can while still being able to complete a subsequence
+        for(int i = 0; i <= working_range; i++){
+            table[i][0] = 1;
+        }
+
+        //Iterate through the remaining table to 
+        //calculate the number of subsequences
+        for(int i = 1; i <= s.length(); i++){
+            //Initialize j to either 1 or j-working_range, whichever is bigger.
+            //This is because we compressed the table in the beginning
+            for(int j = (i-working_range)>0?i-working_range:1; j <= t.length() && j <= i; j++){
+                //If the current index is at the top of the table
+                //then we cannot pull from anything above
+                //So we copy the value from the row above only when possible
+                if(i-j>0){
+                    //The i-j is how we compressed the 
+                    //diagonal table into a more linear one
+                    table[i-j][j] = table[i-j-1][j];
+                }
+                
+                //If the current characters in s and t match
+                //then add the number of subsequences 
+                //from the previous step to this one
+                if(s[i-1]==t[j-1]){
+                    table[i-j][j]+=table[i-j][j-1];
+                }
+                
+                //Another feature of the data is that 
+                //if the value at the current index was not changed this step
+                //no value to the right (j++) will be changed either
+                //so we can break here
+                if(!table[i-j][j]){
+                    break;
+                }
+            }
+        }
+
+        //Return the bottom right of the table
+        return table[working_range][t.length()];
+    }
+};

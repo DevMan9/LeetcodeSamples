@@ -1,0 +1,39 @@
+# @param {String} s
+# @return {Boolean}
+def repeated_substring_pattern(s)
+    #Strings that hvae repeated substrings can be detected like this:
+    #Suppose you have a string "abab"
+    #This string clearly has a repeated substring "[ab]"
+    #The brackets are for emphasis
+    #If you double the original string you get "[ab][ab][ab][ab]"
+    #by removing the first and last character of this new string you get:
+    #"b[ab][ab]a"
+    #the middle 2 copies of the substring remain untouched 
+    #AND reproduce the original string
+    #Now suppose you have a string "character"
+    #Repeating this process yields:
+    #Double:
+    #"[character][character]"
+    #Remove first and last
+    #"haractercharacte"
+    #Because there was only one copy of the word to begin with
+    #There are no copies in the middle to join to make the original word
+    #So if a doubled string minus the first ans last character 
+    #contains the original string, then the original string was at least doubled
+    #A tripled word would have 4 copies in the middle and 
+    #could easily recreate the original word
+    #This holds for all counts of repeated substrings
+
+    #Append s to itself
+    #step1 = s+s
+    
+    #Remove the first and last character
+    #step2 = step1[1...-1]
+
+    #Find s in step2
+    #step3 = step2[s]
+
+    #Check if s was in step2
+    #step4 = !(step3.nil?)
+    return !((s+s)[1...-1][s].nil?)
+end

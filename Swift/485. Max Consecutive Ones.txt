@@ -1,0 +1,28 @@
+class Solution {
+    func findMaxConsecutiveOnes(_ nums: [Int]) -> Int {
+        //Initialize the return variable
+        var max = 0
+
+        //Initialize a variable to count consecutive ones
+        var count = 0
+
+        //Iterate through nums
+        for num in nums {
+            //Count each 1 and reset on 0
+            if num == 0{
+                count = 0
+            }else{
+                count += 1
+            }
+
+            //If the current count is greater than the current max
+            //Store the current count in max
+            if count > max {
+                max = count
+            }
+        }
+
+        //Return the max consecutive ones
+        return max
+    }
+}

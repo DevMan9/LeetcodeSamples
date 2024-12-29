@@ -1,0 +1,24 @@
+class Solution {
+public:
+    std::unordered_map<char,std::string> phoneKeyMap = {{'2',"abc"},{'3',"def"},{'4',"ghi"},{'5',"jkl"},{'6',"mno"},{'7',"pqrs"},{'8',"tuv"},{'9',"wxyz"}};
+
+void teleStringHelper(std::vector<std::string>* vec, std::string code, std::string tail){
+    if(code.length()<=0){
+        (*vec).push_back(tail);
+        return;
+    }
+    std::string t = phoneKeyMap[code[0]];
+    for(char c:phoneKeyMap[code[0]]){
+        teleStringHelper(vec, code.substr(1,code.size()-1), tail+c);
+    }
+}
+    
+    vector<string> letterCombinations(string digits) {
+        std::vector<std::string> ret;
+        if(digits.length()==0){
+            return ret;
+        }
+        teleStringHelper(&ret,digits,"");
+        return ret;
+    }
+};

@@ -1,0 +1,26 @@
+func judgeCircle(moves string) bool {
+    //Create a variable to store the robot's position
+    var position = []int{0,0}
+
+    //Iterate the moves
+    for _, character := range moves {
+        switch character {
+            //Move up
+            case 'U':
+                position[1]++
+            //Move down
+            case 'D':
+                position[1]--
+            //Move right
+            case 'R':
+                position[0]++
+            //Move left
+            case 'L':
+                position[0]--
+            default:
+        }
+    }
+
+    //Return whether the robot is at the origin
+    return position[0] == 0 && position[1] == 0
+}

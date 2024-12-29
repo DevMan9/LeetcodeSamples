@@ -1,0 +1,36 @@
+func findErrorNums(nums []int) []int {
+    //Sort nums
+    //When nums is sorted, the duplicate will be next to eachother
+    //and 1 will be the first number, 2 will be the second etc.
+    sort.Ints(nums[:])
+
+    //Create 2 variables to store the missing and duplicate numbers
+    var missing = 1
+    var duplicate = 1
+
+    //Iterate up to the secont to last element in nums
+    for index := 0; index < len(nums) - 1; index++ {
+        //If the predicted missing number was found at this index
+        if nums[index] == missing {
+            //Guess that the next number is missing
+            //This will stop moving the missing var forward when we miss a number
+            //But will also be duplicate proof
+            missing++
+        }
+
+        //If the current number is the same as the next number
+        if nums[index] == nums[index + 1] {
+            //Then record the current number as the duplicate
+            duplicate = nums[index]
+        }
+    }
+
+    //Check the last number against missing
+    //Because we skipped the last index in the loop
+    if nums[len(nums) - 1] == missing {
+        missing++
+    }
+
+    //Return the duplicate and missing number
+    return []int{duplicate,missing}
+}

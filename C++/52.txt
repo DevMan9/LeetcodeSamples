@@ -1,0 +1,105 @@
+class Solution {
+public:
+    //A particular data structure named "queens"
+    //is reused throuhgout these functions.
+    //It is a representation of where a queen is located
+    //in each column of the board.
+    //Since queens can attack infinilty vertically and horizontally
+    //there must only be 1 queen in each column, and one queen in each row
+    //So, this data structure takes the form of some permutation of
+    //{0,1,2...n} where n is the number of queens
+    
+    //Returns false if there are any collisions on the forward diagonals
+    bool forwardDiagonalCheck(std::vector<int>& queens){
+        //Initialize a set to keep track of which diagonals are occupied
+        std::unordered_set<int> diagonals;
+        
+        //Iterate through the queens and check for diagonal collisions
+        //Along top-left to bottom-right lines
+        for(int i = 0;i<queens.size();i++){
+            //hash the queen's position. i.e. 0,7 = 1,6 = 4,3
+            int hash = i+queens[i];
+            
+            //If this hash has been seen before
+            //Then return false
+            if(diagonals.count(hash)){
+                return false;
+            }
+            
+            //Add the hash to the set
+            diagonals.insert(hash);
+        }
+        
+        //No hashes collided
+        //Return true
+        return true;
+    }
+
+    //Returns false if there are any collisions on the backward diagonals
+    bool backwardDiagonalCheck(std::vector<int>& queens){
+        //Initialize a set to keep track of which diagonals are occupied
+        std::unordered_set<int> diagonals;
+        
+        //Iterate through the queens and check for diagonal collisions
+        //Along bottom-left to top-right lines
+        for(int i = 0;i<queens.size();i++){
+            //hash the queen's position. i.e. 0,7 = 1,6 = 4,3
+            //but the "(queens.size()-1-i)" goes from right to left
+            int hash = (queens.size()-1-i)+queens[i];
+            
+            //If this hash has been seen before
+            //Then return false
+            if(diagonals.count(hash)){
+                return false;
+            }
+            
+            //Add the hash to the set
+            diagonals.insert(hash);
+        }
+        
+        //No hashes collided
+        //Return true
+        return true;
+    }
+
+    //Returns true if a given queens configuation is valid
+    bool validQueens(std::vector<int> queens){
+        //Check the forward and backward diagonals
+        //Because of the way that the queens input is created
+        //we don't have to worry about horizontal and vertical collisions
+        return forwardDiagonalCheck(queens)&&backwardDiagonalCheck(queens);
+    }
+
+    int totalNQueens(int n) {
+        //Initialize a vector that will be used 
+        //to iterate through permuations of queen configurations
+        //By storing the row of each queen into a vector
+        //and ensuring the initial state has no vertical of horizontal collisions
+        //it is guaranteed that any permutation of this vector
+        //also has no vertical or horizontal collisions
+        std::vector<int> queens;
+        
+        //Push the numbers 0 to n-1 into "queens"
+        //This represents a line of queens across the
+        //bottom-left to top_right diagonal
+        for(int i = 0; i<n; i++){
+            queens.push_back(i);
+        }
+    
+        //Initialize the return value
+        int ret = 0;
+        
+        //Iterate through all permuations of queens
+        do{
+            //If this queens configuation is valid
+            //Then increment the return value
+            ret += (validQueens(queens))?1:0;
+        //Get the next permutation
+        //If there is not one
+        //Then end
+        }while(std::next_permutation(queens.begin(), queens.end()));
+    
+        //Return the return value
+        return ret;
+    }
+};

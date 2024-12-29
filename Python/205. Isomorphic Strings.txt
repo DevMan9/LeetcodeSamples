@@ -1,0 +1,48 @@
+class Solution(object):
+    def isIsomorphic(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+
+        #Store the length of s for ease of access
+        length = len(s)
+
+        #If the lengths of s and t are not equal
+        #Then they are not isomorphic
+        if length != len(t):
+            return False
+
+        #Create 2 dictionaries to store 
+        #the forward relation from characters in s to characters in t 
+        stot = dict()
+        #and the backwards relation from characters in t to characters in s
+        ttos = dict()
+
+        #Iterate through the strings
+        for i in range(length):
+            #If the current character is already mapped
+            if s[i] in stot and t[i] in ttos:
+                #If the current mapping fails
+                if stot[s[i]] != t[i] or ttos[t[i]] != s[i]:
+                    return False
+                else:
+                    #For clarity
+                    continue
+            
+            #If the current characters in s and t are not mapped
+            elif s[i] not in stot and t[i] not in ttos:
+                #Map the current character in s to t
+                stot[s[i]] = t[i]
+                #Map the current character in t to s
+                ttos[t[i]] = s[i]
+            else:
+                #Only one of the 2 current characters already have a mapping
+                #therefore one of them must need 
+                #to be mapped to a different character
+                #So return False
+                return False
+    
+        #The two strings are isomorphic
+        return True

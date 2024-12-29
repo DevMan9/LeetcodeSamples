@@ -1,0 +1,26 @@
+class Solution {
+public:
+    bool isPalindrome(std::string s){
+    // std::cout<<s<<std::endl;
+    if(s.length()>2){
+        // std::cout<<"string is larger than 2"<<std::endl;
+        if(s[0]==s[s.length()-1]){
+            // std::cout<<"begining and end match"<<std::endl;
+            return isPalindrome(s.substr(1,s.length()-2));
+        }else{
+            // std::cout<<"beginning and end do not match"<<std::endl;
+            return false;
+        }
+    }else if(s.length()>1){
+        // std::cout<<"2 mathcing letters"<<std::endl;
+        return s[0]==s[1];
+    }
+    // std::cout<<"single letter"<<std::endl;
+    return true;
+}
+    
+    
+    bool isPalindrome(int x) {
+        return isPalindrome(std::to_string(x));
+    }
+};

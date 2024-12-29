@@ -1,0 +1,64 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    //Returns true if the given TreeNode has no children
+    bool isLeafNode(TreeNode* node){
+        if(node){
+            //Either both are nullptr
+            //or you have a malformed tree and 
+            //shouldn't expect accurate results anyway
+            return node->left==node->right;
+        }else{
+            return false;
+        }
+    }
+
+    int minDepth(TreeNode* root) {
+        //If the given tree is empty
+        //return 0
+        if(!root){
+            return 0;
+        }
+        
+        //Initialize a queue to seach nodes in a breadth first manner
+        //Each node is stored alongside its depth
+        std::queue<std::pair<TreeNode*,int>> nodes;
+        
+        //Push the root of the tree into the nodes queue
+        nodes.push({root,1});
+        
+        //Iterate through the nodes of the tree in a breadth first manner until
+        //we reach a leaf node
+        while(!isLeafNode(nodes.front().first)){
+            //If the current node has a left node
+            //then add it to the queue
+            if(nodes.front().first->left){
+                nodes.push({nodes.front().first->left,nodes.front().second+1});
+            }
+            
+            //If the current node has a right node
+            //then add it to the queue
+            if(nodes.front().first->right){
+                nodes.push({nodes.front().first->right,nodes.front().second+1});
+            }
+            
+            //Pop this node off the queue
+            nodes.pop();
+        }
+        //After this point, the front of the queue is the first leaf node
+        //we encountered during the breadth first search
+        
+        //Return the depth of the first encountered leaf node
+        return nodes.front().second;
+    }
+};

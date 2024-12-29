@@ -1,0 +1,25 @@
+class Solution {
+public:
+    std::string countAndSay(int n) {
+        if(n == 1){
+            return "1";
+        }
+        std::string s = countAndSay(n-1);
+        std::ostringstream sb;
+        
+        int last_index = 0;
+        int count = 1;
+        for(int i = 1;i<s.length();i++){
+            if(s[i]!=s[last_index]){
+                sb<<count<<s[last_index];
+                last_index=i;
+                count = 1;
+            }else{
+                count++;
+            }
+        }
+        sb<<count<<s[last_index];
+        return sb.str();
+        
+    }
+};

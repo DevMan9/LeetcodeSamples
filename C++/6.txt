@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        std::string ret = "";
+        std::vector<std::vector<int>> table;
+        int multiple = (numRows-1)*2;
+        if(numRows == 1){
+            return s;
+        }else{
+            for(int i = 0;i<numRows;i++){
+                std::vector<int> tmp = {i};
+                table.push_back(tmp);
+            }
+            for(int i = 1;i<numRows-1;i++){
+                table[numRows-i-1].push_back(numRows+i-1);
+            }
+        }
+    
+        for (int i = 0; i<table.size(); i++) {
+            bool done = false;
+            int it = 0;
+            while(!done){
+                for(int j = 0;j<table[i].size();j++){
+                    int ind = multiple*it+table[i][j];
+                    if(ind>=s.length()){
+                        done = true;
+                        break;
+                    }
+                    ret.push_back(s[ind]);
+                }
+                it++;
+            }
+        }
+        return ret;
+    }
+};

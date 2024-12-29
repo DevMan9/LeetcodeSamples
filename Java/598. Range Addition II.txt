@@ -1,0 +1,19 @@
+class Solution {
+    public int maxCount(int m, int n, int[][] ops) {
+        //No matter what operation you give,
+        //it will be applied from top left to bottom right
+        //so for example the ops [1,4] and [4,1] guarantee that there will only be 
+        //1 max value at 0,0
+        //similarly [2,4] and [7,1] produeces 2 maxes at 0,0 and 1,0
+        //So we only need to keep track of the smallest values for m and n
+        int min_m = m;
+        int min_n = n;
+        for(int[] op : ops){
+            min_m = min_m < op[0] ? min_m : op[0];
+            min_n = min_n < op[1] ? min_n : op[1];
+        }
+
+        //Multiply the mins to get the smallest area covered by all ops
+        return min_m * min_n;
+    }
+}

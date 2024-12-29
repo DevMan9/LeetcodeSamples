@@ -1,0 +1,52 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        //Initialize 2 nodes that will represent the beginnings of
+        //the list of nodes with values less than x and
+        //the list of nodes with values greater than or equal to than x
+        //They are new ListNodes to cover silly edge cases where
+        //there are no numbers less than x and
+        //adding the first element to one of the two
+        ListNode* true_lesser_head = new ListNode(-1);
+        ListNode* true_greater_head = new ListNode(-1);
+        
+        //Initialize a ListNode pointer for the end of each list
+        ListNode* lesser_end = true_lesser_head;
+        ListNode* greater_end = true_greater_head;
+        
+        //Iterate through the input list
+        //sorting each element into one of the two lists
+        for(ListNode* current = head; current!=nullptr; current = current->next){
+            //If the value in the current node is less than x
+            //then put it in the lesser list
+            //else put it in the greater list
+            if(current->val < x){
+                lesser_end->next = current;
+                lesser_end = current;
+            }else{
+                greater_end->next = current;
+                greater_end = current;
+            }   
+        }
+        
+        //Stitch the two lists back together
+        lesser_end->next = true_greater_head->next;
+        
+        //Make sure to clear what the end points to
+        greater_end->next = nullptr;
+        
+        //Return the head of the lesser list
+        //the entire greater list has been appended to the lesser
+        return true_lesser_head->next;
+    }
+};

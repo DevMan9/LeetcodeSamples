@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int bs(std::vector<int>* nums, int target, int start, int end){
+        if(nums->size()==0){
+            return -1;
+        }
+        if(start==end){
+            if(target==(*nums)[start]){
+                return start;
+            }else{
+                return -1;
+            }
+        }
+        int mid = start+(end-start)/2;
+    
+        if(target > (*nums)[mid]){
+            return bs(nums,target,mid+1,end);
+        }else{
+            return bs(nums,target,start,mid);
+        }
+    }
+
+    std::vector<int> searchRange(std::vector<int>& nums, int target) {
+        int lower_bound = bs(&nums,target,0,(int)(nums.size())-1);
+        if(lower_bound==-1){
+            return {-1,-1};
+        }
+        int step = 1;
+        while(step<nums.size()){
+            step = step<<1;
+        }
+        int upper_bound = lower_bound;
+        while(step>0){
+            int next_lower = lower_bound-step;
+            int next_upper = upper_bound+step;
+        
+            if(next_upper<nums.size()&&nums[next_upper]==target){
+                upper_bound = next_upper;
+            }
+            if(next_lower>=0&&nums[next_lower]==target){
+                lower_bound = next_lower;
+            }
+            
+            step = step>>1;
+        }
+        return {lower_bound,upper_bound};
+    }
+};

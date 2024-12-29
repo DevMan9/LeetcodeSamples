@@ -1,0 +1,20 @@
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        //Initialize a counter for each color
+        std::vector<int> count = {0,0,0};
+        
+        //Count each of the colors
+        for(int i:nums){
+            count[i]++;
+        }
+        
+        //Initialize an iterator to the beginning of nums
+        auto it = nums.begin();
+        
+        //Fill nums with count number of each color from beginning to end
+        for(int i = 0; i < count.size(); i++){
+            it = std::fill_n(it,count[i],i);
+        }
+    }
+};

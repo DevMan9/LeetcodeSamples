@@ -1,0 +1,37 @@
+class Solution {
+    public int findLHS(int[] nums) {
+        //Create a HashMap to store the count of each num in nums
+        HashMap<Integer,Integer> map = new HashMap<Integer,Integer>();
+
+        //Tally each num in nums
+        for(int num : nums){
+            map.compute(num, (k, v) -> (v == null) ? 1 : v + 1);
+        }
+
+        //Get the keys from the map and sort them
+        List<Integer> keys = new ArrayList<Integer>(map.keySet());
+        Collections.sort(keys);
+
+        //Initialize the return variable
+        int ret = 0;
+
+        //Iterate through the keys,
+        //checking if 2 adjacent keys qualify as "Harmonious"
+        for(int i = 1; i < keys.size(); i++){
+            //If 2 adjacent keys qualify as "Harmonious"
+            if(keys.get(i) - keys.get(i-1) < 2){
+                //Then calculate how big their subsequence would be
+                int sum = map.get(keys.get(i)) + map.get(keys.get(i-1));
+
+                //If their subsequence is bigger than the current biggest
+                if(sum > ret){
+                    //Overwrite the max
+                    ret = sum;
+                }
+            }
+        }
+
+        //Return the size of the largest harmonious subsequence
+        return ret;
+    }
+}

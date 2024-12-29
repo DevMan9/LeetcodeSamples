@@ -1,0 +1,10 @@
+# Write your MySQL query statement below
+SELECT employee_id, department_id
+FROM Employee
+LEFT JOIN (
+  SELECT employee_id, COUNT(*) <= 1 AS single_department
+  FROM Employee
+  GROUP BY employee_id
+) SingleDepartment
+USING(employee_id)
+WHERE single_department OR primary_flag = 'Y'

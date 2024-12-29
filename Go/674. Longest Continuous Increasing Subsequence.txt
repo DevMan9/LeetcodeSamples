@@ -1,0 +1,30 @@
+func findLengthOfLCIS(nums []int) int {
+  //Initialize varibale to store length and max_length of an ascending sequence
+  max_length := 1
+  length := 1
+
+  //Store the number of nums for ease of access
+  count := len(nums)
+
+  //Iterate through nums, counting ascending sequences
+  for index := 1; index < count; index++ {
+    //If the current num is greater than the previous num
+    if nums[index] > nums[index - 1] {
+      //Then the sequence continues
+      length++
+
+      //If this sequence is longer than the longest seen
+      if length > max_length {
+        //Then overwrite the longest length
+        max_length = length
+      }
+    }else{
+      //The sequence descended
+      //Reset the length
+      length = 1
+    }
+  }
+
+  //Return the length of the longest ascending sequence
+  return max_length
+}

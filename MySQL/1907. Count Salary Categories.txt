@@ -1,0 +1,24 @@
+# Write your MySQL query statement below
+WITH Categories AS (
+  SELECT 'Low Salary' AS 'category'
+  UNION
+  SELECT 'Average Salary' AS 'category'
+  UNION
+  SELECT 'High Salary' AS 'category'
+),
+AccountsCategorized AS (
+  SELECT account_id, 
+  income, 
+  CASE
+    WHEN income < 20000 THEN 'Low Salary'
+    WHEN income > 50000 THEN 'High Salary'
+    ELSE 'Average Salary'
+  END AS 'category'
+  FROM Accounts
+)
+
+SELECT category, SUM(IF(ISNULL(account_id), 0, 1)) AS 'accounts_count'
+FROM Categories
+LEFT JOIN AccountsCategorized
+USING(category)
+GROUP BY category

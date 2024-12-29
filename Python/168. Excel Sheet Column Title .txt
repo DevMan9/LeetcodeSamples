@@ -1,0 +1,25 @@
+class Solution(object):
+    def convertToTitle(self, columnNumber):
+        """
+        :type columnNumber: int
+        :rtype: str
+        """
+
+        #The new base characters stored in a string.
+        newBase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+        #The new base to convert to
+        newBaseLength = len(newBase)
+
+        #Initialize the return string to be empty
+        ret = ""
+
+        #Base conversion
+        while columnNumber > 0:
+            #Calculate the character for the current place value
+            ret = newBase[(columnNumber - 1) % newBaseLength] + ret
+
+            #Reduce the current column number by one place
+            columnNumber = (columnNumber -1) / newBaseLength
+
+        return ret

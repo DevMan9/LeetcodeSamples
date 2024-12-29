@@ -1,0 +1,21 @@
+/**
+ * @param {number} num
+ * @return {number}
+ */
+var addDigits = function(num) {
+    while(num > 9){
+        //Convert the number to a string to parse the digits individualy.
+        str = num.toString();
+
+        //set num to 0.
+        //We will be using it as an accumulator since it's value is stored in str.
+        num = 0;
+
+        //Iterate through the string and add each digit to the acccumulator.
+        for (let i = 0; i < str.length; i++){
+            num += Number(str[i]);
+        }
+    }
+
+    return num;
+};

@@ -1,0 +1,116 @@
+class Solution {
+public:
+    std::vector<std::string> fullJustify(std::vector<std::string>& words, int maxWidth) {
+        //Initialize the return vector
+        //We will be pushing formated lines into this
+        //as they are built
+        std::vector<std::string> ret;
+
+        //Initialize an index variable to traverse the input words
+        int index = 0;
+        
+        //Loop through the input words and build a justified line
+        //left-justifying when justification fails (1 word line)
+        //or we reach the end of the input words
+        while(index < words.size()){
+            //Initialize a vector to store the words in this line
+            std::vector<std::string> line;
+            
+            //Initialize a variable to store number of non-space characters
+            //in the line
+            int line_chars = 0;
+            
+            //Initialize a variable to store the number of spaces required
+            //Between every 2 words there must be a space
+            //"word word word etc."  4 words, 3 spaces
+            int line_spaces = 0;
+            
+            //Initialize a boolean to track if the line could accept more words
+            bool more_words = true;
+
+            //Build the next line, recording important data such as
+            //line_chars and line_spaces
+            while(more_words && index < words.size()){
+                //Estimate the size of the line if we add the next word
+                int line_estimate = line_chars + line_spaces + ((line.size()>0)?1:0) + words[index].size();
+
+                //If the line_estimate fits the max_width
+                //then add the word to the line
+                //else we can NOT accept more_words
+                if(line_estimate <= maxWidth){
+                    line.push_back(words[index]);
+                    
+                    //Calculate the new line_chars
+                    line_chars += words[index].size();
+                    
+                    //Calculate the new line_spaces
+                    line_spaces += (line.size()>1)?1:0;
+                    
+                    //increment the index
+                    index++;
+                }else{
+                    more_words = false;
+                }
+            }
+
+            //If we could not accept anymore words 
+            //then build a justified string of the line
+            //The line size check defaults the process to left-justification
+            //if there's only 1 word  which is treated the same as the end of file
+            if(!more_words&&line.size()>1){
+                //Initialize a vector to store the number of spaces after each word
+                std::vector<int> spaces(line_spaces);
+                
+                //divide the spaces evenly among the words
+                //with priority going to earlier words
+                for(int space_count = 0; space_count < maxWidth - line_chars; space_count++){
+                    spaces[space_count % line_spaces]++;
+                }
+
+                //Initialize a string builder
+                std::ostringstream os;
+
+                //Push the first word in the line into the string builder
+                os<<line[0];
+                
+                //Push the remaining words into the string builder
+                //preceded by the number of spaces described in spaces
+                for(int i = 0; i < line_spaces; i++){
+                    for(int j = 0; j < spaces[i]; j++){
+                        os<<' ';
+                    }
+                    os<<line[i+1];
+                }
+
+                //Push the built string into the return vector
+                ret.push_back(os.str());
+                
+            //Left justification
+            }else{
+                //Initialize a string builder
+                std::ostringstream os;
+
+                //Push the first word of the line into the string builder
+                os<<line[0];
+
+                //Push the rest of the words into the string builder 
+                //preceded by 1 space
+                for(int i = 1; i < line.size(); i++){
+                    os<<' '<<line[i];
+                }
+                
+                //Pack the string builder with the 
+                //required number of spaces to meet maxWidth
+                for(int i = 0; i < maxWidth - (line_chars + line_spaces); i++){
+                    os<<' ';
+                }
+                
+                //Push the built string into the return vector
+                ret.push_back(os.str());
+            }
+        }
+        
+        //Return the justified strings
+        return ret;
+    }
+};

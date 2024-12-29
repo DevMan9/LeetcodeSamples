@@ -1,0 +1,103 @@
+func floodFill(image [][]int, sr int, sc int, color int) [][]int {
+    //Store the dimensions of image for easy access
+    var rows int = len(image)
+    var cols int = len(image[0])
+
+    //Get the color we will be matching against
+    var match_color int = image[sr][sc]
+
+    //If color == match_color
+    if color == match_color {
+        //Then the image will look exactly the same as it started
+        //So return image
+        return image
+    }
+
+    //Initialize a "set" to store the locations we have visited
+    var set map[int]bool = make(map[int]bool)
+    //Initialize a "stack" to store the locations we still need to visit
+    var stack []int = make([]int,0)
+
+    //Store the initial location in the stack and the set
+    stack = append(stack,sr * cols + sc)
+    set[sr * cols + sc] = true
+
+    //Loop until the stack is empty
+    for len(stack) > 0 {
+        //Get the top entry in the stack
+        var top int = stack[len(stack) - 1]
+
+        //Pop the stack
+        stack = stack[:len(stack) - 1]
+
+        //Parse the top entry back into a row and column
+        var row int = top / cols
+        var col int = top % cols
+
+        //Set the current location to color
+        image[row][col] = color
+
+        //Check if north is valid
+        if row - 1 >= 0 {
+            //Hash north
+            north := (row - 1) * cols + col
+            //Check if north is not mapped
+            if !set[north] {
+                //Check that north is the right color
+                if image[row - 1][col] == match_color {
+                    //Add north to the set and stack
+                    set[north] = true
+                    stack = append(stack, north)
+                }
+            }
+        }
+
+        //Check if south is valid
+        if row + 1 < rows {
+            //Hash south
+            south := (row + 1) * cols + col
+            //Check if south is not mapped
+            if !set[south] {
+                //Check that south is the right color
+                if image[row + 1][col] == match_color {
+                    //Add south to the set and stack
+                    set[south] = true
+                    stack = append(stack, south)
+                }
+            }
+        }
+
+        //Check if west is valid
+        if col - 1 >= 0 {
+            //Hash west
+            west := row * cols + col - 1
+            //Check if west is not mapped
+            if !set[west] {
+                //Check that west is the right color
+                if image[row][col - 1] == match_color {
+                    //Add west to the set and stack
+                    set[west] = true
+                    stack = append(stack, west)
+                }
+            }
+        }
+
+        //Check if east is valid
+        if col + 1 < cols {
+            //Hash east
+            east := row * cols + col + 1
+            //Check if east is not mapped
+            if !set[east] {
+                //Check that east is the right color
+                if image[row][col + 1] == match_color {
+                    //Add east to the set and stack
+                    set[east] = true
+                    stack = append(stack, east)
+                }
+            }
+        }
+    }
+
+    //Return the altered image
+    return image
+}

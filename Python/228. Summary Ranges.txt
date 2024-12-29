@@ -1,0 +1,45 @@
+class Solution(object):
+    def summaryRanges(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[str]
+        """
+        #Empty exception
+        if not nums:
+            return []
+
+        #Initialize a variable to store the tail of the range
+        tail = 0
+
+        #Initialize a return variable
+        ret = list()
+
+        #Iterate through nums 
+        #(skip the first index because 
+        #we are checking changes between adjacent indicies)
+        for i in range(1,len(nums)):
+            #If the difference between 2 adjacent indicies is greater than 1
+            #Then there is a break in the range
+            if nums[i] - nums[i-1] > 1:
+                #Formatting ranges
+                if i - 1 == tail:
+                    #Single value
+                    ret.append(str(nums[tail]))
+                else:
+                    #Proper range
+                    ret.append(str(nums[tail]) + "->" + str(nums[i - 1]))
+                
+                #Set the tail to the current index which broke the previous range
+                tail = i
+
+        #The final range is still open
+        #Format the final range
+        if tail == len(nums)-1:
+            #Single value
+            ret.append(str(nums[tail]))
+        else:
+            #Proper range
+            ret.append(str(nums[tail]) + "->" + str(nums[len(nums) - 1]))
+        
+        #Return the range list
+        return ret

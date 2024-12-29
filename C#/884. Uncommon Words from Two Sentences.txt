@@ -1,0 +1,38 @@
+public class Solution {
+    public string[] UncommonFromSentences(string s1, string s2) {
+        //Create a dictionary to count occurances of words in s1 and s2
+        Dictionary<string, int> counts = new Dictionary<string, int>();
+
+        //Tally the words in s1
+        foreach (string word in s1.Split(' ')){
+            if (!counts.ContainsKey(word)){
+                counts[word] = 1;
+            }else{
+                counts[word]++;
+            }
+        }
+
+        //Tally the words in s2
+        foreach (string word in s2.Split(' ')){
+            if (!counts.ContainsKey(word)){
+                counts[word] = 1;
+            }else{
+                counts[word]++;
+            }
+        }
+
+        //Create a list to store the uncommon_words
+        List<string> uncommon_words = new List<string>();
+
+        //Iterate the dictionary, 
+        //recording words that occur only once between the sentences
+        foreach (KeyValuePair<string, int> entry in counts) {
+            if (entry.Value == 1) {
+                uncommon_words.Add(entry.Key);
+            }
+        }
+
+        //Return the uncommon_words as an array
+        return uncommon_words.ToArray();
+    }
+}

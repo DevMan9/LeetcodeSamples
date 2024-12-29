@@ -1,0 +1,32 @@
+func dominantIndex(nums []int) int {
+    //Create variables to store the max and second max (sax)
+    //Specifically 0 and 1 so that they naturally order themselves
+    //as the algorithm progresses
+    var max int = 0
+    var sax int = 1
+
+    //Iterate nums to find max and sax
+    for index := 1; index < len(nums); index++ {
+        //If the current value is greater than max
+        if nums[index] > nums[max] {
+            //put max into sax
+            sax = max
+            //put the current index into max
+            max = index
+        
+        //If value is not greather than max, but greater than sax
+        }else if nums[index] > nums[sax] {
+            //Then out the current index into sax
+            sax = index
+        }
+    }
+
+    //If max is at least twice sax
+    if nums[max] - nums[sax] >= nums[sax] {
+        //Then return max
+        return max
+    }else{
+        //Else return -1
+        return -1
+    }
+}

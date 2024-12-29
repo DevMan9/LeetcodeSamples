@@ -1,0 +1,32 @@
+# @param {Integer} num
+# @return {String}
+def to_hex(num)
+    #Edge case
+    if num == 0
+        return "0"
+    end
+
+    #Create an array of characters of the new base's characters
+    base_chars = "0123456789abcdef"
+
+    #Calculate the new base from the array of characters
+    base = base_chars.length
+
+    #Right shift mask to simulate pushing in 0s (specifically for bin2hex)
+    mask = 0x0fffffff
+
+    #Inititalize the return string
+    ret = ""
+
+    #Calculate each heximal place until num reaches 0
+    while num != 0
+        #Append the calculated heximal place to the front of the return string
+        ret = base_chars[num&15] << ret
+
+        #Right-shift and fill with 0s
+        num = (num >> 4) & mask
+    end
+
+    #Return the hexadecimal representation of num
+    return ret
+end

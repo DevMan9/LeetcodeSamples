@@ -1,0 +1,27 @@
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func searchBST(root *TreeNode, val int) *TreeNode {
+    //End case
+    if root == nil {
+        return root
+    }
+
+    //Success case
+    if root.Val == val {
+        return root
+    }
+
+    //If val < root.val
+    if val < root.Val {
+        //Then val might be in the left branch
+        return searchBST(root.Left, val)
+    }
+    //Otherwise val might be in the right branch
+    return searchBST(root.Right, val)
+}

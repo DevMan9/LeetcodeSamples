@@ -1,0 +1,46 @@
+func calPoints(operations []string) int {
+    //Initialize a slice to store the scores
+    score_card := make([]int, 0)
+    
+    //Iterate the operations
+    for _, operation := range operations {
+        //Store last index of the score_card for ease of access
+        end := len(score_card) - 1
+
+        //Parse the operation
+        switch operation {
+            //Record a new score that is the sum of the previous two scores.
+            case "+":
+                value := score_card[end] + score_card[end - 1]
+                score_card = append(score_card, value)
+
+            //Record a new score that is the double of the previous score.
+            case "D":
+                value := score_card[end] + score_card[end]
+                score_card = append(score_card, value)
+
+            //Invalidate the previous score, removing it from the record.
+            case "C":
+                score_card = score_card[:end]
+
+            default:
+                //Attempt to parse the operation into an integer
+                value, err := strconv.Atoi(operation)
+                if err != nil {
+                    //operation was not valid
+                }else{
+                    //Append the parsed integer
+                    score_card = append(score_card, value)
+                }
+        }
+    }
+
+    //Sum the score_card
+    sum := 0
+    for _, value := range score_card {
+        sum += value
+    }
+
+    //Return the sum total
+    return sum
+}

@@ -1,0 +1,36 @@
+impl Solution {
+    pub fn large_group_positions(s: String) -> Vec<Vec<i32>> {
+        //Store the index of the first character
+        let mut last_character: usize = 0;
+
+        //Initialize the return vector
+        let mut ret: Vec<Vec<i32>> = vec![];
+
+        //Itereate through s by index skipping the first character
+        for index in 1..s.len() {
+            //If the current character is different than the last_character
+            if s.chars().nth(index) != s.chars().nth(last_character) {
+                //Calculate the number of characters that matched the last_character
+                let size = index - last_character;
+                
+                //If we had a run of 3 or more characters
+                if size >= 3 {
+                    //Push that range into the return vector
+                    ret.push(vec![last_character as i32, (index - 1) as i32]);
+                }
+
+                //Since we encountered a new character, 
+                //begin a new run starting from index
+                last_character = index;
+            }
+        }
+
+        //Pick up the last group if it qualifies
+        if s.len() - last_character >= 3 {
+            ret.push(vec![last_character as i32, (s.len() - 1) as i32])
+        }
+
+        //Return the vector of large groups
+        return ret;
+    }
+}

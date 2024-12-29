@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int minPathSum(std::vector<std::vector<int>>& grid) {
+        //Store the dimensions of the grid for ease of access
+        int rows = grid.size();
+        int columns = grid[0].size();
+
+        //Calculate the path cost of the first column
+        for(int i = 1; i < rows; i++){
+            grid[i][0] = grid[i-1][0] + grid[i][0];
+        }
+
+        //Calculate the path cost of the first row
+        for(int i = 1; i < columns; i++){
+            grid[0][i] = grid[0][i-1] + grid[0][i];
+        }
+        
+        //Calculate the minimum path cost for the remaining grid
+        //There are exaxtly 2 ways to reach a give grid square
+        //from above and from the left, 
+        //corresponding to the down and right allowed movements
+        //so the minimum cost to reach a square is the lesser of
+        //the cost of reaching the top square
+        //and the cost of reaching the left square
+        for(int i = 1; i < rows; i++){
+            for(int j = 1; j < columns; j++){
+                //Get the minimium between the path from above
+                //and the path from the left
+                int min = (grid[i-1][j]<grid[i][j-1])?grid[i-1][j]:grid[i][j-1];
+                //add minimum to the current grid square
+                //This is the minimum cost of reaching this square
+                grid[i][j] = min + grid[i][j];
+            }
+        }
+        
+        //Return the bottom-right square
+        return grid[rows-1][columns-1];
+    }
+};

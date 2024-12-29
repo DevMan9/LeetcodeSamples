@@ -1,0 +1,72 @@
+class Solution {
+public:
+    //Returns the greatest common denominator between a and be
+    int gcd(int a, int b) {
+        return (b == 0)?a:gcd(b, a % b);
+    }
+
+    //Returns n choose m
+    int microchoose(int n, int m){
+        //If n is less than m
+        //swap them for simplicity
+        if(n<m){
+            m^=n;
+            n^=m;
+            m^=n;
+        }
+        
+        //Initialize a vector to store the terms that will be multiplied
+        std::vector<int> vec(n - m);
+        
+        //Fill the vector with [m+1...n]
+        //since n choose m = (n!)/(m!(n-m)!)
+        //this vector will represent n!/m!
+        for (int i = n; i > m; i--) {
+            vec[n - i] = i;
+        }
+
+        //Divide i from the terms stored in vec
+        //this is the 1/(n-m)! part
+        for (int i = 2; i<=(n-m); i++) {
+            //set the remaining divisor to i
+            int rem = i;
+            
+            //factor out rem from vec, one term at a time
+            for (int j = 0; j<vec.size(); j++) {
+                //calculate the gcd between rem and the current term
+                int d = gcd(rem, vec[j]);
+                
+                //divide rem by the gcd
+                rem/=d;
+                
+                //divide the current term by gcd
+                vec[j]/=d;
+                
+                //if there are no remaining factors
+                //then there is no need to check the other terms
+                //break
+                if (rem==1) {
+                    break;
+                }
+            }
+        }
+
+        //Inititalize the return variable to 1
+        //we will be multiplying the terms in vec into it
+        int ret = 1;
+        
+        //Multiply each term in vec into the return variable
+        for (int i = 0; i<vec.size(); i++) {
+            ret*=vec[i];
+        }
+
+        //return the return variable
+        return ret;
+
+    }
+
+    int uniquePaths(int m, int n) {
+        //The problem is just (n-1+m-1)choose(n-1)
+        return microchoose(n+m-2,n-1);
+    }
+};

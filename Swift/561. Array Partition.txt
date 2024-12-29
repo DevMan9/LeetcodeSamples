@@ -1,0 +1,18 @@
+class Solution {
+    func arrayPairSum(_ nums: [Int]) -> Int {
+        //Created a sorted version of nums
+        let sorted = nums.sorted()
+
+        //Initialize a variable to store the sum
+        var sum = 0
+
+        //Sum every other item in sorted
+        //(This is like taking a min of every 2 adjacent elements)
+        for index in stride(from:0, to: sorted.count, by: 2) {
+            sum += sorted[index]
+        }
+
+        //Return the sum
+        return sum
+    }
+}

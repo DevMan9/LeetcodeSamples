@@ -1,0 +1,64 @@
+class Solution {
+public:
+    void teleStringHelper(std::vector<std::string>* vec, std::string code, std::string tail){
+    if(code.length()<=0){
+        (*vec).push_back(tail);
+        return;
+    }
+    switch(code[0]){
+        case '2':
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"a");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"b");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"c");
+            break;
+        case '3':
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"d");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"e");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"f");
+            break;
+        case '4':
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"g");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"h");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"i");
+            break;
+        case '5':
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"j");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"k");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"l");
+            break;
+        case '6':
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"m");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"n");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"o");
+            break;
+        case '7':
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"p");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"q");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"r");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"s");
+            break;
+        case '8':
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"t");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"u");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"v");
+            break;
+        case '9':
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"w");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"x");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"y");
+            teleStringHelper(vec, code.substr(1,code.size()-1), tail+"z");
+            break;
+        default:
+            break;
+    }
+}
+    
+    vector<string> letterCombinations(string digits) {
+        std::vector<std::string> ret;
+        if(digits.length()==0){
+            return ret;
+        }
+        teleStringHelper(&ret,digits,"");
+        return ret;
+    }
+};

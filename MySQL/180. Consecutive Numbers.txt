@@ -1,0 +1,10 @@
+# Write your MySQL query statement below
+WITH LeadLag AS (
+SELECT num, 
+LEAD(num) OVER(ORDER BY id) AS 'lead', 
+LAG(num) OVER(ORDER BY id) AS 'lag'
+FROM Logs) 
+
+SELECT DISTINCT LeadLag.num AS 'ConsecutiveNums'
+FROM LeadLag
+WHERE LeadLag.num = LeadLag.lead AND LeadLag.num = LeadLag.lag

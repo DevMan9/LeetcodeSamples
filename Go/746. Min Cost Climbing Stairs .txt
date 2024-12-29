@@ -1,0 +1,37 @@
+func minCostClimbingStairs(cost []int) int {
+    //Store the length of cost for ease of access
+    var length int = len(cost)
+
+    //Create a list to store the part_cost of a trip up to each index
+    part_cost := make([]int, length)
+
+    //Fill the first two elements in part_cost with the first to elements of cost
+    //This is because we can start on either the first or second index
+    for index := 0; index < 2; index++ {
+        part_cost[index] = cost[index]
+    }   
+
+    //Iterate through the remainder of the costs
+    //Recording the cheapest rout to get there
+    for index := 2; index < length; index++ {
+        //Fill the current index with the current cost
+        //If we stop here we must pay this toll
+        part_cost[index] = cost[index]
+        
+        //Add the cost of the cheaper of the 2 previous paths
+        //Go doesn't have a min() as far as I know
+        if part_cost[index - 1] < part_cost[index - 2] {
+            part_cost[index] += part_cost[index - 1]
+        }else{
+            part_cost[index] += part_cost[index - 2]
+        }
+    }
+    
+    //Return the minimum of the final 2 elements
+    //becuase we can still skip the last stop
+    if part_cost[length - 1] < part_cost[length - 2] {
+        return part_cost[length - 1]
+    }else{
+        return part_cost[length - 2]
+    }
+}

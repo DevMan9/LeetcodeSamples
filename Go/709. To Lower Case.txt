@@ -1,0 +1,21 @@
+func toLowerCase(s string) string {
+    //Convert s to a workable format
+    //In this case a byte slice
+    bytes := []byte(s)
+
+    //This bit signifies a letter's case in ASCII
+    //0 for capital
+    //1 for lowercase
+    const lowercase_flag byte = 0b00100000
+
+    //Loop though the bytes
+    for index := range bytes {
+        //Set the case flag of every capital byte 
+        if bytes[index] >= 'A' && bytes[index] <= 'Z' {
+            bytes[index] |= lowercase_flag
+        }
+    }
+
+    //Return the byte array to a string
+    return string(bytes)
+}

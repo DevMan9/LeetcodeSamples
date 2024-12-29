@@ -1,0 +1,57 @@
+class Solution {
+    func findWords(_ words: [String]) -> [String] {
+        //Initialize the return array
+        var ret: [String] = []
+
+        //Iterate through the words in words
+        for word in words {
+            //Check if the current word is a word that can be 
+            //written using only one row on an American keyboard
+            //If it can, then add it to the return array
+            if isWord(word) {
+                ret.append(word)
+            }
+        }
+
+        return ret
+    }
+
+    //True if word can be written using only one row of and American keyboard
+    //Otherwise false
+    func isWord(_ word: String) -> Bool {
+        //If the word has no characters
+        //then it can been written using only one row
+        if word.count < 1 {
+            return true
+        }
+
+        //Convert the word to lowercase
+        //This simplifies the test
+        let lowered = word.lowercased()
+
+        //Create a dictionary storing the each character against the row it's in
+        let keys: [Character: Int] = [
+            "q": 0, "w": 0, "e": 0, "r": 0, "t": 0, "y": 0, "u": 0, "i": 0, "o": 0, "p": 0,
+            "a": 1, "s": 1, "d": 1, "f": 1, "g": 1, "h": 1, "j": 1, "k": 1, "l": 1,
+            "z": 2, "x": 2, "c": 2, "v": 2, "b": 2, "n": 2, "m": 2,
+        ]
+
+        //Get the row of the first character in the word
+        //If even one chacter in the word uses a row different than this
+        //then the word cannot be written with one row
+        let row = keys[lowered.first!]
+
+        //Iterate through the remainder of the word
+        for letter in lowered.dropFirst(1) {
+            //Check that the current letter is in the same row as the first letter
+            //If it's not
+            if keys[letter] != row {
+                //Then the word cannot be written with one row
+                return false
+            }
+        }
+
+        //All the letters are in the same row
+        return true
+    }
+}

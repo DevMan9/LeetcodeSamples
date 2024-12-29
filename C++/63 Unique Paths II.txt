@@ -1,0 +1,56 @@
+class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        //Store the dimensions of the obstacleGrid for ease of access
+        int m = obstacleGrid.size();
+        int n = obstacleGrid[0].size();
+        
+        //Initialize a table to track the number of ways the 
+        //robot can reach a given square
+        std::vector<std::vector<int>> table(m,std::vector<int>(n));
+        
+        //Initialize the first row
+        //There is only 1 way the robot can reach each square in the first column
+        //and that is by moving only right
+        for(int i = 0; i < m; i++){
+            //If there the robot encounters an obstacle
+            //then break because the robot cannot reach the rest of the row
+            if(obstacleGrid[i][0])
+                break;
+            table[i][0] = 1;
+        }
+        
+        //Initialize the first column to 1
+        //There is only 1 way the robot can reach each square in the first column
+        //and that is by moving only down
+        for(int i = 0; i < n; i++){
+            //If there the robot encounters an obstacle
+            //then break because the robot cannot reach the rest of the column
+            if(obstacleGrid[0][i])
+                break;
+            table[0][i] = 1;
+        }
+        
+        //Iterate through the rest of the grid to calculate how many ways
+        //the robot can reach each square
+        //The robot can reach any given square in exactly 2 ways
+        //from above and from the left
+        //So the number of ways the robot can reach a square 
+        //is the sum of the ways the robot can reach the square above
+        //and the square to the left
+        for(int i = 1; i < m; i++){
+            for(int j = 1; j < n; j++){
+                //If the current obstacleGrid square is not an obstacle
+                //then the robot can reach this square
+                //so calculate the number of ways and store it in the table
+                if(!obstacleGrid[i][j]){
+                    table[i][j] = table[i-1][j]+table[i][j-1];
+                }
+            }
+        }
+
+        //We are interested in how many ways the robot can reach the bottom-right
+        //so return the bottom-right square
+        return table[m-1][n-1];
+    }
+};

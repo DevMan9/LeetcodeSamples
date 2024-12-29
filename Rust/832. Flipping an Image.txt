@@ -1,0 +1,20 @@
+impl Solution {
+    pub fn flip_and_invert_image(image: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
+        //Create a copy of the image
+        let mut new_image: Vec<Vec<i32>> = image.clone();
+
+        //Iterate the rows of the image
+        for row in 0..new_image.len() {
+            //Reverse the row
+            new_image[row].reverse();
+
+            //Invert the row
+            for col in 0..new_image[row].len() {
+                new_image[row][col] = new_image[row][col] ^ 1;
+            }
+        }
+
+        //Return the new_image
+        return new_image;
+    }
+}

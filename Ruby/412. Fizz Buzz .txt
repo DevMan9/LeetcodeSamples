@@ -1,0 +1,31 @@
+# @param {Integer} n
+# @return {String[]}
+def fizz_buzz(n)
+    #Initialize the return array to contain the elements [1, n] in order
+    #We will be overwriting the ones divisible by 3 and 5
+    ret = Array.new(n) {|i| (i+1).to_s}
+
+    #Set every third element to "Fizz"
+    index = 2
+    while index < n
+        ret[index] = "Fizz"
+        index += 3
+    end
+
+    #Set every fifth element to "Buzz"
+    index = 4
+    while index < n
+        ret[index] = "Buzz"
+        index += 5
+    end
+
+    #Set every fifteenth element to "FizzBuzz"
+    index = 14
+    while index < n
+        ret[index] = "FizzBuzz"
+        index += 15
+    end
+
+    #Return the "FizzBuzz" array
+    return ret
+end

@@ -1,0 +1,56 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    //Returns the end of the newly flattened list
+    TreeNode* flattenGetEnd(TreeNode* root) {
+        //If root is not a valid tree
+        //then about the operation and return root
+        if(root){
+            //If the root is a leaf node
+            //then it is already a flattened tree
+            //and it is also the end of the list
+            //so return root
+            if(!root->left && !root->right){
+                return root;
+                
+            //If there is no right node
+            //then move the left subtree to the right and flatten it
+            }else if(!root->right){
+                root->right = root->left;
+                root->left = nullptr;
+                TreeNode* end = flattenGetEnd(root->right);
+                return end;
+            //If there is no left subtree
+            //then just flatten the right tree
+            }else if(!root->left){
+                TreeNode* end = flattenGetEnd(root->right);
+                return end;
+            //If there are both a left and right subtree
+            //then flatten both and insert the left before the right
+            }else{
+                TreeNode* end = flattenGetEnd(root->left);
+                TreeNode* r_end = flattenGetEnd(root->right);
+                end->right = root->right;
+                root->right = root->left;
+                root->left = nullptr;
+                return r_end;
+            }
+        }
+        //The tree is empty
+        return nullptr;
+    }
+    
+    void flatten(TreeNode* root) {
+        flattenGetEnd(root);
+    }
+};

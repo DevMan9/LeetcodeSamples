@@ -1,0 +1,14 @@
+# Write your MySQL query statement below
+WITH 2019Orders AS (
+  SELECT buyer_id AS user_id, COUNT(*) AS 'orders'
+  FROM Orders
+  WHERE YEAR(order_date) = '2019'
+  GROUP BY buyer_id
+)
+
+SELECT user_id AS 'buyer_id', 
+join_date, 
+IFNULL(orders, 0) AS 'orders_in_2019'
+FROM Users
+LEFT JOIN 2019Orders
+USING(user_id)

@@ -1,0 +1,19 @@
+/**
+ * @param {number} n
+ * @return {boolean}
+ */
+var isPowerOfThree = function(n) {
+    //Initialize a variable.
+    //We will be itarativly multiplying by 3 until we pass the given number
+    let test = 1;
+
+    //Loop until test is no less than n
+    while(test<n){
+        //Cheeky multiply by 3
+        test = (test<<1) + test;
+    }
+
+    //At this point test will be the first power of 3 >= n
+    //So if test and n are equal, then n must be a power of 3.
+    return test == n;
+};

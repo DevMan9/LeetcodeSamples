@@ -1,0 +1,40 @@
+public class Solution {
+    public bool HasGroupsSizeX(int[] deck) {
+        //Create a dictionary to count cards
+        Dictionary<int, int> counting_cards = new Dictionary<int, int>();
+
+        //Count the cards
+        foreach (int card in deck) {
+            if (counting_cards.ContainsKey(card)){
+                counting_cards[card]++;
+            }else{
+                counting_cards[card] = 1;
+            }
+        }
+
+        //Create a variable to store the min count
+        int gcd = counting_cards[deck[0]];
+
+        //Calculate the Greatest Common Divisor of all values
+        foreach (int value in counting_cards.Values) {
+            gcd = GreatestCommonDivisor(gcd, value);
+        }
+
+        //If the gcd is less than 2
+        if (gcd < 2) {
+            //The the deck cannot be partitioned
+            return false;
+        }
+
+        //The deck CAN be partitioned
+        return true;
+    }
+
+    public int GreatestCommonDivisor(int a, int b) {
+        if (b == 0){
+           return a;
+        }else{
+            return GreatestCommonDivisor(b, a % b);
+        }
+    }
+}

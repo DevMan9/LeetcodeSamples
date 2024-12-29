@@ -1,0 +1,34 @@
+public class Solution {
+    public bool IsMonotonic(int[] nums) {
+        //Store the length of nums for ease of access
+        int length = nums.Length;
+
+        //If there are less than 2 elements
+        if (length < 2) {
+            //Then the array is monotonic
+            return true;
+        }
+
+        //Get the sign between the last and first element
+        int sign = Math.Sign(nums[length - 1] - nums[0]);
+
+        //Loop through nums comparing each to its predecessor
+        for(int index = 1; index < length; index++) {
+            //Store the sign of the change between this element and its predecessor
+            int current_sign = Math.Sign(nums[index] - nums[index - 1]);
+
+            //If the current sign is not 0 
+            //(zeros are omitted because 
+            //nums[i] is allowed to equal nums[i + 1] 
+            //under the given definition of monotonic)
+            //AND the current_sign is different than the expected sign
+            if (current_sign != 0 && current_sign != sign){
+                //Then the array is NOT monotonic
+                return false;
+            }
+        }
+
+        //The array is monotonic
+        return true;
+    }
+}

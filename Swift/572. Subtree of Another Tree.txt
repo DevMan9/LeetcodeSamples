@@ -1,0 +1,41 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public var val: Int
+ *     public var left: TreeNode?
+ *     public var right: TreeNode?
+ *     public init() { self.val = 0; self.left = nil; self.right = nil; }
+ *     public init(_ val: Int) { self.val = val; self.left = nil; self.right = nil; }
+ *     public init(_ val: Int, _ left: TreeNode?, _ right: TreeNode?) {
+ *         self.val = val
+ *         self.left = left
+ *         self.right = right
+ *     }
+ * }
+ */
+class Solution {
+    func isSubtree(_ root: TreeNode?, _ subRoot: TreeNode?) -> Bool {
+        //There's probably a better way than to parse all those optionals as a string
+        return treeToArray(root).map{"\($0)"}.joined(separator: ",").contains(treeToArray(subRoot).map{"\($0)"}.joined(separator: ","))
+    }
+
+    //Converts a tree to a pre order array
+    func treeToArray(_ root: TreeNode?) -> [Int?] {
+        //If root is nil
+        if root == nil {
+            //Then return an array with 1 element nil
+            return [nil]
+        }
+
+        //Create the return variable
+        var ret: [Int?] = [root!.val]
+
+        //Append the left nodes
+        ret.append(contentsOf: treeToArray(root!.left))
+        //Append the right nodes
+        ret.append(contentsOf: treeToArray(root!.right))
+
+        //Return the array
+        return ret
+    }
+}

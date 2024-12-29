@@ -1,0 +1,25 @@
+/**
+ * @param {number} n
+ * @return {boolean}
+ */
+var isUgly = function(n) {
+    //Edge case
+    if (n == 0){
+        return false;
+    }
+    
+    //Ugly numbers consist only of 2, 3, and 5 (and 1)
+    const primes = [2,3,5];
+
+    //Iterate through each prime and 
+    //divide it out of n until you can't divide n anymore.
+    for(let div of primes){
+        while(!(n%div)){
+            n/=div;
+        }
+    }
+
+    //If n is 1, then the number is ugly.
+    //If it's not 1, then it contains a prime that isn't 2, 3, or 5.
+    return n == 1;
+};

@@ -1,0 +1,33 @@
+class Solution {
+    func convertToBase7(_ num: Int) -> String {
+        //0 is our end case and must be specially handled
+        if num == 0 {
+            return "0"
+        }
+
+        //Initialize the base we will be converting to
+        let base = 7
+
+        //Initialize the return string
+        var ret = ""
+
+        //ensure the input num is a positive number
+        var n = abs(num)
+
+        //Iteratively convert n to base 7
+        while n > 0 {
+            //Calculate the current digit
+            ret = String(n % base) + ret
+            //right shift n in base
+            n /= base 
+        }
+
+        //Append a negative sign if necessary
+        if num < 0 {
+            ret = "-" + ret
+        }
+
+        //Return num in base 7
+        return ret
+    }
+}

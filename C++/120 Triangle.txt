@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int minimumTotal(std::vector<std::vector<int>>& triangle) {
+        //Iterate bottom up through the triangle to calculate the 
+        //minimum value that each index can hold
+        for(int i = triangle.size()-2; i >= 0; i--){
+            for(int j = 0; j <= i; j++){
+                //Add the minimum of the 2 indexes 
+                //below the current index to the current index
+                triangle[i][j]+=(triangle[i+1][j]<triangle[i+1][j+1]?triangle[i+1][j]:triangle[i+1][j+1]);
+            }
+        }
+        //The top of the triangle now holds the minimum path sum from top to bottom
+        return triangle[0][0];
+    }
+};

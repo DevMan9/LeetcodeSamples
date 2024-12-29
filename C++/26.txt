@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int current_index = 0;
+        int test_index = 1;
+        while(test_index < nums.size()){
+            if(nums[test_index]^nums[current_index]){
+                current_index++;
+                nums[current_index] = nums[test_index];
+            }
+            test_index++;
+        }
+        return current_index+1;
+    }
+};

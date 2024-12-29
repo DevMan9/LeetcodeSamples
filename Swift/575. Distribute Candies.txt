@@ -1,0 +1,7 @@
+class Solution {
+    func distributeCandies(_ candyType: [Int]) -> Int {
+        //She can eat either half her candies types of candies,
+        //or her total types of candies types of candies, whichever is less
+        return min(candyType.count/2, Set(candyType).count)
+    }
+}

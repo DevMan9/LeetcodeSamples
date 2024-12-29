@@ -1,0 +1,21 @@
+impl Solution {
+    pub fn transpose(matrix: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
+        //Get the dimensions of the original matrix
+        let rows = matrix.len();
+        let cols = matrix[0].len();
+
+        //Create a new matrix the size of the transposed matrix
+        let mut new_matrix: Vec<Vec<i32>> = vec![vec![0; rows]; cols];
+
+        //Iterate through the elements in matrix
+        //Placing them in their coresponding spot in new_matrix
+        for row in 0..rows {
+            for col in 0..cols {
+                new_matrix[col][row] = matrix[row][col];
+            }
+        }
+
+        //Return the transposed matrix
+        return new_matrix;
+    }
+}

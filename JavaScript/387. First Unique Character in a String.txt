@@ -1,0 +1,32 @@
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var firstUniqChar = function(s) {
+    //Create a map to store the counts of each character in s
+    const count = new Map();
+
+    //Count each character in s
+    for(const char of s){
+        //Check to see if this character has a count
+        if(count.has(char)){
+            //Increment the count
+            count.set(char, count.get(char) + 1);
+        }else{
+            //Add an entry for this character
+            count.set(char, 1);
+        }
+    }
+
+    //Iterate through s by index
+    for(let index = 0; index < s.length; index++){
+        //Check to see if the character at index is unique
+        if(count.get(s[index])==1){
+            //This index is a unique character
+            return index;
+        }
+    }
+
+    //There are no unique character in the string
+    return -1;
+};

@@ -1,0 +1,19 @@
+func hasAlternatingBits(n int) bool {
+    //If the LSB (least significant bit) is 0
+    //Right shift n by 1
+    //This will convert 10101...01010
+    //into 10101...10101
+    //but will leave 10101...10101 alone
+    test := n >> (1 & (1 ^ n))
+
+    //Calcluate the xor of test left shifted twice with a 1 ored to the front 
+    //and test
+    //This will take 10101
+    //and by 10101 xor 1010101
+    //will produce 1000000
+    //which we can then test as a power of 2
+    test = ((test << 2) | 1) ^ test
+
+    //if test is now a power of 2, the n had alternating bits
+    return test & (test - 1) == 0
+}

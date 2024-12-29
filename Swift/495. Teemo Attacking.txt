@@ -1,0 +1,42 @@
+class Solution {
+    func findPoisonedDuration(_ timeSeries: [Int], _ duration: Int) -> Int {
+        //If there are no attacks in timeSeries
+        if timeSeries.count < 1 {
+            //Then no damage will be accrewed
+            return 0
+        }
+
+        //Initialize the return variable
+        var ret = 0
+
+        //Iterate through timeSeries to calculate the times between attacks
+        //Since we are accessing two adjacent indicies at once
+        //We stop at the second to last element instead of the last element
+        var index = 0
+        while index < timeSeries.count - 1{
+            //Calculate the time until the next attack
+            //We will compare this to the duration of an attack
+            //to calculate how much damage this attack will do
+            var delta = timeSeries[index + 1] - timeSeries[index]
+
+            //If the time until the next attack is greater than the duration
+            //then the timer will not be reset and 
+            //the current attack will do its full damage
+            if delta > duration {
+                delta = duration
+            }
+
+            //Add the calculated damage to the total
+            ret += delta
+
+            //Increment the index
+            index += 1
+        }
+
+        //The last attack will always produce its full damage
+        ret += duration
+        
+        //Return the total damage
+        return ret
+    }
+}

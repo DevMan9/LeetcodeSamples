@@ -1,0 +1,30 @@
+func pivotIndex(nums []int) int {
+    //Create a pair of variable to store the left and right sums
+    var left_sum int = 0;
+    var right_sum int = 0;
+
+    //Store the length of nums for easy access
+    var length int = len(nums)
+
+    //Sum the right side
+    for index := 0; index < length; index++ {
+        right_sum += nums[index]
+    }
+
+    //Iterate the list
+    for index := 0; index < length; index++ {
+        //Subtract the current index from right_sum
+        right_sum -= nums[index]
+        //If left_sum and right_sum are equal
+        if left_sum == right_sum {
+            //Then return the current index
+            return index
+        }else{
+            //Else add the current index to left_sum
+            left_sum += nums[index]
+        }
+    }
+
+    //The left and right sum were never equal
+    return -1
+}

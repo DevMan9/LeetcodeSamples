@@ -1,0 +1,45 @@
+class Solution {
+    func checkRecord(_ s: String) -> Bool {
+        //Thresholds for attendance award
+        let late_threshold = 3
+        let absent_threshold = 2
+
+        //Variables to store counts
+        var late = 0
+        var absent = 0
+
+        //Iterate through s counting absences and tardies
+        for letter in s {
+            //If absent
+            if letter == "A" {
+                //Increment the absent count
+                absent += 1
+
+                //If absent count exceeds threshold
+                if absent >= absent_threshold {
+                    //Then the student is disqualified
+                    return false
+                }
+            }
+
+            //If late
+            if letter == "L" {
+                //Increment late count
+                late += 1
+
+                //If late count exceeds threshold
+                if late >= late_threshold {
+                    //Then the student is disqualified
+                    return false
+                }
+            }else{
+                //Reset the late count when the student is not late
+                //(for some reason an absences inbetween reset the count)
+                late = 0
+            }
+        }
+
+        //The student was not disqualified
+        return true
+    }
+}

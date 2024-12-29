@@ -1,0 +1,14 @@
+class Solution {
+public:
+    bool search(vector<int>& nums, int target) {
+        //Worst case scenario you're going to have to 
+        //iterate the list at some point
+        //rip off the band-aid and just do it...
+        for(int i:nums){
+            if(i==target){
+                return true;
+            }
+        }
+        return false;
+    }
+};

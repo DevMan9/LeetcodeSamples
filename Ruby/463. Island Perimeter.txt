@@ -1,0 +1,32 @@
+# @param {Integer[][]} grid
+# @return {Integer}
+def island_perimeter(grid)
+    #Initialize a variable to store the perimeter
+    ret = 0
+
+    #Loop through the entire grid
+    for row in 0...grid.length
+        for col in 0...grid[0].length
+            #If the current grid square is land,
+            #Then calculate how many water squares it is touching
+            if grid[row][col] == 1
+                #North (^)
+                n = row - 1 < 0 ? 0 : grid[row - 1][col]
+                #South (v)
+                s = row + 1 >= grid.length ? 0 : grid[row + 1][col]
+                #East (>)
+                e = col + 1 >= grid[0].length ? 0 : grid[row][col + 1]
+                #West (<)
+                w = col - 1 < 0 ? 0 : grid[row][col - 1]
+
+                #Water squares are represented by 0
+                #Since we only reach this section if the current square is land (1)
+                #We can add 4, then subtract each surrounding land square
+                ret += 4-n-e-s-w
+            end
+        end
+    end
+    
+    #Return the perimeter of the island
+    return ret
+end

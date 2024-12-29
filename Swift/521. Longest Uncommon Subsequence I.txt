@@ -1,0 +1,14 @@
+class Solution {
+    func findLUSlength(_ a: String, _ b: String) -> Int {
+        //If a and b are the same string
+        if a == b {
+            //Then there are no subsequences that do not appear in only one string 
+            return -1
+        }
+
+        //If a and b are not equal,
+        //then the full length of the longer string
+        //will be the longest uncommon subsequence     
+        return max(a.length, b.length)
+    }
+}

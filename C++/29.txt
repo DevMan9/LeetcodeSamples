@@ -1,0 +1,54 @@
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        //record whether the result will be negative or not
+        bool negative = (dividend < 0 ^ divisor < 0);
+        
+        //rectify the inputs and store them in long variables
+        long l_divisor = (divisor<0)?0-(long)divisor:divisor;
+        long l_dividend = (dividend<0)?0-(long)dividend:dividend;
+    
+        //initialize a variable to store multiples of 2 of the rectified divisor
+        long modified_divisor = l_divisor;
+        
+        //initialize a variable to keep track of 
+        //how many multiples of the divisor are currently stored in modified_divisor
+        long sum_term = 1;
+        
+        //loop until the modified_divisor is greater than the rectified dividend
+        while(l_dividend>=modified_divisor){
+            //"Multiply" the modified_divisor by 2
+            modified_divisor = modified_divisor<<1;
+            
+            //"Multiply" the sum_term by 2
+            sum_term = sum_term<<1;
+        }
+        
+        //initialize a return variable
+        long ret = 0;
+        
+        //loop until the rectified dividend is less than the original rectifed divisor
+        while(l_dividend>=l_divisor){
+            //"Divide" the modified_divisor by 2
+            modified_divisor = modified_divisor>>1;
+            
+            //"Divide" the sum_term by 2
+            sum_term = sum_term>>1;
+            
+            //if modified_divisor goes into the remaining rectified dividend at least once
+            if(l_dividend>=modified_divisor){
+                //subtract 1 count of modified_divisor from the rectified dividend
+                l_dividend-=modified_divisor;
+                
+                //add the number of divisors contained in modified_divisor
+                ret+=sum_term;
+            }
+        }
+        
+        //apply the sign to the return value
+        ret = (negative)?0-ret:ret;
+        
+        //return the return value, clamped to the integer range
+        return (ret>0b01111111111111111111111111111111)?(ret<0b10000000000000000000000000000000)?0b10000000000000000000000000000000:0b01111111111111111111111111111111:(int)(ret);
+    }
+};

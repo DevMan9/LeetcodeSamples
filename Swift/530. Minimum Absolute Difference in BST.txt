@@ -1,0 +1,66 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public var val: Int
+ *     public var left: TreeNode?
+ *     public var right: TreeNode?
+ *     public init() { self.val = 0; self.left = nil; self.right = nil; }
+ *     public init(_ val: Int) { self.val = val; self.left = nil; self.right = nil; }
+ *     public init(_ val: Int, _ left: TreeNode?, _ right: TreeNode?) {
+ *         self.val = val
+ *         self.left = left
+ *         self.right = right
+ *     }
+ * }
+ */
+class Solution {
+    func getMinimumDifference(_ root: TreeNode?) -> Int {
+        //Convert the tree into a inOrder array
+        let arr = inOrder(root)
+
+        //If the array has less than 2 elements
+        //Then there can be no difference between two nodes
+        if arr.count < 2 {
+            return -1
+        }
+
+        //Initialize the return variable to 
+        //the difference between the first 2 elements
+        var ret = arr[1] - arr[0]
+
+        //Check the remaining differences in the tree
+        for index in 1 ..< arr.count - 1 {
+            //Calculate the difference between the current and next node
+            let dif = arr[index + 1] - arr[index]
+
+            //If dif is less than ret (the minimum)
+            if dif < ret {
+                //Then overwrite the min
+                ret = dif
+            }
+        }
+
+        //Return the minimum difference
+        return ret
+    }
+
+    //Returns an array of the inOrder traversal of a Tree
+    func inOrder(_ root: TreeNode?) -> [Int] {
+        //End condition
+        if root == nil {
+            return []
+        }
+
+        //Calculate the inOrder of the left node
+        var ret = inOrder(root!.left)
+
+        //Append the current value to the inOrder
+        ret.append(root!.val)
+
+        //Append the inOrder traversal of the right node
+        ret.append(contentsOf: inOrder(root!.right))
+
+        //Return the inOrder traversal of this node
+        return ret
+    }
+}

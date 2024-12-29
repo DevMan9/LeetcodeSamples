@@ -1,0 +1,33 @@
+class Solution(object):
+    def majorityElement(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+
+        #Create a dictionary to count occurances of each num in nums
+        dictionary = dict()
+
+        #Iterate through nums and talley each element
+        for num in nums:
+            #If num is already in the dictionary,
+            #then we can simply increment it
+            if num in dictionary:
+                dictionary[num] += 1
+            
+            #Otherwise, we must initialize it.
+            else:
+                dictionary[num] = 1
+
+        #Initialize variables to recored the majority element
+        majority = 0
+        majority_count = 0
+
+        #Iterate the dictionary to find the majority element
+        for key in dictionary:
+            if dictionary[key] > majority_count:
+                majority = key
+                majority_count = dictionary[key]
+
+        #Return the majority element
+        return majority

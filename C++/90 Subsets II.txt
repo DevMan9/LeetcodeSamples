@@ -1,0 +1,122 @@
+class Solution {
+public:
+    //Returns every subset of [1...n] where we choose k elements
+    //each subset is in ascending order
+    std::vector<std::vector<int>> combine(int n, int k) {
+        //Initialize the return vector
+        std::vector<std::vector<int>> ret;
+
+        //Initialize a variable to store the index
+        //We will be building each choose digit by digit
+        int index = 0;
+
+        //Initialize a vector to store the chosen
+        std::vector<int> combination(k,0);
+
+        //Repeat until index is less than 0
+        //because of the way we are constructing numbers
+        //this will occur when the combination vector is filled with n+1
+        while (index >= 0){
+            //Increment the value at index
+            combination[index]++;
+
+            //If the value at index is greater than n
+            //then this index is at the max value it can be
+            //so move back an index and increment that one
+            if (combination[index] > n){
+                index--;
+
+            //If index is at the end of combination
+            //then this choose is complete
+            //so push it into the return vector
+            }else if (index >= k - 1){
+                ret.push_back(combination);
+
+            //The current index is not maxed
+            //nor are we working on te last element
+            //so move to the next index
+            //since we are choosing numbers in order
+            //we copy the value at the previuos index into the current index
+            //and then start incrementing from there
+            }else{
+                index++;
+                combination[index] = combination[index - 1];
+            }
+        }
+
+        //Return the return vector
+        return ret;
+    }
+
+    //Produces csv string representation of the given vector
+    std::string hash(std::vector<int>& vec){
+        //If the vector is empty
+        //then return the empty string
+        if(vec.size()==0){
+            return "";
+        }
+        
+        //Initialize a string builder
+        std::ostringstream os;
+        
+        //Push the first value in the input vector into the string builder
+        os<<vec[0];
+        
+        //Iterate over the remaining elements in the input vector and 
+        //push them into the string builder separated by commas
+        for(int i = 1; i < vec.size(); i++){
+            os<<','<<vec[i];
+        }
+        
+        //Return the built string
+        return os.str();
+    }
+    
+    std::vector<std::vector<int>> subsetsWithDup(vector<int>& nums) {
+        //Initialize the return vector
+        std::vector<std::vector<int>> ret = {{}};
+        
+        //Sort the input nums
+        //this is necessary to ensure that no duplicates are added
+        std::sort(nums.begin(),nums.end());
+        
+        //Initialize a set to track which subsets have been used
+        //We will be converting the subsets to string for ease of implementation
+        std::unordered_set<std::string> set;
+
+        //Iterate through the possible combinations of indexes
+        //then build a vector uning the values at the indices
+        //skipping 0 for simplicity (It's already in the return vector)
+        for(int i = 1; i <= nums.size(); i++){
+            //Genereate the set of combinations for picking i elements from n
+            std::vector<std::vector<int>> keys = combine(nums.size(), i);
+
+            //for every combination in keys
+            //get the corresponding element in nums and store
+            for(std::vector<int> subset:keys){
+                //Iterate through the subsets and map the values
+                //in nums back to the indicies in subset
+                for (int i = 0; i < subset.size(); i++) {
+                    subset[i] = nums[subset[i]-1];
+                }
+                
+                //Generate the key string we will use for hashing the subset
+                std::string key = hash(subset);
+                
+                //If the hash set does NOT contain the generated key
+                //then push the subset into the return vector
+                //and add the hash key to the hash set
+                if(!set.count(key)){
+                    //Push the subset into the return vector
+                    ret.push_back(subset);
+                    
+                    //Add the hash key to the hash set
+                    set.insert(key);
+                }
+            }
+        }
+
+        //Return the return vector
+        return ret;
+    }
+};

@@ -1,0 +1,25 @@
+class Solution(object):
+    def isHappy(self, n):
+        """
+        :type n: int
+        :rtype: bool
+        """
+
+        #Create a set to track numbers we have previously encountered
+        nums = set()
+
+        #Loop until we reach 1
+        while n != 1:
+            #If we encounter a duplicate number,
+            #then we have entered a loop
+            if n in nums:
+                return False
+
+            #Add the current number to the set of encountered numbers
+            nums.add(n)
+
+            #Calculate the next number
+            n = sum(map(lambda x:x*x,map(lambda x:int(x),str(n))))
+
+        #1 was reached
+        return True

@@ -1,0 +1,57 @@
+class Solution {
+public:
+    int minDistance(std::string word1, std::string word2){
+        //Store the lengths of each word for ease of access
+        int m = (int)word1.length();
+        int n = (int)word2.length();
+
+        //Initialize a 2D vector that will be used track the number of changes
+        //to get from word1 to word2 the size is (m+1,n+1) because
+        //row 0 represents the empty string
+        std::vector<std::vector<int>> table(m + 1,std::vector<int>(n + 1));
+
+        //Fill the first column
+        //The first column represents how many steps it would take to get
+        //an empty string to equal word2 up to index i
+        for(int i = 0; i <= m; i++){
+            table[i][0] = i;
+        }
+
+        //Fill the first row
+        //The first row represents how many steps it would take to get
+        //an empty string to equal word1 up to index i
+        for(int i = 1; i <= n; i++){
+            table[0][i] = i;
+        }
+
+        //Fill the rest of the grid
+        //Moving across the row is equivalent to adding a letter to word1
+        //Likewise, moving down a column is removing a letter from word1
+        //So it follows that moving down and right is both adding and removing a letter
+        //This can be thought of as changing a letter
+        //Lastly if the letters already match then no operation is needed
+        for(int i = 1; i <= m; i++){
+            for(int j = 1; j <= n; j++){
+                //If the current letters in the words match,
+                //then no operation is done so the cost at this index is the same as the last
+                if(word1[i - 1] == word2[j - 1]){
+                    table[i][j] = table[i - 1][j - 1];
+                }else{
+                    //Get the minimum value of the index above, to the left and to the top left
+                    //This initial value is before we add a letter
+                    int min = table[i - 1][j];
+                    //This value is for removing a letter
+                    min = (table[i][j - 1]<min)?table[i][j - 1]:min;
+                    //This value is for changing a letter
+                    min = (table[i - 1][j - 1]<min)?table[i - 1][j - 1]:min;
+
+                    //We performed an operation so add 1 to the minimum and
+                    //store it at the current index
+                    table[i][j] = 1 + min;
+                }
+            }
+        }
+        //Return the bottom-right of the table
+        return table[m][n];
+    }
+};

@@ -1,0 +1,25 @@
+class Solution(object):
+    def singleNumber(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+
+        #Initialize a return variable
+        ret = 0
+
+        #Iterate through the given nums
+        for num in nums:
+            """
+            XOR each num in nums into the return variable.
+            By doing so, all values that occur twice (and any multiple of 2)
+            will cancel out.
+            All values that occur once (and any odd number of times)
+            will be XORd together.
+            Since nums only contains 1 single value, while the rest are doubles
+            we can assume the single number will be the only one left
+            """
+            ret ^= num
+
+        #Return the single number
+        return ret

@@ -1,0 +1,32 @@
+class Solution {
+    func fib(_ n: Int) -> Int {
+        //Edge case
+        if n == 0 {
+            return 0
+        }
+
+        //Initilaize the first 2 values
+        //We will be walking forward
+        var current = 1
+        var prev = 1;
+
+        //Loop n - times
+        var loop = n - 2
+        while loop > 0 {
+            //Calculate the next fib
+            let tmp = current + prev
+
+            //Store the current in prev
+            prev = current
+
+            //set the current to the newly calculated fib
+            current = tmp
+
+            //Decrement the loop
+            loop -= 1
+        }
+
+        //Return the fibonacci number
+        return current
+    }
+}

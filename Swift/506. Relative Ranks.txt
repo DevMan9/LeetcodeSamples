@@ -1,0 +1,41 @@
+class Solution {
+    func findRelativeRanks(_ score: [Int]) -> [String] {
+        //Create a dictionary to store the score to string relationship
+        var dict: [Int: String] = [:]
+        
+        //Create an sort a copy of score
+        var sorted = score;
+        sorted.sort(by: >)
+
+        //Create the return array
+        var ret: [String] = []
+
+        //Iterate through the sorted scores
+        //storing them in the dictionary with their customized placing
+        for index in 0..<sorted.count {
+            let place: String
+            switch index {
+                case 0:
+                    place = "Gold Medal"
+                case 1:
+                    place = "Silver Medal"
+                case 2:
+                    place = "Bronze Medal"
+                default:
+                    place = String(index + 1)
+            }
+
+            dict[sorted[index]] = place
+        }
+
+        //Populate the return array with the 
+        //placings attributed to each element in score
+        for value in score {
+            ret.append(dict[value]!)
+        }
+
+        //Return the placings
+        return ret
+
+    }
+}

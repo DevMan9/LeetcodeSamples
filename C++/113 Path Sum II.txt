@@ -1,0 +1,64 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    //Outputs all the paths which sum to targetSum in out
+    //builder is used while building the paths
+    void pathSumHelper(TreeNode* root, int targetSum, vector<vector<int>>& out, vector<int>& builder) {
+        //If the node is not valid accessing it would cause errors
+        //so only operate if it is valid
+        if(root){
+            //Push the current node's value onto the builder
+            builder.push_back(root->val);
+            
+            //Subtract the current node's value from sum
+            targetSum-=root->val;
+            
+            //If the current node is a leaf node
+            //then check if the path is valid
+            //else check the left and right subtrees
+            if(root->left==root->right){
+                //If the targetSum is zero
+                //then the sum of the nodes to reach this leaf is 
+                //the same as the initial targetSum
+                //So push the built path onto the output variable
+                if(!targetSum){
+                    out.push_back(builder);
+                }
+            }else{
+                //Check left subtree
+                pathSumHelper(root->left,targetSum,out,builder);
+                
+                //Check right subtree
+                pathSumHelper(root->right,targetSum,out,builder);
+            }
+            
+            //Before we return, we need to put everything back the way it was
+            builder.pop_back();
+        }
+    }
+    
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+        //Initilaize a variable to store the output of the helper function
+        vector<vector<int>> out;
+        
+        //Initialize a vector that the 
+        //recursive function can build into and backtrack with
+        vector<int> builder;
+        
+        //Recursively build paths that sum to targetSum
+        pathSumHelper(root, targetSum, out, builder);
+        
+        //Return the list of built paths
+        return out;
+    }
+};

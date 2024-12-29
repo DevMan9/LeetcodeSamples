@@ -1,0 +1,34 @@
+public class Solution {
+    public string ReverseOnlyLetters(string s) {
+        //Create a mutable version of s
+        StringBuilder str = new StringBuilder(s);
+
+        //Initialize *WOW* Two pointers! *WOW*
+        int left = 0;
+        int right = s.Length - 1;
+
+        //Loop until left and right meet
+        while (left < right){
+            //If left char is a letter
+            if (Char.IsLetter(str[left])) {
+                //Then if right char is a letter
+                if (Char.IsLetter(str[right])) {
+                    //Swap the chars
+                    str[left] ^= str[right];
+                    str[right] ^= str[left];
+                    str[left] ^= str[right];
+                    //Move the left pointer forward
+                    left++;
+                }
+                //Move the right pointer backwards
+                right--;
+            }else{
+                //Move the left pointer forward
+                left++;
+            }
+        }
+
+        //Return the built string
+        return str.ToString();
+    }
+}

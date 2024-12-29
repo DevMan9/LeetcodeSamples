@@ -1,0 +1,35 @@
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {character}
+ */
+var findTheDifference = function(s, t) {
+    //Create a map to store the counts of each character in s
+    const count = new Map();
+
+    //Count each character in s
+    for(const char of s){
+        //Check to see if this character has a count
+        if(count.has(char)){
+            //Increment the count
+            count.set(char, count.get(char) + 1);
+        }else{
+            //Add an entry for this character
+            count.set(char, 1);
+        }
+    }
+
+    //Uncount each character in t
+    for(const char of t){
+        //Check to see if the character has a count
+        if(count.has(char) && count.get(char) > 0){
+            count.set(char, count.get(char) - 1);
+        }else{
+            //This character was added
+            return char;
+        }
+    }
+
+    //No character was added
+    return " ";
+};

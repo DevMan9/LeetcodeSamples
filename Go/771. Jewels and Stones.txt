@@ -1,0 +1,24 @@
+func numJewelsInStones(jewels string, stones string) int {
+    //Create a map to catalogue jewels
+    var jewel_map map[rune]bool = make(map[rune]bool)
+
+    //Add each jewel to the jewel_map
+    for _, jewel := range jewels {
+        jewel_map[jewel] = true
+    }
+
+    //Initialize a variable to count the jewels in stones
+    var count int = 0
+
+    //Iterate through stones
+    for _, stone := range stones {
+        //If stone is a jewel
+        if jewel_map[stone] {
+            //Increment count
+            count++
+        }
+    }
+
+    //Return the count of jewels
+    return count
+}

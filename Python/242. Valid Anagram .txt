@@ -1,0 +1,29 @@
+class Solution(object):
+    def isAnagram(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+        #Check that the lenghts are the same
+        if len(s) != len(t):
+            return False
+
+        #Initialize a dictionary to store the letters in s
+        chars = dict()
+
+        #Count each occurance of each letter in s
+        for char in s:
+            chars[char] = chars.get(char,0) + 1
+
+        #Uncount each occurance of each letter in t
+        for char in t:
+            chars[char] = chars.get(char,0) - 1
+
+        #s and t are anagrams if and only if 
+        #the number of occurances of each letter is the same
+        #Letters found in s but not t will have a postive count
+        #Letters found in t but not s will have a negatve count
+        #Letters found in both with have a 0 count
+        #So if all letters in chars have a 0 count, then s and t must be anagrams
+        return not sum(map(abs,chars.values()))

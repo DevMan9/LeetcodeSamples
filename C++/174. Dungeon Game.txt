@@ -1,0 +1,73 @@
+class Solution {
+public:
+    int calculateMinimumHP(vector<vector<int>>& dungeon) {
+        //Store size of dungeon for ease of access
+        int rows = dungeon.size();
+        int cols = dungeon[0].size();
+
+        //Create a table to store the required health
+        //to reach the end from a given room
+        int health[rows][cols];
+
+        //Initialize the end condition
+        //(The knight must complete the final room with at least one health)
+        health[rows - 1][cols - 1] = 1;
+
+        //Populate the rightmost column
+        for(int row = rows - 2; row >= 0; row--){
+            //Calculate the required health to reach to complete the next room
+            int required_health = 
+            health[row + 1][cols - 1] - dungeon[row + 1][cols - 1];
+
+            //Clamp minimum 1
+            required_health = required_health > 0 ? required_health : 1;
+
+            //Store the required health
+            health[row][cols - 1] = required_health;
+        }
+
+        //Populate the bottommost row
+        for(int col = cols - 2; col >= 0; col--){
+            //Calculate the required health to reach to complete the next room
+            int required_health = 
+            health[rows - 1][col + 1] - dungeon[rows - 1][col + 1];
+
+            //Clamp minimum 1
+            required_health = required_health > 0 ? required_health : 1;
+
+            //Store the required health
+            health[rows - 1][col] = required_health;
+        }
+
+        //Caulcate the remainder of the dungeon
+        for(int row = rows - 2; row >= 0; row--){
+            for(int col = cols - 2; col >= 0; col--){
+                //Required health to complete the room to the right
+                int right = health[row][col + 1] - dungeon[row][col + 1];
+                //Clamp minimum 1
+                right = right > 0 ? right : 1;
+
+                //Required health to complete the room to the right
+                int down = health[row + 1][col] - dungeon[row + 1][col];
+                //Clamp minimum 1
+                down = down > 0 ? down : 1;
+
+                //The room with the lesser required health is easier
+                int min = right < down ? right : down;
+
+                //Store the required health
+                health[row][col] = min;
+            }
+        }
+
+        //Calculate the required initial health
+        int min = health[0][0] - dungeon[0][0];
+
+        //Store the required health clamped minimum 1
+        //(For completeness, we could just return the clamped min)
+        health[0][0] = min > 0 ? min : 1;
+
+        //Return the minimum required initial health
+        return health[0][0];
+    }
+};

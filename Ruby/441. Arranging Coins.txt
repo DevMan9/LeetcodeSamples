@@ -1,0 +1,21 @@
+# @param {Integer} n
+# @return {Integer}
+def arrange_coins(n)
+    #Initialize a row variable.
+    #This will track the number of coins this row requires
+    row = 1
+
+    #Keep taking row coins from n until row requires more coins than remain
+    while row <= n
+        #Take row coins from n
+        n -= row
+
+        #Move to the next row
+        row += 1
+    end
+
+    #We currently don't have enough coins to fill this row
+    #but we filled the last row
+    #so return row - 1
+    return row - 1
+end

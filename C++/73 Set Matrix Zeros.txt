@@ -1,0 +1,52 @@
+class Solution {
+public:
+    void setZeroes(std::vector<std::vector<int>>& matrix) {
+        //Store the height and the width for ease of access
+        int height = (int)matrix.size();
+        int width = (int)matrix[0].size();
+
+        //Initialize a queue
+        //First we will need to find all the zeros before doing any operations
+        std::queue<int> queue;
+
+        //Find all the zeros and push theri indices into the queue
+        for(int i = 0; i < height; i++){
+            for(int j = 0; j < width; j++){
+                if(!matrix[i][j]){
+                    //We can "hash" their location as a combination of i and j
+                    //Since j will never be >= width we can multiply i by width
+                    //and then add j
+                    //This allows us to use hash/width to get i
+                    //and hash%width to get j
+                    queue.push(i*width+j);
+                }
+            }
+        }
+
+        //Iterate through every recorded zero
+        //and fill its row and column with 0s
+        while (queue.size()) {
+            //Get the first element in the queue
+            int index = queue.front();
+            
+            //Get the row that the zero was in
+            int row = index/width;
+            
+            //Get the column that the zero was in
+            int column = index%width;
+            
+            //Fill the column with zeros
+            for(int i = 0; i < height; i++){
+                matrix[i][column] = 0;
+            }
+            
+            //Fill the row with zeros
+            for(int i = 0; i < width; i++){
+                matrix[row][i] = 0;
+            }
+
+            //Pop the first element off the list
+            queue.pop();
+        }
+    }
+};

@@ -1,0 +1,36 @@
+/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @return {number[]}
+ */
+var intersect = function(nums1, nums2) {
+    //Create a map to count occurances of numbers in nums1
+    const map = new Map();
+
+    //Create a return list
+    const ret = [];
+
+    //Count the occurances of each number in nums
+    for(const num of nums1){
+        if(map.has(num)){
+            map.set(num, map.get(num) + 1);
+        }else{
+            map.set(num, 1);
+        }
+    }
+
+    //Add each number in nums2 to the return list 
+    //up to the number of occurances in nums1
+    for(const num of nums2){
+        //If nums1 had this num && there are still available spots for this num
+        if(map.has(num) && map.get(num) > 0){
+            //Add to return list
+            ret.push(num);
+            //Decrement the number of occurances
+            map.set(num, map.get(num) - 1);
+        }
+    }
+
+    //Return the intersection of the 2 arrays.
+    return ret;
+};

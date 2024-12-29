@@ -1,0 +1,50 @@
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        //If nums contains less than 2 elements
+        //then the end has already been reached
+        //so return true
+        if(nums.size()<2){
+            return true;
+        }
+        //Note that all inputs will have more than 1 element after this point
+        
+        //If the first element is 0
+        //then no jumps can be made to pass it
+        //so return false
+        if(nums[0]==0){
+            return false;
+        }
+        
+        //Iterate through nums backwards starting at the second to last element
+        //We are specifically looking for 0s than cannot be passed
+        for(int index = nums.size()-2;index > 0;index--){
+            //If the value at the current index is 0
+            //then check that there is a way to pass it.
+            if(nums[index]==0){
+                //Initialize a flag to tell if we can pass this 0
+                bool can_pass = false;
+                
+                //Iterate through all the indices before this 0
+                for(int i = 0; i < index; i++){
+                    //If there is an index that can jump past this 0
+                    //then set can_pass to true and break
+                    if(i+nums[i]>index){
+                        can_pass = true;
+                        break;
+                    }
+                }
+                
+                //If this 0 cannot be passed
+                //then return false;
+                if(!can_pass){
+                    return false;
+                }
+            }
+        }
+        
+        //All 0s could be passed
+        //Return true
+        return true;
+    }
+};

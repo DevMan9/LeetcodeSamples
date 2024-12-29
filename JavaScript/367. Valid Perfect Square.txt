@@ -1,0 +1,41 @@
+/**
+ * @param {number} num
+ * @return {boolean}
+ */
+var isPerfectSquare = function(num) {
+    //I can't remember the name, but we are going to 
+    //APPROXIMATE the square root of num using the derivative of x^2
+    //Pick some guess (this number is less likely to overflow than say num/2)
+    let guess = 42069;
+
+    //Initilaize our last guess to 0
+    //This ensures our initial guess will fail the tolerance test
+    let last = 0;
+
+    //Set a tolerance for when the algorithm should stop
+    //I chose this number to pass a very specific case:
+    //the largest perfect square < 2^31 
+    //and its two neightbors
+    const tolerance = .000001;
+
+    //Iteratively calculate a better guess for the square root of num
+    while(Math.abs(guess-last) > tolerance){
+        //Store the last guess
+        last = guess;
+
+        //Calculate the slope of the tangent line to x^2-num
+        const slope = 2 * guess;
+
+        //Calculate guess^2-num
+        const value = guess * guess - num;
+
+        //Calculate the x-intercept of the line tangent to x^2-num at guess
+        guess = guess - value / slope;
+    }
+
+    //If guess is within tolerance of itself as an interger
+    //then it's probably an integer square root.
+    return guess-Math.trunc(guess) < tolerance;
+
+    //It works most of the time ( ͡° ͜ʖ ͡°)
+};

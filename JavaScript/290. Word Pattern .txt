@@ -1,0 +1,60 @@
+/**
+ * @param {string} pattern
+ * @param {string} s
+ * @return {boolean}
+ */
+var wordPattern = function(pattern, s) {
+    //Convert the inputs into more usable forms
+    //The patters are converted from a string to a character array
+    //(For clarity and generality)
+    const pats = pattern.split("");
+
+    //The strings are converted to an array of words
+    const strs = s.split(" ");
+
+    //Check that the arrays are the same size.
+    //The pattern WILL NOT match if there aren't the same number of elements
+    if(pats.length != strs.length){
+        return false;
+    }
+
+    //Create 2 maps
+    //One for storing the pattern to string relation
+    const ptos = new Map();
+
+    //And the other for storing the string to pattern relation
+    //This is neccessary to catch 2 charcters in the pattern
+    //mapping to the same word
+    const stop = new Map();
+
+    //Iterate the pattern checking that each pattern element 
+    //maps to one and only one word
+    for(let i = 0; i < pats.length; i++){
+        //the current pattern element is already mapped
+        if(ptos.has(pats[i])&&stop.has(strs[i])){
+            //If the current mapping fails
+            if(ptos.get(pats[i])!=strs[i]||stop.get(strs[i])!=pats[i]){
+                return false;
+            }else{
+                //For clarity
+                continue;
+            }
+
+        //If the current pattern elements are not mapped
+        }else if(!ptos.has(pats[i])&&!stop.has(strs[i])){
+            //Map the current pattern to the current word
+            ptos.set(pats[i],strs[i]);
+            //And vice versa
+            stop.set(strs[i],pats[i]);
+        
+        //There there is a one sided mapping, as in either:
+        //The current pattern maps to a word while the word doesn't
+        //or the current word maps to a pattern but the pattern doesn't
+        }else{
+            return false;
+        }
+    }
+
+    //The pattern matches the string
+    return true;
+};

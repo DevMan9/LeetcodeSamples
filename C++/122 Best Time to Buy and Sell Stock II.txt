@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        //Initialize total profit to 0;
+        int profit = 0;
+        
+        //Initialize last value to the first element in prices
+        int last = prices[0];
+        
+        //Iterate through the prices and calculate the maximum profit
+        for(int i : prices){
+            //If the price went up, imagine we bought yesterday and sold today
+            if(i>last){
+                profit += i - last;
+            }
+            
+            //Record the last price
+            last = i;
+        }
+        
+        //Return the maximum profit
+        return profit;
+    }
+};

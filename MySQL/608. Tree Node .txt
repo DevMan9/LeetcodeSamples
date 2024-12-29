@@ -1,0 +1,20 @@
+# Write your MySQL query statement below
+WITH RootNodes AS (
+  SELECT id
+  FROM Tree
+  WHERE ISNULL(p_id)
+),
+InnerNodes AS (
+  SELECT DISTINCT p_id AS id
+  FROM Tree
+  WHERE NOT ISNULL(p_id)
+)
+
+SELECT id, 
+CASE
+    WHEN id IN (SELECT * FROM RootNodes) THEN 'Root'
+    WHEN id IN (SELECT * FROM InnerNodes) THEN 'Inner'
+    ELSE 'Leaf'
+END
+AS 'type'
+FROM Tree

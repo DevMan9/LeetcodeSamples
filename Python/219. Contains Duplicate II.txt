@@ -1,0 +1,32 @@
+class Solution(object):
+    def containsNearbyDuplicate(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: bool
+        """
+        #Create a set to track active numbers.  
+        #I.E. numbers that are within k of the current index
+        active_nums = set()
+
+        #Create a variable to track the tail of the active range
+        tail = 0
+
+        #Iterate through nums by index
+        for index in range(len(nums)):
+            #If the tail of the active range is outside the active range
+            if (index - tail) > k:
+                #Then remove the value at tail and increment the tail
+                active_nums.remove(nums[tail])
+                tail+=1
+            
+            #If the number at the current index in an active number, 
+            #The we saw this number within k indicies
+            if nums[index] in active_nums:
+                return True
+
+            #Add the current number to the active set
+            active_nums.add(nums[index])
+
+        #No duplicate numbers were found within k indices of eachother.
+        return False  

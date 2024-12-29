@@ -1,0 +1,100 @@
+class Solution {
+public:
+    std::vector<std::vector<int>> combinationSum2Helper(std::vector<int>& candidates, int target, int index) {
+        //if index is less than 0 (out of range)
+        //then return an empty vector
+        if(index<0){
+            return {};
+        }
+    
+        //if this element is larger than target, skip this element
+        if(target<candidates[index]){
+            return combinationSum2Helper(candidates, target, index-1);
+        }
+        
+        //count the number of instances of the current candidate in the input vector
+        int max_count = 1;
+        while(index-max_count>=0&&candidates[index]==candidates[index-max_count]){
+            max_count++;
+        }
+    
+        //if index is equal to the first index
+        if(index-max_count < 0){
+            //if target is NOT divisible by the first candidate
+            //then return an empty vector
+            //else return a vector filled with the first candidate that sums to target
+            if(target%candidates[index]){
+                return {};
+            }else{
+                if(target/candidates[index]<=max_count){
+                    std::vector<int> tmp;
+                    for(int i = 0;i<target/candidates[0];i++){
+                        tmp.push_back(candidates[0]);
+                    }
+                    return {tmp};
+                }else{
+                    return {};
+                }
+            }
+        }
+    
+        //initialize return vector
+        std::vector<std::vector<int>> ret;
+    
+        //initialize a partial sum variable used to track the current partial sum
+        int part_sum = 0;
+    
+        //initialize a count variable to keep track of
+        //how many of candidates[index] are in the partial sum
+        int count = 0;
+    
+        //loop, adding an additional candidates[index] to the partial sum each time
+        //until partial sum is greather than ot equal to target
+        while(part_sum < target&&count<=max_count){
+            //recrusively call this function on the next largest value in candidates
+            //with a target of the current target minus some number of candidates[index].
+            std::vector<std::vector<int>> sub = combinationSum2Helper(candidates, target-part_sum, index-max_count);
+        
+            //if the remaining target is NOT 0 and no possible sub combinations exist
+            //then continue to the next partial sum
+            if(!(part_sum-target!=0&&sub.size()==0)){
+                for(std::vector<int> vec:sub){
+                    for(int i = 0; i<count; i++){
+                        vec.push_back(candidates[index]);
+                    }
+                    ret.push_back(vec);
+                }
+            }
+        
+            //add another instance of candidates[index] to the partial sum
+            count++;
+            part_sum+=candidates[index];
+        }
+    
+        //if target is divisible by the candidate at the current index
+        //and there are enough instances of the candidate
+        //add a vector filled with the current candidate that sums to target
+        //to the return vector
+        if(part_sum==target&&count<=max_count){
+            std::vector<int> tmp;
+            for(int i = 0; i<count; i++){
+                tmp.push_back(candidates[index]);
+            }
+            ret.push_back(tmp);
+        }
+    
+        //return the return vector
+        return ret;
+}
+
+std::vector<std::vector<int>> combinationSum2(std::vector<int>& candidates, int target) {
+        //sort the input vector
+        //when the input vector is sorted,
+        //we can skip large amounts of redundant calculations
+        std::sort(candidates.begin(),candidates.end());
+    
+        //call the combinationsumhelper.
+        //the helper is designed to reduce the problem recursively.
+        return combinationSum2Helper(candidates, target, candidates.size()-1);
+    }
+};

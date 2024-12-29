@@ -1,0 +1,36 @@
+class Solution {
+public:
+    void merge(std::vector<int>& nums1, int m, std::vector<int>& nums2, int n) {
+        //Initialize a variable that points to the end of nums1
+        int end = n+m-1;
+        
+        //Decrement m and n
+        //We will be using them as the indexes for the 2 vectors
+        m--;
+        n--;
+        
+        //Iterate through the vectors backwards 
+        //putting the larger of the 2 elements at the end of nums1
+        //until we exhaust one of the two vectors
+        while(m>=0&&n>=0){
+            if(nums1[m]>nums2[n]){
+                nums1[end] = nums1[m];
+                end--;
+                m--;
+            }else{
+                nums1[end] = nums2[n];
+                end--;
+                n--;
+            }
+        }
+
+        //Add the remaining elements from nums2 if there are any
+        //We don't have to worry if there are any remaining in nums1
+        //because they are already in order and in place if there are any
+        while(n>=0){
+            nums1[end] = nums2[n];
+            end--;
+            n--;
+        }
+    }
+};

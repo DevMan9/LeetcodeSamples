@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int romanToInt(std::string s) {
+    //std::cout<<s<<std::endl;
+        if(s.length()==0){
+            return 0;
+        }
+        switch(s[s.length()-1]){
+            case 'I':
+                return 1 + romanToInt(s.substr(0,s.length()-1));
+                break;
+                case 'V':
+                return 5 + ((s.length()>1&&s[s.length()-2]=='I')?romanToInt(s.substr(0,s.length()-2))-1 :romanToInt(s.substr(0,s.length()-1)));
+                break;
+                case 'X':
+                return 10 + ((s.length()>1&&s[s.length()-2]=='I')?romanToInt(s.substr(0,s.length()-2))-1 :romanToInt(s.substr(0,s.length()-1)));
+                break;
+                case 'L':
+                return 50 + ((s.length()>1&&s[s.length()-2]=='X')?romanToInt(s.substr(0,s.length()-2))-10 :romanToInt(s.substr(0,s.length()-1)));
+                break;
+                case 'C':
+                return 100 + ((s.length()>1&&s[s.length()-2]=='X')?romanToInt(s.substr(0,s.length()-2))-10 :romanToInt(s.substr(0,s.length()-1)));
+                break;
+                case 'D':
+                return 500 + ((s.length()>1&&s[s.length()-2]=='C')?romanToInt(s.substr(0,s.length()-2))-100 :romanToInt(s.substr(0,s.length()-1)));
+                break;
+                case 'M':
+                return 1000 + ((s.length()>1&&s[s.length()-2]=='C')?romanToInt(s.substr(0,s.length()-2))-100 :romanToInt(s.substr(0,s.length()-1)));
+                break;
+            default:
+                return 0;
+                break;
+        }
+    }
+};

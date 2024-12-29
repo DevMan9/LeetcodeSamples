@@ -1,0 +1,73 @@
+# @param {String} num1
+# @param {String} num2
+# @return {String}
+def add_strings(num1, num2)
+    #For the sake of simplicity, makes sure num1 is no longer than num2
+    if num1.length > num2.length
+        tmp = num1;
+        num1 = num2;
+        num2 = tmp
+    end
+
+    #Also for the sake of simplicity, reverse num1 and num2
+    num1 = num1.reverse
+    num2 = num2.reverse
+
+    #Initialize a carry variable
+    carry = 0
+
+    #Initialize an index
+    index = 0
+    
+    #num1 has fewer digits so we will iterate through num1 adding the digits to num2
+    while index < num1.length
+        #Calculate the value of adding the current digits in num1 and num2 and carry
+        place = num2[index].to_i + num1[index].to_i + carry
+
+        #Calculate the new carry
+        carry = place / 10
+
+        #Calculate the single digit to be placed in the current place
+        place = place % 10
+
+        #Set the current digit in num2 to be this new value
+        num2[index] = place.to_s
+
+        #increment the index
+        index+=1
+    end
+
+    #So long as the carry is not equal to 0
+    #We need to continue a more careful version of the above addition
+    while carry != 0
+        #If there are still digits in num2
+        if index < num2.length
+            #Caulcuate the new place value
+            place = num2[index].to_i + carry
+
+            #Calculate the new carry
+            carry = place / 10
+
+            #Calculate the single digit to be placed in num2
+            place = place % 10
+
+            #Set the current digit in num2 to be this new value
+            num2[index] = place.to_s
+        else
+            #There are no digits left in num 2
+            #but we still have a carry
+            #Append it to the end of num2
+            num2 = num2 << carry.to_s
+
+            #Set carry to 0 
+            #since there's no way that 0 + carry can result in another carry
+            carry = 0
+        end
+
+        #Increment the index
+        index+=1
+    end
+
+    #Reverse num2 since we reversed it while working, and return it
+    return num2.reverse
+end

@@ -1,0 +1,26 @@
+# Write your MySQL query statement below
+WITH UserReviews AS (
+  SELECT user_id, COUNT(*) AS 'reviews'
+  FROM MovieRating
+  GROUP BY user_id
+),
+Ratings AS (
+  SELECT movie_id, AVG(rating) AS 'average_rating'
+  FROM MovieRating
+  WHERE EXTRACT(YEAR_MONTH FROM created_at) = 202002
+  GROUP BY movie_id
+)
+
+(SELECT name AS results
+FROM UserReviews
+LEFT JOIN Users
+USING(user_id)
+ORDER BY reviews DESC, name
+LIMIT 1)
+UNION ALL
+(SELECT title AS results
+FROM Ratings
+LEFT JOIN Movies
+USING(movie_id)
+ORDER BY average_rating DESC, title
+LIMIT 1)

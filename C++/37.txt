@@ -1,0 +1,132 @@
+class Solution {
+public:
+    //This palette template is reoresents every possible entry in a square
+    std::unordered_set<char> palette_template = {'1','2','3','4','5','6','7','8','9'};
+
+    //This function returns a vector containing every element in a given row in a given sudoku board
+    std::vector<char> getSudokuRow(std::vector<std::vector<char>>& board,int row){
+        return board[row];
+    }
+
+    //This function returns a vector containing every element in a given column in a        given sudoku board
+    std::vector<char> getSudokuColumn(std::vector<std::vector<char>>& board,int column){
+        std::vector<char> ret;
+        ret.reserve(9);
+        for(int i = 0;i<9;i++){
+            ret.push_back(board[i][column]);
+        }
+        return ret;
+    }
+
+    //This function converts a given index to box space
+    //ie. (1,2) falls in the top left box (0,0)
+    //and (5,5) falls in the middle box (1,1)
+    int convertToBox(int index){
+        return (index/3)*3;
+    }
+
+    //This function returns a vector containing every element in a box that conatins the given square at (row,column) in a give sudoku board
+    std::vector<char> getSudokuBox(std::vector<std::vector<char>>& board, int row, int column){
+        std::vector<char> ret;
+        ret.reserve(9);
+        for(int i = 0;i<3;i++){
+            for(int j = 0;j<3;j++){
+                ret.push_back(board[convertToBox(row)+i][convertToBox(column)+j]);
+            }
+        }
+        return ret;
+    }
+
+    //This function returns a set of all possible valid choices that
+    //a square (row, column) can accept
+    std::unordered_set<char> getChoices(std::vector<std::vector<char>>& board, int row, int column){
+        std::unordered_set<char> palette(palette_template.begin(), palette_template.end());
+    
+        for(char used:getSudokuRow(board, row)){
+            if(used != '.'){
+                palette.erase(used);
+            }
+        }
+        for(char used:getSudokuColumn(board, column)){
+            if(used != '.'){
+                palette.erase(used);
+            }
+        }
+        for(char used:getSudokuBox(board, row, column)){
+            if(used != '.'){
+                palette.erase(used);
+            }
+        }
+        return palette;
+    }
+
+    //This helper function makes it easier to tell when board is solved or unsolvable
+    bool solveSudokuHelper(std::vector<std::vector<char>>& board){
+        //find an empty square with the least possible solutions
+        int easiest_row = 0;
+        int easiest_column = 0;
+        int easiest_choices = 10;
+    
+        //iterate every square until
+        //a) a square with no possible choices is found
+        //b) a square with one possible choice is found
+        //c) all squares are checked
+        for(int row = 0; row < 9; row++){
+            for(int column = 0; column < 9; column++){
+                //if square is occupied, move onto the next square
+                if(board[row][column]!='.'){
+                    continue;
+                }
+                //get possible choices
+                std::unordered_set<char> palette = getChoices(board, row, column);
+            
+                //if this square is easier to solve that the current recorded easiest square
+                //record this square
+                if(easiest_choices>palette.size()){
+                    //if there are no valid choices for this square
+                    //then the puzzle is not solvable
+                    if(palette.size()==0){
+                        return false;
+                    }
+                    //recored this square and it's starts
+                    easiest_choices = palette.size();
+                    easiest_row = row;
+                    easiest_column = column;
+                }
+            }
+        }
+        //if no squares are empty
+        //then the board is solved
+        if(easiest_choices==10){
+            return true;
+        }
+    
+        //get the possible choices for the easiest square
+        std::unordered_set<char> choices = getChoices(board, easiest_row, easiest_column);
+    
+        //try each possible choice for the easiest square
+        for(char choice:choices){
+            //set the easiest square to one of the choices
+            board[easiest_row][easiest_column] = choice;
+        
+            //solve the new board
+            //if the ne board gets solved
+            //then return true;
+            if(solveSudokuHelper(board)){
+                return true;
+            }
+        }
+    
+        //There was no solution for the given board
+        //reset the easiest square
+        board[easiest_row][easiest_column] = '.';
+    
+        //board was not solved
+        //return false
+        return false;
+    }
+
+    void solveSudoku(std::vector<std::vector<char>>& board) {
+        solveSudokuHelper(board);
+    }
+};

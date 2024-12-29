@@ -1,0 +1,102 @@
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        //Initialize the return matrix
+        vector<vector<int>> matrix(n,vector<int>(n));
+        
+        //Initialize our constraints, these will be used to 
+        //"close the walls in on the player"
+        int min_x = 0;
+        int min_y = 0;
+        int max_x = matrix[0].size()-1;
+        int max_y = matrix.size()-1;
+        
+        //Initialize the player's location
+        int x = -1;
+        int y = 0;
+        
+        //Inititalize the current_number to 1
+        int current_number = 1;
+        
+        //Loop until either the min_x is greater than the max_x
+        //or until the min_y is greater than the max_y
+        //This indicates that the player has no valid space they can occupy
+        while(1){
+            //Move right until you hit the right wall
+            while(x<max_x){
+                //Move right
+                x++;
+                
+                //set the current tile to the current_number
+                matrix[y][x] = current_number++;
+            }
+            
+            //Increment the top wall
+            //the player has walked all of those tiles already
+            min_y++;
+            
+            //If there are no more valid tiles for the player to walk
+            //then break;
+            if(max_y<min_y){
+                break;
+            }
+            
+            //Move down until you hit the bottom wall
+            while(y<max_y){
+                //Move down
+                y++;
+                
+                //set the current tile to the current_number
+                matrix[y][x] = current_number++;
+            }
+            
+            //Decrement the right wall
+            max_x--;
+            
+            //If there are no more valid tiles for the player to walk
+            //then break;
+            if(max_x<min_x){
+                break;
+            }
+            
+            //Move left until we hit the left wall
+            while(x>min_x){
+                //Move left
+                x--;
+                
+                //set the current tile to the current_number
+                matrix[y][x] = current_number++;
+            }
+            
+            //Decrement the bottom wall
+            max_y--;
+            
+            //If there are no more valid tiles for the player to walk
+            //then break;
+            if(max_y<min_y){
+                break;
+            }
+
+            //Move up until you hit the top wall
+            while(y>min_y){
+                //Move up
+                y--;
+                
+                //set the current tile to the current_number
+                matrix[y][x] = current_number++;
+            }
+            
+            //Increment the left wall
+            min_x++;
+            
+            //If there are no more valid tiles for the player to walk
+            //then break;
+            if(max_x<min_x){
+                break;
+            }
+        }
+        
+        //Return the return matrix
+        return matrix;
+    }
+};

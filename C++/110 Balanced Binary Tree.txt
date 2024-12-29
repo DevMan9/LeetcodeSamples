@@ -1,0 +1,65 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    //Returns the height of the tree if it is balanced
+    //otherwise returns -1
+    int balancedHeight(TreeNode* root){
+        //If root is a valid tree
+        //calculate its height
+        if(root){
+            //Calculate the height of the left subtree
+            int left = balancedHeight(root->left);
+            
+            //If the left subtree is unbalanced
+            //return -1
+            if(left==-1){
+                return -1;
+            }
+            
+            //Calculate the height of the right subtree
+            int right = balancedHeight(root->right);
+            
+            //If the right subtree is unbalanced
+            //return -1
+            if(right==-1){
+                return -1;
+            };
+            
+            //Calculate the difference between the 
+            //heights of the left and right subtrees
+            int dif = left-right;
+            
+            //Absolute value of dif
+            dif = (dif<0)?0-dif:dif;
+            
+            //If the difference in the heights of the left and right subtrees
+            //is greater than 1
+            //then the root tree is considered unbalanced
+            //so return -1
+            if(dif>1){
+                return -1;
+            }
+            
+            //Return the height of the larger of the two subtrees plus 1
+            return 1+((left>right)?left:right);
+        }else{
+            //Empty tree has a height of zero
+            return 0;
+        }
+    }
+    
+    bool isBalanced(TreeNode* root) {
+        //balancedHeight returns -1 if a tree is unbalanced
+        return balancedHeight(root)>=0;
+    }
+};

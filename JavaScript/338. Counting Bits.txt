@@ -1,0 +1,43 @@
+/**
+ * @param {number} n
+ * @return {number[]}
+ */
+var countBits = function(n) {
+    //Initialize the return array
+    const ret = [0];
+
+    //Each binary number can be thought of as
+    //appending a 0 or a 1 to the right of a previous nuumber
+    //For example to go from 1 to 2 you can append a 0 to the right of 1
+    // "1" + "0" = "10" = 2
+    //From 2 to 4 is the same:
+    // "10" + "0" = "100" = 4
+    //From 4 to 9 is:
+    // "100" + "1" = "1001" = 9
+    //Reversing that process tells us that to get to 9, 
+    //we take off the right most bit:
+    //9 % 2 = 1
+    //and to get the remainder:
+    //9 >> 1 = 4 (1001 >> 1 = 100)
+    //So if we replace 9 with a variable we get:
+    //x = countBits(x >> 1) + x % 2
+    //Since we are calculating every number up to n
+    //if we go in order, we will already have an answer to countBits(x >> 1)
+    //And it will be stored in the return array at [x >> 1]
+
+    //Iterate from 1 to n (inclusive)
+    for(var index = 1; index <= n; index++){
+        //Calculate the number of ones in the binary representation of index
+        ret[index] = ret[index>>1] + index % 2;
+    }
+
+    //Return the array of bits
+    return ret;
+};
+//                       A binary tree representation
+//          number of bits                            number
+//                 1                |//                 1                |
+//         1               2        |//         2               3        |
+//     1       2       2       3    |//     4       5       6       7    |
+//   1   2   2   3   2   3   3   4  |//   8   9   10  11  12  13  14  15 |
+//  1 2 2 3 2 3 3 4 2 3 3 4 3 4 4 5 |//  16...                           |

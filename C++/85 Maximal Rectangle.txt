@@ -1,0 +1,115 @@
+class Solution {
+public:
+    //Returns the largest rectangle in a histogram
+    int largestRectangleArea(std::vector<int>& heights) {
+        //Initialize a stack to track left sides of potential rectangles
+        std::stack<std::pair<int,int>> stack;
+        //Push the initial histogram bar onto the stack
+        stack.push({heights[0],0});
+
+        //Initialize a variable to store the max rectangle area
+        int ret = 0;
+
+        //Iterate through the histogram
+        for(int index = 0; index < heights.size(); index++){
+            //Initialize a variable to store the last index that we check against
+            int last = index;
+            
+            //If the current value at the current index is 
+            //less than the top of the stack
+            //calculate the area created by the rectangle from top to index-1
+            while(stack.size()&&stack.top().first>heights[index]){
+                //Calculate the area
+                int area = stack.top().first * (index-stack.top().second);
+                
+                //Set the last index to the top of the stack
+                last = stack.top().second;
+                
+                //If this is the largest rectangle
+                //record its size
+                ret = (area > ret)?area:ret;
+                
+                //Remove this left side
+                stack.pop();
+            }
+            
+            //Push the current height onto the stack
+            //BUT give it the last index that we checked
+            //This effectivly clamps the last index to the 
+            //height of the current index
+            stack.push({heights[index],last});
+        }
+
+        //Check the remaining rectangles against the end of the vector
+        while (stack.size()) {
+            //Caclulate the area
+            int area = stack.top().first * (heights.size()-stack.top().second);
+            
+            //If this is the largest rectangle
+            //record its size
+            ret = (area > ret)?area:ret;
+            
+            //Remove this left side
+            stack.pop();
+        }
+
+        //Return the largest rectangle's area
+        return ret;
+    }
+
+    //Converts a character matrix of 1s and other to a histogram matrix 
+    //where each row contains the number of consecutive 1s after that row
+    //[1,0,1,0,0]    \  [4,0,3,0,0]
+    //[1,0,1,1,1] ----\ [3,0,2,3,2]
+    //[1,1,1,1,1] ----/ [2,1,1,2,1]
+    //[1,0,0,1,0]    /  [1,0,0,1,0]
+    std::vector<std::vector<int>> convertToHistogram(std::vector<std::vector<char>>& matrix){
+        //Store the height and width of matrix for ease of access
+        long width = matrix[0].size();
+        long height = matrix.size();
+
+        //Initialize the return matrix to 0 with height and width
+        std::vector<std::vector<int>> ret(height,std::vector<int>(width,0));
+
+        //Iterate through the matrices
+        for(int column = 0; column < width; column++){
+            //Set the final row of ret according to the last row of the matrix
+            ret[height-1][column] = matrix[height-1][column]=='1';
+            
+            //Iterate down a column
+            for(long row = height - 2; row >= 0; row--){
+                //If the value for this index in matrix is a '1'
+                //then set the value at the same index in ret 
+                //to the value above it plus 1
+                //else set this index to 0;
+                ret[row][column] = (matrix[row][column]=='1')?ret[row+1][column]+1:0;
+            }
+        }
+
+        //Return the newly built histogram matrix
+        return ret;
+    }
+
+    int maximalRectangle(std::vector<std::vector<char>>& matrix) {
+        //Convert the matrix to a histogram matrix
+        std::vector<std::vector<int>> histogram = convertToHistogram(matrix);
+
+        //Initialize the max value to 0
+        //If there is no rectangle then the max size was 0
+        int max = 0;
+        
+        //Iterate through the rows of the histogram matrix
+        //and find the largest rectangle within that histogram
+        for(std::vector<int> vec:histogram){
+            //Find the largest rectangle within this histogram
+            int test_max = largestRectangleArea(vec);
+            
+            //If this rectangle is bigger than max
+            //overwrite max with this new rectangle
+            max = (test_max > max) ? test_max : max;
+        }
+
+        //Return the maxiaml rectangle in matrix
+        return max;
+    }
+};

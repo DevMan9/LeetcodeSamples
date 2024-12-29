@@ -1,0 +1,109 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        //if k is 1 or less return the list as is
+        if(k<=1){
+            return head;
+        }
+    
+        //initialize the return value
+        ListNode* ret = head;
+    
+        //the last node in the previous section of the list
+        ListNode* kGroup_Previous = nullptr;
+    
+        //the beginning of the kGroup
+        ListNode* kGroup_Start = head;
+    
+        //the last node in the kGroup
+        ListNode* kGroup_End;
+    
+        //first node of the rest of the list
+        ListNode* kGroup_Next;
+    
+        //infinite loop. we will be returning part way though.
+        while(1){
+            //initialize a counter to count out k node
+            int k_counter = k;
+        
+            //initialize a listnode* as our main traversal variable
+            ListNode* kGroup_Traverser = kGroup_Start;
+       
+            //count out k nodes, break if we reach the end.
+            while(k_counter > 1 && kGroup_Traverser != nullptr){
+                kGroup_Traverser = kGroup_Traverser->next;
+                k_counter--;
+            }
+        
+            //if kGroup_Traverer is a nullptr
+            //then we have reached the end of the list without finding a valid group
+            if(kGroup_Traverser==nullptr){
+                //return the head of the list
+                return ret;
+            }
+        
+            //store the last node of the kGroup
+            kGroup_End = kGroup_Traverser;
+        
+            //store the first node of the rest of the list
+            kGroup_Next = kGroup_End->next;
+        
+            //We will now reverse the kGroup
+            //set the traverser to the beginning of the kGroup
+            kGroup_Traverser = kGroup_Start;
+        
+            //sever the kGroup from the rest of the list
+            kGroup_End->next = nullptr;
+        
+            //inititalize a temporary variable to store the previous node during traversal
+            ListNode* prev = nullptr;
+        
+            //iterate through the kGroup
+            while (kGroup_Traverser!=nullptr) {
+            
+                //store the next element in the kGroup
+                ListNode* next = kGroup_Traverser->next;
+            
+                //change the current node from pointing to the next node, to the previous node
+                kGroup_Traverser->next = prev;
+            
+                //store the current node as the previous node
+                prev = kGroup_Traverser;
+            
+                //set the current node to the next node
+                kGroup_Traverser = next;
+            }
+        
+            //if there was no previous kGroup
+            //then update the beginning of the list
+            //else link the previous section to the current kGroup
+            if(kGroup_Previous==nullptr){
+                ret = kGroup_End;
+            }else{
+                kGroup_Previous->next = kGroup_End;
+            }
+        
+            //link the current kGroup to the rest of the list
+            kGroup_Start->next = kGroup_Next;
+        
+            //record the last node in the previous kGroup
+            kGroup_Previous = kGroup_Start;
+        
+            //move on to the rest of the list
+            kGroup_Start = kGroup_Next;
+        }
+    
+        //Just incase the while loop fails.
+        return ret;
+    }
+};

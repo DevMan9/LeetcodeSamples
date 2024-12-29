@@ -1,0 +1,75 @@
+// Definition for a binary tree node.
+// #[derive(Debug, PartialEq, Eq)]
+// pub struct TreeNode {
+//   pub val: i32,
+//   pub left: Option<Rc<RefCell<TreeNode>>>,
+//   pub right: Option<Rc<RefCell<TreeNode>>>,
+// }
+// 
+// impl TreeNode {
+//   #[inline]
+//   pub fn new(val: i32) -> Self {
+//     TreeNode {
+//       val,
+//       left: None,
+//       right: None
+//     }
+//   }
+// }
+use std::rc::Rc;
+use std::cell::RefCell;
+impl Solution {
+    pub fn leaf_similar(root1: Option<Rc<RefCell<TreeNode>>>, root2: Option<Rc<RefCell<TreeNode>>>) -> bool {
+        //Get the leaves of each tree
+        let leaves1: Vec<i32> = Solution::leaves(root1);
+        let leaves2: Vec<i32> = Solution::leaves(root2);
+
+        //If the lengths are not the same
+        if leaves1.len() != leaves2.len() {
+            //Then the leaves are not the same
+            return false;
+        }
+
+        //Check that each leaf is in the same position
+        for index in 0..leaves1.len() {
+            //If 2 leaves in the same position are not equal
+            if leaves1[index] != leaves2[index]{
+                //Then the trees are not leaf-similar
+                return false;
+            }
+        }
+
+        //The trees are leaf-similar
+        return true;
+    }
+
+    //Returns the leaves in order from left to right
+    pub fn leaves(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+        //If root is not some TreeNode
+        if !root.is_some() {
+            //Then return an empty vector
+            return vec![];
+        }
+
+        //Unwrap the root
+        let node = root.unwrap();
+        //Borrow this node
+        let node = node.borrow();
+
+        //Get the leaves of the left and right nodes
+        let mut left = Solution::leaves(node.left.clone());
+        let mut right = Solution::leaves(node.right.clone());
+
+        //Append the leaves of the right node to the leaves of the left node
+        left.append(&mut right);
+
+        //If the vector of all the leaves is not empty
+        if !left.is_empty() {
+            //Then return that vector
+            return left;
+        }else{
+            //Else return a vector of only the current node's value
+            return vec![node.val];
+        }
+    }
+}

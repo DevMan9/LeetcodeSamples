@@ -1,0 +1,37 @@
+/**
+ * @param {string} ransomNote
+ * @param {string} magazine
+ * @return {boolean}
+ */
+var canConstruct = function(ransomNote, magazine) {
+    //Create a map to count occurances of characters in magazine
+    const count = new Map();
+
+    //Count occurances of characters in magazine
+    for(const char of magazine){
+        //Check if this character is in the map
+        if(count.has(char)){
+            //Increment the count of this character
+            count.set(char, count.get(char) + 1);
+        }else{
+            //Add this character to the count
+            count.set(char,1);
+        }
+    }
+
+    //Pull out the characters needed to write the ransomNote
+    for(const char of ransomNote){
+        //If this character has a count and the count is greater than 0
+        if(count.has(char) && count.get(char) > 0){
+            //Decrement the count of this character
+            count.set(char, count.get(char) - 1);
+        }else{
+            //The ransomNote cannot be created using this magazine
+            return false;
+        }
+    }
+
+    //There are enough letters in the magazine to write the ransomNote.
+    //I feel a little conflicted about helping you write ransome notes though.
+    return true;
+};

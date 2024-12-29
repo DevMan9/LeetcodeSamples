@@ -1,0 +1,35 @@
+class Solution {
+    public String[] findRestaurant(String[] list1, String[] list2) {
+        //Create a map to store the locations of each entry in list1
+        HashMap<String,Integer> dic1 = new HashMap<>();
+        for(int index = 0; index < list1.length; index++){
+            dic1.put(list1[index], index);
+        }
+
+        //Create a map to store strings against their index sum
+        HashMap<Integer,List<String>> ls = new HashMap<>();
+
+        //Iterate through list2
+        for(int index = 0; index < list2.length; index++){
+            //Check that the current string appears in list1
+            if(dic1.containsKey(list2[index])){
+                //Calculate the index sum
+                int key = dic1.get(list2[index]) + index;
+
+                //If there is already an entry for this index sum
+                if(ls.containsKey(key)){
+                    //Add it to the stored list
+                    ls.get(key).add(list2[index]);
+                }else{
+                    //Create a new list and store it
+                    List<String> tmp = new ArrayList<>();
+                    tmp.add(list2[index]);
+                    ls.put(key,tmp);
+                }
+            }
+        }
+
+        //Get the list with the minium index sum and return that
+        return ls.get(Collections.min(ls.keySet())).toArray(new String[0]);
+    }
+}

@@ -1,0 +1,45 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    //A helper function to store the min and max values that a node may have
+    //(longs to account for min and max int values)
+    bool isValidBST(TreeNode* root,long min, long max){
+        return 
+            //If the root is a nullptr
+            //then the root is a valid bst
+            root==nullptr
+            ||
+            //OR if the root val is greater than min
+            root->val>min
+            &&
+            //AND the root val is less than max
+            root->val<max
+            &&
+            //AND the left sub tree is valid
+            isValidBST(root->left,min,root->val)
+            &&
+            //AND the right sub tree is valid
+            isValidBST(root->right,root->val,max);
+            //Then the tree is a valid bst
+    }
+    
+    bool isValidBST(TreeNode* root) {
+        //Use the helper function to determine if a tree is valid
+        //by tracking the min and max values a node may have
+        return isValidBST(
+            root,
+            std::numeric_limits<long>::min(),
+            std::numeric_limits<long>::max()
+        );
+    }
+};

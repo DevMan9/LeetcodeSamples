@@ -1,0 +1,91 @@
+class Solution {
+public:
+    int numDecodings(std::string s) {
+        //Store the input sting's length for ease of access
+        long length = s.length();
+
+        //If the length is 0
+        //then there is nothing to decode
+        //so return 0
+        if(length==0){
+            return 0;
+        }
+        
+        //If the length is one
+        //then the string will only have 1 encoding
+        //unless it's a "0"
+        //then it will have no decodings
+        if(length==1){
+            if(s[0]=='0'){
+                return 0;
+            }else{
+                return 1;
+            }
+        }
+        
+        //Initialize a table to store possible decodings
+        std::vector<int> table(length,0);
+
+        //We need to initialize the last 2 values in the table
+        //These 2 values represent the number of ways to decode
+        //the last 2 characters
+        //the very last value being decoding a single char
+        //and the second to last being decoding the last 2 chars
+        //as a sigle char OP as individual chars
+        
+        //If we are at the last character of the string
+        //then there is 1 decoding, so long as the character is not '0'
+        if(s[length-1]!='0'){
+            table[length-1] = 1;
+        }
+        
+        //If we are at the second to last character
+        //then there are a few of possibilities
+        //0 - 0..9  there are no possible decodings
+        //1 or 2 - 0 there is one possible decoding
+        //1 - 1..9 there are 2 possible decodings
+        //2 - 1..6 there are 2 possible decodings
+        //everything else there is one possible decoding
+        
+        //If the second to last character is '0' 
+        //then there are no possible decodings from this index
+        if(s[length-2]!='0'){
+            //The second to last character is NOT 0
+            //so we can at least decode as 1..9 so we add the value at length-1
+            //or more precisely,
+            //If the character at length-1 is NOT '0' then we add 1
+            table[length-2] += table[length-1];
+            
+            //If the last 2 characters can be parsed together
+            //then increment the value at lenght-2
+            if(s[length-2]=='1'||(s[length-2]=='2'&&s[length-1]!='7'&&s[length-1]!='8'&&s[length-1]!='9')){
+                table[length-2]++;   
+            }
+        }
+
+        //Iterate through the remaining table entries building up, from the end,
+        //the number of ways to decode the string
+        //For example, when i = length - 3 we are asking how many ways we can decode
+        //the last 3 chars in s
+        //and that is equal to the amount of ways we can decode the resulting string
+        //when removing 1 char and 2 chars respectivly
+        //i.e. decode(123) = decode(23) + decode(3)
+        for(int i = length-3; i >= 0; i--){
+            //If we can parse 2 ways
+            //then add the previous 2 values
+            //else add the previous 1 way
+            //unless the current char is '0'
+            //In that case, there is no way to parse that
+            //so leave the value as 0
+            if(s[i]=='1'||(s[i]=='2'&&s[i+1]!='7'&&s[i+1]!='8'&&s[i+1]!='9')){
+                table[i] = table[i+1]+table[i+2];
+            }else if(s[i]!='0'){
+                table[i] = table[i+1];
+            }
+        }
+
+        //Return the first index of the table
+        //This recursivly represents the number of ways to decode the string
+        return table[0];
+    }
+};

@@ -1,0 +1,41 @@
+class Solution {
+public:
+    //A helper version of numTrees to include a map for storing values
+    int numTreesRec(int n, std::unordered_map<int, int>& memo) {
+        //If this value has already been calculated
+        //then return it
+        if(memo.count(n)){
+            return memo[n];
+        }
+        
+        //If the tree has 1 or less nodes
+        //then there's only 1 tree
+        if(n <= 1){
+            memo[n] = 1;
+            return 1;
+        }
+        
+        //Initialize the return value
+        int ret = 0;
+
+        //Iterate up to and down from n
+        //calculating the number of trees with i-1 left nodes and n-i right nodes
+        for (int i = 1; i <= n; i++) {
+            ret += numTreesRec(i-1,memo) * numTreesRec(n-i,memo);
+        }
+
+        //Store the result for numTrees(n)
+        memo[n] = ret;
+        
+        //Return the number of trees
+        return ret;
+    }
+
+    int numTrees(int n) {
+        //Initialize a map for storing results to avoid redundant calculations
+        std::unordered_map<int, int> memo;
+        
+        //Calculate ad return the number of trees
+        return numTreesRec(n, memo);
+    }
+};

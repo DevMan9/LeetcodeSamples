@@ -1,0 +1,28 @@
+func numberOfLines(widths []int, s string) []int {
+    //Initialize variables to store line_count and current line_width
+    var line_count int = 1
+    var line_width int = 0
+
+    //The max line width as specified in description
+    const Max_Line_Width = 100
+
+    //Iterate the letters in s
+    for _, letter := range s {
+        //Get the letter_width of the current letter
+        var letter_width int = widths[letter - 'a']
+
+        //Add the letter to the current line
+        line_width += letter_width
+
+        //If the current line_width exceeds the Max_Line_Width
+        if line_width > Max_Line_Width {
+            //Move to the next line
+            line_count++
+            //Put the current letter on the next line
+            line_width = letter_width
+        }
+    }
+
+    //Return the line_count and last line_width
+    return []int{line_count,line_width}
+}

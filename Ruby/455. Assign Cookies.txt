@@ -1,0 +1,29 @@
+# @param {Integer[]} g
+# @param {Integer[]} s
+# @return {Integer}
+def find_content_children(g, s)
+    #Sort the lists because nowhere did it say the lists would be sorted
+    s = s.sort
+    g = g.sort
+
+    #We will be walking through both lists simultaneously
+    #Initialize an index for the child list
+    child_index = 0;
+
+    #Initialize an index for the cookie list
+    cookie_index = 0;
+
+    #Loop until we run out of children or cookies, whichever comes first
+    while child_index < g.length && cookie_index < s.length
+        #If the current child is content with the current cookie
+        if g[child_index] <= s[cookie_index]
+            #Then move on to the next child
+            child_index += 1
+        end
+        #Move on to the next cookie
+        cookie_index += 1
+    end
+
+    #We gave child_index children cookies and they were happy
+    return child_index
+end

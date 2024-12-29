@@ -1,0 +1,85 @@
+class Solution {
+public:
+    std::vector<int> findSubstring(std::string s, std::vector<std::string>& words) {
+        //initialize a word_map to store the number of occurances of each word in words
+        std::unordered_map<std::string,int> word_map;
+    
+        //populate word_map
+        for(std::string word:words){
+            //increment the entry for word
+            word_map[word]++;
+        }
+    
+        //initialize a word_pallet that will be used
+        //to test if a substring of input string s is a valid word
+        std::unordered_map<std::string,int> word_pallet;
+    
+        //store the word_size
+        int word_size = words[0].length();
+    
+        //store the total number_of_words
+        int number_of_words = words.size();
+    
+        //calculate the full concatenation_size
+        int concatenation_size = number_of_words*word_size;
+    
+        //initialize the return vector
+        std::vector<int> ret;
+    
+        //if the full concatenation_size is larger than the size of the input string s
+        //then return an empty vector
+        if(concatenation_size>s.length()){
+            return ret;
+        }
+    
+        //iterate through the input string s until no more valid concatenations are possible
+        //this occurs when there are less than concatenation_size after the ith character
+        for(int i = 0;i<=s.length()-concatenation_size;i++){
+            //reset the word_pallet to be empty
+            word_pallet.clear();
+        
+            //populate the word_pallet with the data from word_map
+            word_pallet.insert(word_map.begin(),word_map.end());
+        
+            //loop number_of_words times, checking to see if the following words are valid
+            for(int word_index = 0;word_index<number_of_words;word_index++){
+                //get the current_word from s
+				//this is the substring starting at i + (word_index * word_size)
+				//with a length of word_size
+                std::string current_word = s.substr(i+word_index*word_size,word_size);
+            
+                //if current_word is in word_pallet, and it is a valid occurance
+                //then decrement it's count in the pallet
+                //else break because anything after is invalid
+                if(word_pallet[current_word]){
+                    word_pallet[current_word]--;
+                }else{
+                    break;
+                }
+            }
+        
+            //initialize a flag to check if all the words in the word_pallet have been used
+            bool all_words_used = true;
+        
+            //Check every entry in word_pallet
+            for(auto p:word_pallet){
+                //if the entry does not have a count of 0,
+                //then either a word was used more than it occured in the input vector words
+                //or a word was not used
+                if(p.second!=0){
+                    all_words_used = false;
+                    break;
+                }
+            }
+        
+            //if all words were used
+            if(all_words_used){
+                //push the current index onto the return vector
+                ret.push_back(i);
+            }
+        }
+    
+        //return the return vector
+        return ret;
+    }
+};

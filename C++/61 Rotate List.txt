@@ -1,0 +1,73 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        //If list is less than 2 elements long
+        //then return the list as rotating it would do nothing
+        //but cause errors
+        if(head==nullptr||head->next==nullptr){
+            return head;
+        }
+        
+        //Initialize a variable to store the end of the list
+        //We must traverse there manually
+        ListNode* end = head;
+        
+        //Initialize a variable to count the number of elements in the list
+        int length = 1;
+        
+        //Iterate through the list
+        //Count the elements
+        //Store the end
+        while(end->next!=nullptr){
+            end = end->next;
+            length++;
+        }
+
+        //if k is some multiple of the length
+        //then rotating would result in the same list
+        //so return the list
+        if(!(k%length)){
+            return head;
+        }
+        
+        //Initialize a variable to store the break_node,
+        //the node that will become the new head
+        ListNode* break_node = head;
+        
+        //Initialize a variable to store the ListNode 
+        //directly before the break_node
+        ListNode* pre_break = break_node;
+        
+        //Iterate to the (k % length)th element from the end of the list
+        //this will be the break_node
+        for(int i = 0; i < length-(k % length); i++){
+            pre_break = break_node;
+            break_node = break_node->next;
+        }
+        
+        //Break the list in half between the pre_break node and the break_node
+        //and reverse their order
+        
+        //Break the link from the pre_break to the break_node
+        pre_break->next=nullptr;
+        
+        //Link the end of the node to the beginning
+        end->next = head;
+        
+        //Set the head to the break_node
+        head = break_node;
+
+        //Return new head
+        return head;
+    }
+};

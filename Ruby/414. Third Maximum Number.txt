@@ -1,0 +1,20 @@
+# @param {Integer[]} nums
+# @return {Integer}
+def third_max(nums)
+    #Value we are looking for
+    place = 3
+
+    #Convert the list to contain only the place largest unique numbers in nums
+    nums = nums.uniq.max(place)
+
+    #If there are less than place numbers in the list
+    if nums.length < place
+        #then there is no place largest number
+        #So return the maximum in nums
+        return nums[0]
+    else
+        #There is a place maximum number in nums
+        #It is indexed at place - 1
+        return nums[place - 1]
+    end
+end

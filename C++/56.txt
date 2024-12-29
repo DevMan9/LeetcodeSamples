@@ -1,0 +1,105 @@
+class Solution {
+public:
+    std::vector<std::vector<int>> merge(std::vector<std::vector<int>>& intervals) {
+        //Initialize the return vector
+        std::vector<std::vector<int>> ret;
+
+        //sort each interval in case any are reversed
+        // for(std::vector<int>& vec:intervals){
+        //     std::sort(vec.begin(),vec.end());
+        // }
+
+        //Initialize a vector to store the open and closes separatly
+        //We will be iterating over them checking the depth as if they
+        //represent parenthesis at a given index
+        //
+        //0123456789ABCDEFGHI
+        //-((-----(------(---
+        //----)-)---)-------)
+        std::vector<int> opens;
+        std::vector<int> closes;
+
+        //Populate the respective vectors
+        for(std::vector<int> vec:intervals){
+            opens.push_back(vec[0]);
+            closes.push_back(vec[1]);
+        }
+
+        //sort the vectors
+        //this will make it so that we encounter each parenthese
+        //in order of appearance 
+        std::sort(opens.begin(), opens.end());
+        std::sort(closes.begin(), closes.end());
+
+        //initialize indicies for each vector
+        int open_index = 0;
+        int close_index = 0;
+        
+        //store the max for each indicie for simplicity
+        //each interval contains 1 open and 1 close
+        //so one variable will suffice
+        int intervals_count = intervals.size();
+
+        //Initialize a variable to track the number of unclosed parenthesis
+        //depth changes from 0 and to 0 indicate the open and close of a
+        //merged interval, respectively
+        int depth = 0;
+        
+        //Initialize a variable to track the the open of the merged interval
+        int new_open = 0;
+        
+        //Iterate through the open and close vectors, tracking depth,
+        //to determine where merged intervals will occur
+        while(open_index<intervals_count){
+            //If the current open_index value is 
+            //less than the current close_index value
+            //then open a new parenthese at opens[open_index]
+            //Ties go to opens so that a close and an 
+            //open occuring at the same time count as a merge
+            if(opens[open_index]<=closes[close_index]){
+                //If depth is equal to 0
+                //then there is not a currently running interval
+                //since we are opening a new interval
+                //store the value at open_index as new_open
+                if(depth == 0){
+                    new_open = opens[open_index];
+                }
+                
+                //Increment depth
+                depth++;
+                
+                //Increment the open_index
+                open_index++;
+                
+            //Close a parenthese
+            }else{
+                //Decrement the depth
+                depth--;
+                
+                //If depth is now 0
+                //then there is no longer a running interval
+                //push the interval from new_open to the value at close_index
+                //into the return vector
+                if(depth==0){
+                    ret.push_back({new_open,closes[close_index]});
+                }
+                
+                //Increment the close_index
+                close_index++;
+            }
+        }
+
+        //If the depth is not zero
+        //then there is still an open interval
+        //All open intervals will be merged
+        //so, push the interval from the last recorded open
+        //to the last value in the closes vector
+        if(depth){
+            ret.push_back({new_open,closes[intervals_count-1]});
+        }
+
+        
+        //Return the return vector
+        return ret;
+    }
+};

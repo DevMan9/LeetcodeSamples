@@ -1,0 +1,37 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    //A helper to traverse a tree in order recursively and push to a vector in place
+    void inorderTraversalHelper(TreeNode* root, std::vector<int>& ret) {
+        //If the root is not a nullptr
+        //Then traverse left
+        //Then push the current value
+        //Then traverse right
+        if(root!=nullptr){
+            inorderTraversalHelper(root->left,ret);
+            ret.push_back(root->val);
+            inorderTraversalHelper(root->right,ret);
+        }
+    }
+
+    std::vector<int> inorderTraversal(TreeNode* root) {
+        //Initialize the return vector
+        std::vector<int> ret;
+        
+        //Traverse in order recursivly
+        inorderTraversalHelper(root, ret);
+        
+        //Return the return vector
+        return ret;
+    }
+};

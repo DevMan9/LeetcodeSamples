@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int lengthOfLastWord(std::string s) {
+        //Initialize a variable to store the current index
+        //we will be working from the end of the string backwards
+        int index = s.length()-1;
+        
+        //skip trailing whitespace
+        while(s[index]==' '){
+            index--;
+        }
+        
+        //Initialize a variable to count how many letter there are in the last word
+        int ret = 0;
+        
+        //Loop until the beginning of the string or until whilespace is encountered
+        while(index>=0&&s[index]!=' '){
+            //Increment the count
+            ret++;
+            
+            //decrement the index
+            index--;
+        }
+        
+        //return the count
+        return ret;
+    }
+};

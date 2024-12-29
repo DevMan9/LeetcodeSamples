@@ -1,0 +1,5 @@
+class Solution {
+    func detectCapitalUse(_ word: String) -> Bool {
+        return (word == word.prefix(1).uppercased() + word.suffix(word.length-1).lowercased()) || (word == word.uppercased()) || (word == word.lowercased())
+    }
+}

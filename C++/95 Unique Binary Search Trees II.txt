@@ -1,0 +1,91 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    //Generates all possible bst from min to max
+    std::vector<TreeNode*> generateTrees(int min, int max, std::unordered_map<std::string, std::vector<TreeNode*>>& memo){
+        //Initialize a string builder
+        //We will be hashing the inputs against the output of this function
+        std::ostringstream os;
+        
+        //The key will be "min,max"
+        os<<min<<','<<max;
+        
+        //If we have already calculated this bst
+        //then return it
+        if (memo.count(os.str())) {
+            return memo[os.str()];
+        }
+
+        //If min is equal to max
+        //then return a tree consisting of only min
+        if(min==max){
+            return {new TreeNode(min)};
+        }
+
+        //If max - min == 1 (aka we are building a tree of 2 elements)
+        //then return the 2 possible trees
+        if(max - min == 1){
+            return {new TreeNode(min,nullptr,new TreeNode(max)), new TreeNode(max,new TreeNode(min),nullptr)};
+        }
+
+        //Initialize the return vector
+        std::vector<TreeNode*> ret;
+        
+        //Iterate from min to max
+        //We will recursivly generate the left hand side and right hand side
+        //of a tree rooted at i
+        for(int i = min; i <= max; i++){
+            //Generate the left hand side
+            std::vector<TreeNode*> left = generateTrees(min, i-1, memo);
+            
+            //Generate the right hand side
+            std::vector<TreeNode*> right = generateTrees(i+1, max, memo);
+
+            //If there is no left hand side
+            //then build a tree specifying a left nullptr
+            if(i == min){
+                for(TreeNode* r : right){
+                    ret.push_back(new TreeNode(i,nullptr,r));
+                }
+            //If there is no right hand side
+            //then build a tree specifying a right nullptr
+            }else if(i == max){
+                for(TreeNode* l : left){
+                    ret.push_back(new TreeNode(i,l,nullptr));
+                }
+            //Else build a tree for every combination of left and right hand sides
+            }else{
+                for(TreeNode* l : left){
+                    for(TreeNode* r : right){
+                        ret.push_back(new TreeNode(i,l,r));
+                    }
+                }
+            }
+        }
+        
+        //Store the result in the memo at "min,max"
+        memo[os.str()] = ret;
+        
+        //Return the generated trees
+        return ret;
+    }
+
+
+    std::vector<TreeNode*> generateTrees(int n) {
+        //Initialize a map to store results to prevent redundant calculations
+        std::unordered_map<std::string, std::vector<TreeNode*>> memo;
+        
+        //Generate the trees from 1 to n
+        return generateTrees(1,n,memo);
+    }
+};

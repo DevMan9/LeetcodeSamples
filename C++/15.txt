@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        std::vector<std::vector<int>> ret;
+        std::unordered_map<int, int> last;
+        std::sort(nums.begin(), nums.end());
+        for(int i = 0;i<nums.size();i++){
+            last[nums[i]]=i;
+        }
+        for(int i = 0;i<nums.size();i++){
+            for(int j = i+1;j<nums.size();j++){
+                int rem = 0-(nums[i]+nums[j]);
+                if(auto find = last.find(rem);find!=last.end()&&find->second>j){
+                    ret.push_back({nums[i],nums[j],rem});
+                }
+                j = last[nums[j]];
+            }
+            i = last[nums[i]];
+        }
+        return ret;
+    }
+};

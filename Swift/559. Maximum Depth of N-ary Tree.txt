@@ -1,0 +1,38 @@
+/**
+ * Definition for a Node.
+ * public class Node {
+ *     public var val: Int
+ *     public var children: [Node]
+ *     public init(_ val: Int) {
+ *         self.val = val
+ *         self.children = []
+ *     }
+ * }
+ */
+
+class Solution {
+    func maxDepth(_ root: Node?) -> Int {
+        //Initialize a variable to store the max depth of this node's children
+        var max = 0
+
+        //If root is nil
+        if root == nil {
+            //Return max (which at this point is 0)
+            return max
+        }
+
+        //Calculate the depth of each child and store the max
+        for child in root!.children {
+            let depth = maxDepth(child)
+            if depth > max {
+                max = depth
+            }
+        }
+
+        //Return the max + 1
+        //(This node at this point is guaranteed to be not nil
+        //If it has no children, max will be 0
+        //So the depth is max + 1)
+        return max + 1
+    }
+}

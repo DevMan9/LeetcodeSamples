@@ -1,0 +1,10 @@
+# Write your MySQL query statement below
+SELECT name AS NAME, BALANCE
+FROM (
+  SELECT account, SUM(amount) AS BALANCE
+  FROM Transactions
+  GROUP BY account
+  HAVING BALANCE > 10000
+)Balances
+LEFT JOIN Users
+USING(account)

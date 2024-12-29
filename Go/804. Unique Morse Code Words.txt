@@ -1,0 +1,23 @@
+func uniqueMorseRepresentations(words []string) int {
+    //Morse code alphabet
+    code := [26]string{".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."}
+
+    //Set to store Morse code transcriptions
+    var transformations map[string]bool = make(map[string]bool)
+
+    //For every word in words
+    for _, word := range words {
+        //Build a string
+        str := ""
+        //For every letter in word
+        for _, letter := range word {
+            //Add the Morse code for that latter to the string
+            str += code[letter - 'a']
+        }
+        //Add the string to the set of tranformations
+        transformations[str] = true
+    }
+
+    //Return the length of transformations
+    return len(transformations)
+}

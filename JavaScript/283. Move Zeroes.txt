@@ -1,0 +1,27 @@
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var moveZeroes = function(nums) {
+    //Create a variable to track a lagging index while we iterate
+    //This index will lag by exactly the number of zeros encountered
+    let working_index = 0;
+
+    //Iterate the list
+    for(let i = 0; i < nums.length; i++){
+        //If the current number is not 0
+        if(nums[i] != 0){
+            //The swap it with the working_index
+            nums[working_index] = nums[i];
+            //and increment the working_index
+            working_index++;
+        }
+    }
+
+    //Overwrite the remainder of the list with 0
+    while(working_index < nums.length){
+        nums[working_index] = 0;
+        working_index++;
+    }
+
+};

@@ -1,0 +1,91 @@
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        //If a is shorter than b
+        //then swap the string for simplicity
+        if(a.length()<b.length()){
+            std::string tmp = a;
+            a = b;
+            b = tmp;
+        }
+        
+        //Initialize a string builder
+        std::ostringstream os;
+        
+        //Initialize an index integer
+        //We will be iterating from the end of both a and b simultaneously
+        int index = 0;
+        
+        //Initialize a carry flag
+        bool carry = false;
+        
+        //Iterate through the b string
+        //We guaranteed that b is shorter than a
+        //so it is safe to access a simultaneously
+        while(index < b.length()){
+            //Get the bit at the index in a
+            bool a_bit = a[a.length()-1-index]=='1';
+            
+            //Get the bit at the index in b
+            bool b_bit = b[b.length()-1-index]=='1';
+            
+            
+            //Calculate the ones place
+            bool o_bit = a_bit^b_bit^carry;
+            
+            //Calculate the tens place
+            carry = (a_bit && b_bit) || (b_bit && carry) || (carry && a_bit);
+            
+            //Push the ones bit into the string builder
+            os<<((o_bit)?'1':'0');
+            
+            //Increment the index
+            index++;
+        }
+        
+        //Iterate through the remainder of a
+        while(index < a.length()){
+            //Get the bit at the index in a
+            bool a_bit = a[a.length()-1-index]=='1';
+            
+            
+            //Calculate the ones place
+            bool o_bit = a_bit^carry;
+            
+            //Calculate the tens place
+            carry = a_bit&&carry;
+            
+            //Push the ones bit into the string builder
+            os<<((o_bit)?'1':'0');
+            
+            //Increment the index
+            index++;
+        }
+        
+        //If there is a remaining carry after itereating the entirety of a
+        //then push a 1 into the string builder
+        if(carry){
+            os<<'1';
+        }
+        
+        //The string in string builder is reversed because we pushed from the
+        //least significant bit to the most significant
+        //Store the string and reveres it
+        std::string ret = os.str();
+        std::reverse(ret.begin(),ret.end());
+        
+        //Return the summed string
+        return ret;
+    }
+};
+/**  addition truth table
+x   a   b   c       t   o
+1   0   0   0       0   0
+2   0   1   0       0   1
+3   1   0   0       0   1
+4   1   1   0       1   0
+5   0   0   1       0   1
+6   0   1   1       1   0
+7   1   0   1       1   0
+8   1   1   1       1   1
+**/

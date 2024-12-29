@@ -1,0 +1,10 @@
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var missingNumber = function(nums) {
+    //The expected sum of the range [1,n] is n(n+1)/2
+    //So if we sum nums we can calculate the single missing number
+    //by simply subtracting the sum from the expected value.
+    return ((nums.length * (nums.length + 1)) / 2) - nums.reduce((partialSum, a) => partialSum + a, 0) ;
+};

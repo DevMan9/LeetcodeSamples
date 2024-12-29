@@ -1,0 +1,6 @@
+# @param {Integer[]} nums
+# @return {Integer[]}
+def find_disappeared_numbers(nums)
+    #Create an array of numbers [1, nums.length] and subtract nums
+    return (1..nums.length).to_a - nums
+end

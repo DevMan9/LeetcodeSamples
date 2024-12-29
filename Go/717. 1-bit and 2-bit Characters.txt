@@ -1,0 +1,25 @@
+func isOneBitCharacter(bits []int) bool {
+    //Create a variable to store the current index as we step through the bits
+    var index int = 0
+
+    //Store the length of bits for ease of access
+    var length int = len(bits)
+
+    //Loop until we reach the last character
+    for index < length - 1 {
+        //If the current bit is a 1
+        if bits[index] == 1 {
+            //Take an additional step because only 2 bit characters start with a 1
+            index++;
+        }
+
+        //step
+        index++
+    }
+
+    //Because we carefully stopped as soon as the index passed the
+    //SECOND to LAST character in bits
+    //We can say that if there is one more bit in bits,
+    //then it must be a single character
+    return index != length
+}

@@ -1,0 +1,9 @@
+func nextGreatestLetter(letters []byte, target byte) byte {
+    for index := 0; index < len(letters); index++ {
+        if letters[index] > target {
+            return letters[index]
+        }
+    }
+
+    return letters[0]
+}

@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        //Initialize a vaiable to store the maximum profit
+        //The worst we can do is 0
+        int max = 0;
+        
+        //Initialize a variable to store the previous minimum price encountered
+        //We initialize it to the first element of the vector for simplicity
+        int min = prices[0];
+        
+        //Iterate through the prices and track minimums and maximums
+        for(int i:prices){
+            //If we sold today after buying at the minimum
+            //and our profit is higher than any possible point before
+            //then record that profit into max
+            if(i-min>max){
+                max = i-min;
+            }
+            //If the current price is less than the previous minimum
+            //then overwrite the previous minimum
+            if(i<min){
+                min = i;
+            }
+        }
+        
+        //Return the max profit
+        return max;
+    }
+};

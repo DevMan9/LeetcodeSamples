@@ -1,0 +1,50 @@
+func mostCommonWord(paragraph string, banned []string) string {
+    //Create a banned word set
+    var banned_map map[string]bool = make(map[string]bool)
+    for _, word := range banned {
+        banned_map[word] = true
+    }
+    //Ban this "word" because it's not a word, but it gets caught as an edge case
+    banned_map[""] = true
+    
+    //Create a word_map to tally every word in paragraph 
+    var word_map map[string]int = make(map[string]int)
+    
+    //Character that arre most certainly going
+    var remove string = "!?',;."
+
+    //Remove special characters
+    for _, character := range remove {
+        paragraph = strings.ReplaceAll(paragraph, string(character), " ")
+    }
+
+    //Split the paragraph into words
+    var words []string = strings.Split(paragraph, " ")
+
+    //Iterate the list of words
+    for _, word := range words {
+        //Format the word
+        formatted := strings.ToLower(word)
+
+        //Tally the word
+        word_map[formatted] = word_map[formatted] + 1
+    }
+
+    //Initialize a variable to store the most frequently occuring legal word
+    var max_word string = "X"
+
+    //Iterate the word_map
+    for key := range word_map {
+        //If the word is banned, skip it
+        if !banned_map[key] {
+            //If the current word is more frequent than the previous max
+            if word_map[key] > word_map[max_word] {
+                //Overwrite the max
+                max_word = key
+            } 
+        }
+    }
+
+    //Return the most frequent legal word
+    return max_word
+}

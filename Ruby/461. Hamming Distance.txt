@@ -1,0 +1,42 @@
+# @param {Integer} x
+# @param {Integer} y
+# @return {Integer}
+def hamming_distance(x, y)
+    #XOR produces the bits which are different
+    ret = x ^ y
+
+    #Count the 1 bits in dif
+    #This is achieved by a sort of divide and conquer
+    #To count two 1 bits you need only two bits
+    #0b00 = 0b00
+    #0b01 = 0b01
+    #0b10 = 0b01
+    #0b11 = 0b10
+
+    #We can actually store the number of 1 bits withing those same two bits
+
+    #If we tried to add these 2 of these two bit sums,
+    #the largest number we could get is 4 (0b100 = 0b10 + 0b10)
+    #This means we can store this sum in the 4 bits we just counted
+
+    #This will work indefinitly
+    for index in 0..4
+        #Calculate the number of places that the number will be reduced
+        places = 1 << index
+        
+        #Generate the mask for separating the two groups that need to be added
+        #0xffffffff / 0b11 = 0x55555555
+        #0xffffffff / 0b101 = 0x33333333
+        #0xffffffff / 0b10001 = 0x0f0f0f0f
+        #0xffffffff / 0b100000001 = 0x00ff00ff
+        #0xffffffff / 0b100000000000000001 = 0x0000ffff
+        #... (but we only run the loop 5 times anyway...)
+        mask = 0xffffffff / ((1<<places) | 1)
+
+        #Calculate the partial sums
+        ret = (ret & mask) + ((ret>>places) & mask)
+    end
+
+    #return the Hamming distance
+    return ret
+end

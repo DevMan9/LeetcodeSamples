@@ -1,0 +1,89 @@
+class Solution {
+public:
+    //Returns true is a string is a valid IP integer
+    //[0,255]
+    //no leading zeros
+    bool isValidSubIP(std::string s){
+        //Get the integer value of s
+        int val = std::stoi(s);
+    
+        //Return true IF
+        //The value is less than 256
+        //AND value is greater than 0
+        //AND there are no leading zeros
+        //OR
+        //value is 0
+        //AND there is only one character
+        return (val < 256 && val > 0 && s[0] != '0') || (val == 0 && s.length() == 1);
+    }
+
+    std::vector<std::string> restoreIpAddresses(std::string s) {
+        //All valid ip addresses must contain between 4 and 12 digits inclusive
+        if(s.length() < 4||s.length() > 12){
+            return {};
+        }
+
+        //Initialize the return vector
+        std::vector<std::string> ret;
+
+        //Each integer must be 1 to 3 digits long
+        //so iterate over the first 3 digits
+        //(also save room for the other 3 integers with the && clause)
+        for(int first_dot = 1; first_dot <= 3 && first_dot < s.length() - 2 ;first_dot++){
+            //Pull the first int from the input string
+            std::string first_sub = s.substr(0,first_dot);
+            
+            //If it is not a valid IP integer, skip all possible IPs using it
+            if (!isValidSubIP(first_sub)) {
+                continue;
+            }
+            
+            //Iterate over the next 3 digits
+            //(also save room for the other 2 integers with the && clause)
+            for (int second_dot = 1; second_dot <= 3 && first_dot + second_dot < s.length() - 1; second_dot++) {
+                //Pull the second int from the input string
+                std::string second_sub = s.substr(first_dot,second_dot);
+                
+                //If it is not a valid IP integer, skip all possible IPs using it
+                if (!isValidSubIP(second_sub)) {
+                    continue;
+                }
+
+                //Iterate over the next 3 digits
+                //(also save room for the last integer with the && clause)
+                for (int third_dot = 1; third_dot <= 3 && first_dot + second_dot + third_dot < s.length(); third_dot++) {
+                    //Pull the third int from the input string
+                    std::string third_sub = s.substr(first_dot+second_dot,third_dot);
+                    
+                    //If it is not a valid IP integer, skip this IP
+                    int third_int = std::stoi(third_sub);
+                    if (!isValidSubIP(third_sub)) {
+                        continue;
+                    }
+
+                    //Pull the fourth int from the input string
+                    std::string fourth_sub = s.substr(first_dot+second_dot+third_dot);
+                    
+                    //If it is not a valid IP integer, skip this IP
+                    int fourth_int = std::stoi(fourth_sub);
+                    if (!isValidSubIP(fourth_sub)) {
+                        continue;
+                    }
+
+                    //Initialize a string builder
+                    std::ostringstream os;
+                    
+                    //Build the IP address by inserting a 
+                    //'.' between each IP integer
+                    os<<first_sub<<'.'<<second_sub<<'.'<<third_sub<<'.'<<fourth_sub;
+                    
+                    //Push the IP address into the return vector
+                    ret.push_back(os.str());
+                }
+            }
+        }
+
+        //Return the return vector
+        return ret;
+    }
+};

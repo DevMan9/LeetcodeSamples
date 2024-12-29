@@ -1,0 +1,50 @@
+/** 
+ * Forward declaration of guess API.
+ * @param {number} num   your guess
+ * @return 	     -1 if num is higher than the picked number
+ *			      1 if num is lower than the picked number
+ *               otherwise return 0
+ * var guess = function(num) {}
+ */
+
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var guessNumber = function(n) {
+    //Set up for a binary search
+    let top = n;
+    let bot = 1;
+
+    //Binary search
+    while(top>bot){
+        //Calculate the mid point between top and bot
+        const mid = (top >> 1) + (bot >> 1);
+        
+        //Guess the mid point
+        const g = guess(mid);
+
+        
+        switch(g){
+            case 1:
+            //The number is higher
+            //Set bot to be the number above mid
+            bot = mid + 1;
+                break;
+
+            case -1:
+            //The number is lower
+            //Set top to be the number below mid
+            top = mid - 1;
+                break;
+
+            default:
+            //The number is mid (or some error, doesn't matter, wasn't defined)
+                return mid;
+        }
+    }
+
+    //top and bot are the same number (or top is less than bot)
+    //So return bot
+    return bot;
+};

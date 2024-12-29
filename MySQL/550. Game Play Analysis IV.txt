@@ -1,0 +1,23 @@
+# Write your MySQL query statement below
+WITH NextRecord AS (
+  SELECT player_id, 
+  event_date, 
+  LEAD(player_id) OVER() AS 'next_id', 
+  LEAD(event_date) OVER() AS 'next_login'
+  FROM Activity
+  ORDER BY player_id, event_date
+),
+FirstLogin AS (
+  SELECT player_id, MIN(event_date) AS 'first_login'
+  FROM Activity
+  GROUP BY player_id
+),
+ConsecutiveLogin AS (
+  SELECT player_id, event_date
+  FROM NextRecord
+  WHERE player_id = next_id AND DATEDIFF(next_login, event_date) = 1
+)
+
+SELECT ROUND(COUNT(*) / (SELECT COUNT(*) FROM FirstLogin), 2) AS fraction
+FROM FirstLogin
+WHERE (player_id, first_login) IN (SELECT * FROM ConsecutiveLogin)

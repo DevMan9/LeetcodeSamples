@@ -1,0 +1,134 @@
+class Solution {
+public:
+    //Returns a int representing the type of path segment
+    int parsePathSegment(std::string p){
+        int state = -1;
+        //-1 start, expecting '/'                   not valid
+        //0 found '/' expecting '.' or character    '/'
+        //1 found '.' expecting '.' or character    "/."
+        //2 found ".." expecting character          "/.."
+        //3 found character                         "/anythingelse"
+
+        //Iterate through the input string
+        for(char c : p){
+            switch (state) {
+                case -1:
+                    switch (c) {
+                        case '/':
+                            state = 0;
+                            break;
+
+                        default:
+                            return state;
+                    }
+                    break;
+                case 0:
+                    switch (c) {
+                        case '.':
+                            state = 1;
+                            break;
+                        default:
+                            return 3;
+                    }
+                    break;
+                case 1:
+                    switch (c) {
+                        case '.':
+                            state = 2;
+                            break;
+                        default:
+                            return 3;
+                    }
+                    break;
+                case 2:
+                    return 3;
+            }
+        }
+
+        return state;
+    }
+
+    std::string simplifyPath(std::string path) {
+        //Initialize a vector to hold path segments
+        //We will be breaking the path up into segments staring with '/'
+        std::vector<std::string> path_segments;
+
+        //Initialize an index variable to 1 
+        //(we are assuming the path starts with '/')
+        int index = 1;
+        
+        //Initialize a variable to store the starting index of the path_segment
+        int segment_index = 0;
+        
+        //Iterate through the input path
+        //pulling out each path_segemnt and storing them
+        while(index<path.length()){
+            //If the character at index is a '/'
+            //then we have reached the end of a path_segment
+            //store the path segment
+            if(path[index]=='/'){
+                path_segments.push_back(path.substr(segment_index,index-segment_index));
+                
+                //Set the segment_index to the start of the next segment
+                segment_index = index;
+            }
+            
+            //Increment the index
+            index++;
+        }
+        
+        //Push the remainder of the path into path_segments
+        path_segments.push_back(path.substr(segment_index,index-segment_index));
+
+        //Initialize a double-ended queue
+        //We will only be popping things off of the front and the back
+        //and only pushing things on the back
+        std::deque<std::string> dequeue;
+        
+        //iterate through the path_segments
+        //removing usless ones ("/" and "/.")
+        //pushing valid segments
+        //and popping segments ("/..")
+        for(std::string p:path_segments){
+            switch(parsePathSegment(p)){
+                    //If p is "/.."
+                    //then pop the previous path_segment
+                    //If there wasn't a previous segemnt
+                    //then do nothing
+                case 2:
+                    if(dequeue.size()!=0){
+                        dequeue.pop_back();
+                    }
+                    break;
+                    
+                    //Push p into the queue
+                case 3:
+                    dequeue.push_back(p);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //If there are no valid path_segments in the queue
+        //then return "/"
+        if(dequeue.size()==0){
+            return "/";
+        }
+        
+        //Initialize a string builder
+        std::ostringstream os;
+        
+        //Iterate through the valid path_segments
+        while (dequeue.size()>0) {
+            //Push the current path_segment into the string builder
+            os<<dequeue.front();
+            
+            //Pop the front of the queue
+            dequeue.pop_front();
+        }
+
+        //Return the build path
+        return os.str();
+    }
+};

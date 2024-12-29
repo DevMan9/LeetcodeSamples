@@ -1,0 +1,47 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        return (list1!=nullptr&&list2!=nullptr)?((list1->val<=list2->val)?
+            new ListNode(list1->val,mergeTwoLists(list1->next,list2)):
+            new ListNode(list2->val,mergeTwoLists(list1,list2->next))):
+        (list1==nullptr&&list2!=nullptr)?new ListNode(list2->val,mergeTwoLists(list1,list2->next)):
+        (list2==nullptr&&list1!=nullptr)?new ListNode(list1->val,mergeTwoLists(list1->next,list2)):
+        nullptr;
+    }
+    
+    ListNode* mergeKLists(std::vector<ListNode*>& lists) {
+        switch(lists.size()){
+            case 0:
+                return nullptr;
+                break;
+            case 1:
+                return lists[0];
+                break;
+            default:
+                std::vector<ListNode*>::iterator mid = lists.begin()+lists.size()/2;
+                std::vector<ListNode*> sub1(lists.begin(),mid);
+                std::vector<ListNode*> sub2(mid,lists.end());
+                return mergeTwoLists(
+                    mergeKLists(sub1),
+                    mergeKLists(sub2)
+                );
+                break;
+        }
+        
+        ListNode* ret = nullptr;
+        for(ListNode* l:lists){
+            ret = mergeTwoLists(ret,l);
+        }
+        return ret;
+    }
+};

@@ -1,0 +1,32 @@
+/**
+ * Definition for a Node.
+ * public class Node {
+ *     public var val: Int
+ *     public var children: [Node]
+ *     public init(_ val: Int) {
+ *         self.val = val
+ *         self.children = []
+ *     }
+ * }
+ */
+
+class Solution {
+    func preorder(_ root: Node?) -> [Int] {
+        //Recursive end case
+    	if root == nil {
+            return []
+        }
+
+        //Initialize the return array
+        //Since this is preorder, we start the array with the root's value
+        var ret = [root!.val]
+
+        //Append each child to the return array
+        for child in root!.children {
+            ret.append(contentsOf: preorder(child))
+        }
+
+        //Return the return array
+        return ret
+    }
+}

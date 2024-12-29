@@ -1,0 +1,79 @@
+class Solution {
+public:
+    std::vector<std::vector<int>> fourSum(std::vector<int>& nums, int target) {
+        //initialize return vector
+        std::vector<std::vector<int>> ret;
+    
+        //sort input vector to make it possible to skip large portions of redundant data
+        std::sort(nums.begin(),nums.end());
+    
+        //initialize a map to track the last index of each int that appears in input vector
+        std::unordered_map<int, int> last_occurance;
+    
+        //initialize a map to track the number of times each int appears in input vector
+        std::unordered_map<int, int> counts;
+    
+        //populate the maps
+        for(int i = 0;i<nums.size();i++){
+            last_occurance[nums[i]]=i;
+            counts[nums[i]]++;
+        }
+    
+        //picking the first number in the quad
+        for(int i = 0;i<nums.size();i=last_occurance[nums[i]]+1){
+            //Partial calculation of the required value to complete the quad.  It is important to do this here, rather than in the k loop where it would be done exponentially more times.
+            //By the kth loop, this will be (target-nums[i]-nums[j]-nums[k])
+            long ipart_sum = target-nums[i];
+        
+            //picking the second number in the quad
+            for(int j = i+1;j<nums.size();j=last_occurance[nums[j]]+1){
+                //Partial calculation of the required value to complete the quad.
+                long jpart_sum = ipart_sum-nums[j];
+            
+                //picking the third number in the quad
+                for(int k = j+1;k<nums.size();k=last_occurance[nums[k]]+1){
+                    //the value required from the input vector to complete the quad
+                    long long_required = jpart_sum-nums[k];
+                    
+                    //cast long_required to an int to check for overflow
+                    int required = (int)long_required;
+                
+                    //a flag to tell if an overflow occured while calculating required.
+                    bool overflow = required!=long_required;
+                
+                    //if required is NOT in the input vector or required is less than the kth number in the input vector (this check is meaningful because we sorted the input vector) or there was an overflow during the addition to calculate required
+                    //then skip to next triple
+                    if(!last_occurance.count(required)||required<nums[k]||overflow){
+                        continue;
+                    }
+                
+                    //initialize and populate a map, counting each occurance of an int amoung the ith, jth, kth element of the input vector, and the required int to complete the quad.
+                    std::unordered_map<int, int> sub_counts;
+                    sub_counts[nums[i]]++;
+                    sub_counts[nums[j]]++;
+                    sub_counts[nums[k]]++;
+                    sub_counts[required]++;
+                
+                    //check to see if the candidate quad has duplicate entries.  This is done by comparing the counts each int in the candidate quad to the total counts of each int in the input vector.
+                    bool noDuplicates = true;
+                    for(auto entry:sub_counts){
+                        //if there are more of a single int in the quad than there are in the input vector
+                        //then there must be a duplicate in the quad
+                        if(entry.second>counts[entry.first]){
+                            noDuplicates = false;
+                            break;
+                        }
+                    }
+                    //if there are no duplicates
+                    //then push the quad onto the return vector
+                    if(noDuplicates){
+                        ret.push_back({nums[i],nums[j],nums[k],required});
+                    }
+                }
+            }
+        }
+    
+        //return the return vector
+        return ret;
+    }
+};

@@ -1,0 +1,57 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<Double> averageOfLevels(TreeNode root) {
+        //Create 2 lists to store the sum and count of elements in each layer
+        List<Double> sum = new ArrayList<>();
+        List<Integer> count = new ArrayList<>();
+
+        //Calculate the sum and count of each layer
+        averageOfLevelsHelper(root, 0, sum, count);
+
+        //Divide each sum by its count
+        for(int index = 0; index < sum.size(); index++){
+            sum.set(index,sum.get(index)/count.get(index));
+        }
+
+        //Return the averages (now stored in sum)
+        return sum;
+    }
+
+    //Calculate the sum and count of each layer in root
+    private void averageOfLevelsHelper(TreeNode root, int depth, List<Double> sum, List<Integer> count){
+        //End case
+        if(root == null){
+            return;
+        }
+
+        //If depth is greater than the lengths of sum and count
+        //They will always be the same du to how the program is written
+        if(depth >= sum.size()){
+            //Then add new entries for this layer
+            sum.add((double)root.val);
+            count.add(1);
+        }else{
+            //Else add to the current layer's entries
+            sum.set(depth, sum.get(depth) + root.val);
+            count.set(depth, count.get(depth) + 1);
+        }
+
+        //Recursivly calculate the left and right branches
+        averageOfLevelsHelper(root.left, depth + 1, sum, count);
+        averageOfLevelsHelper(root.right, depth + 1, sum, count);
+    }
+}

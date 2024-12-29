@@ -1,0 +1,20 @@
+class Solution {
+    func matrixReshape(_ mat: [[Int]], _ r: Int, _ c: Int) -> [[Int]] {
+        //Get the dimensions of the input matrix
+        let m = mat.count
+        let n = mat[0].count
+
+        //There are 2 conditions where we would return the original matrix:
+        //The new matrix is not properly sized
+        //or the new matrix is the same dimension
+        if (m * n != r * c) || (m == r && n == c){
+            return mat
+        }
+
+        //Flatten the matrix
+        var flat = Array(mat.joined())
+
+        //Cut it back up into the new dimensions
+        return (0..<r).map{stride(from: $0 * c, to: ($0 + 1) * c, by: 1).map { flat[$0] }}
+    }
+}

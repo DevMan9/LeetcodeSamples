@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        if(height.size()<2){
+            return 0;
+        }
+        if(height.size()==2){
+            return (height[0]<height[1])?height[0]:height[1];
+        }
+        int max = 0;
+        int l = 0;
+        int r = height.size()-1;
+        while(l!=r){
+            int min = (height[r]<height[l]) ? height[r] : height[l];
+            max = (min*(r-l)>max) ? min*(r-l) : max;
+            if(height[l]<height[r]){
+                int nl = l;
+                while(nl!=r&&height[l]>=height[nl]){
+                    nl++;
+                }
+                l = nl;
+            }else{
+                int nr = r;
+                while(nr!=l&&height[r]>=height[nr]){
+                    nr--;
+                }
+                r = nr;
+            }
+        }
+        return max;
+    }
+};

@@ -1,0 +1,48 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        //Create a new head one before the input head
+        //This will just make manipulation simpler 
+        //so we don't have to handle special cases like if head has duplicates
+        ListNode* true_head = new ListNode(-1,head);
+        
+        //Initialize a variable to keep track of the node we are working on
+        ListNode* end = true_head;
+        
+        //Iterate the list
+        while(end->next!=nullptr){
+            
+            //Initialize a variable to the next element in the list
+            //This is why we made true_head
+            ListNode* next = end->next;
+            
+            //Iterate through any duplicate values
+            while(next->next!=nullptr&&next->val==next->next->val){
+                next = next->next;
+            }
+            
+            //If there weren't and duplicates
+            //then increment the end
+            //else set the end to the element after next
+            if(end->next == next){
+                end = next;
+            }else{
+                end->next = next->next;
+            }
+        }
+        
+        //Return the head of the list
+        //this is also why we made true_head
+        return true_head->next;
+    }
+};

@@ -1,0 +1,56 @@
+class Solution {
+public:
+    void nextPermutation(std::vector<int>& nums) {
+        //initialize a variable to store the last index
+        //where the value at the next index
+        //is greater than the value at the current index
+        int last_ascending_index;
+    
+        //loop backwards from the end of the input vector nums
+        for(int i = nums.size()-2;i>=0;i--){
+            //if the value at the next index is greater than the value at the current index
+            //record the current index as the last_ascending_index
+            if(nums[i+1]>nums[i]){
+                last_ascending_index = i;
+                break;
+            }
+        }
+    
+        //if the input vector is in decending order
+        //then there are no permuations lexicographically greater than the input.
+        //to get the lowest lexicographical permutation
+        //we can reverse the input vector nums and return
+        if(last_ascending_index<0){
+            std::reverse(nums.begin(), nums.end());
+            return;
+        }
+        //there is now at least 1 value after last_ascending_index that is greater than
+        //it should also be noted that
+        //everything after last_ascending_index is in DECENDING order
+    
+        //initialize a variable to store the last index after the last_ascending_index
+        //that is grater than the value at the last_ascending_index
+        int swap_index;
+    
+        //loop from the end of the input vector nums to the last_ascending_index
+        //to find the last value that is greather than the value at last_ascending_index
+        for(int i=nums.size()-1;i>last_ascending_index;i--){
+            //if the value at the current index
+            //is greater than the value at the last_ascending_index
+            //then record the current index as the swap_index
+            if(nums[i]>nums[last_ascending_index]){
+                swap_index = i;
+                break;
+            }
+        }
+        //swap the values at the last_ascending_index and the swap_index
+        //this makes the sub vector [0,last_ascending_index]
+        //the smallest lexicographical permutation
+        std::swap(nums[last_ascending_index], nums[swap_index]);
+    
+        //reverse everything after the last_ascending_index in the input vector nums
+        //this puts the remainder of the input vector into a (mostly) ascending order
+        //ensuring it to be the smallest lexicographical permuation
+        std::reverse(nums.begin()+last_ascending_index+1, nums.end());
+    }
+};

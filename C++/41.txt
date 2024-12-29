@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int firstMissingPositive(vector<int>& nums) {
+        int n = nums.size();
+        
+        //remove negative entries and entries larger than the vector size
+        //replacing them with a the size of the vector
+        for(int i = 0; i < n; i++) {
+            if(nums[i] <= 0 or nums[i] > n) {
+                nums[i] = n + 1;
+            }
+        }
+        
+        //
+        for(int i = 0; i < n; i++){
+            //if the current index is out of range
+            //then skip this index
+            if(abs(nums[i]) > n){
+                continue;
+            }
+            
+            //invert the value at the index pointed to by the current value
+            int index = abs(nums[i]);
+            nums[index-1] = 0 - abs(nums[index-1]);
+        }
+        
+        //loop until we encounter a positive entry
+        for(int i = 0; i < n; i++) {
+            if(nums[i] > 0) {
+                //the index + 1;
+                return i+1;
+            }
+        }
+        
+        //return the size of the input vector + 1
+        return n+1;
+    } 
+};

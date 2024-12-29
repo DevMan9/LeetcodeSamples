@@ -1,0 +1,193 @@
+class Solution {
+public:
+    //Returns the sum of 2 integers stored as strings
+    std::string sum(std::string num1, std::string num2){
+        //initialize a string builder
+        std::ostringstream os;
+    
+        //if num1 is longer than num2
+        //then swap them for simplicity
+        if(num1.length()<num2.length()){
+            std::string tmp = num1;
+            num1 = num2;
+            num2 = tmp;
+        }
+    
+        //initialize a variable to store the amount to carry to the next digit
+        int carry = 0;
+        
+        //initialize a variable to store the current index that we are working with
+        //this is interpreted as index from the end of the string i.e. the ones place
+        int index = 0;
+        
+        //the length of num2 is guaranteed to be at most as large as that of num1
+        //iterate through the indicies of the 2 numbers,
+        //adding them and storing storing the result
+        while(index<num2.length()){
+            //convert the current index of num1 to an integer
+            int digit1 = num1[num1.length()-1-index]-'0';
+            
+            //convert the current index of num2 to an integer
+            int digit2 = num2[num2.length()-1-index]-'0';
+        
+            //add the 2 digits and the carry together 
+            //note that this will be AT MOST 2 digits (9+9+1=19)
+            int sum = digit1+digit2+carry;
+        
+            //extract the ones place from the sum
+            int sum_ones = sum%10;
+        
+            //push the ones place of the sum into the string builder
+            os<<sum_ones;
+        
+            //exctract the tens place from the sum
+            carry = sum/10;
+            
+            //increment the index
+            index++;
+        }
+        //num2 is exhausted
+        
+        //iterate through the remainder of num1 to
+        //handle any leftover carries and to
+        //push the remainer of num1 into the string builder
+        while(index<num1.length()){
+            //convert the current index of num1 to an integer
+            int digit = num1[num1.length()-1-index]-'0';
+            
+            //add the current digit and the carry
+            int sum = digit + carry;
+            
+            //extract the ones place from the sum
+            int sum_ones = sum % 10;
+            
+            //push the ones place of the sum into the string builder
+            os<<(sum_ones);
+            
+            //exctract the tens place from the sum
+            carry = sum / 10;
+            
+            //increment the index
+            index++;
+        }
+    
+        //if there is a remaining carry
+        //then push it into the string builder
+        if(carry){
+            os<<carry;
+        }
+    
+        //because of how pushed values into the string builder
+        //the result is reversed
+        //store the built string into a return variable
+        std::string ret = os.str();
+        
+        //reverse the return variable
+        std::reverse(ret.begin(), ret.end());
+    
+        //return the sum string
+        return ret;
+    }
+
+    //Returns the product of a string representing an number,
+    //and a char represesnting a single digit,
+    //with a number of tail_zeros
+    std::string oneDigitMuliply(std::string num, char digit, int tail_zeros){
+        //initialize a string builder
+        std::ostringstream os;
+    
+        //pad the string builder with tail_zeros
+        for(int i = 0; i < tail_zeros; i++){
+            os<<"0";
+        }
+        
+        //convert the digit input to an integer
+        int digit_value = digit-'0';
+        
+        //initialize a variable to store the amount to carry to the next digit
+        int carry = 0;
+        
+        //initialize a variable to store the current index that we are working with
+        //this is interpreted as index from the end of the string i.e. the ones place
+        int index = 0;
+        
+        //iterate through the indicies of the input number,
+        //multiplying them by the input digit_value
+        while(index<num.length()){
+            //convert the current index of num1 to an integer
+            int digit1 = num[num.length()-1-index]-'0';
+        
+            //calculate the product of the current digit and the input digit
+            //and add the carry value
+            int product = digit1*digit_value+carry;
+        
+            //extract the ones place from the product
+            int product_ones = product%10;
+        
+            //push the ones place of the product into the string builder
+            //note that this will be AT MOST 2 digits (9*9+8=89)
+            os<<product_ones;
+        
+            //extract the tens place from the product
+            carry = product/10;
+            
+            //increment the index
+            index++;
+        }
+    
+        //if there is a remaining carry
+        //then push it into the string builder
+        if(carry){
+            os<<carry;
+        }
+    
+        //because of how pushed values into the string builder
+        //the result is reversed
+        //store the built string into a return variable
+        std::string ret = os.str();
+        
+        //reverse the return variable
+        std::reverse(ret.begin(), ret.end());
+        
+        //return the sum string
+        return ret;
+}
+
+
+    std::string multiply(std::string num1, std::string num2) {
+        //if either of the nums are 0
+        //then return 0
+        if(num1=="0"||num2=="0"){
+            return "0";
+        }
+    
+        //if num1 is longer than num2
+        //then swap them for simplicity
+        if(num1.length()<num2.length()){
+            std::string tmp = num1;
+            num1 = num2;
+            num2 = tmp;
+        }
+    
+        //initialize a variable to store the current index that we are working with
+        //this is interpreted as index from the end of the string i.e. the ones place
+        int index = 0;
+        
+        //initialize a return string to 0
+        //we will be summing into this repeatedly
+        std::string ret = "0";
+        
+        //iterate through each digit of num2
+        while(index < num2.length()){
+            //calculate the product of the current digit of num2 and num1
+            std::string part_product = oneDigitMuliply(num1, num2[num2.size()-1-index], index);
+            
+            //add the part_product to the return sum
+            ret = sum(ret, part_product);
+            index++;
+        }
+    
+        //return the product string
+        return ret;
+    }
+};

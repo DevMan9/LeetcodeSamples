@@ -1,0 +1,31 @@
+func rotateString(s string, goal string) bool {
+  //Store the length of s for ease of access
+  var length int = len(s) 
+
+  //If the length of s and goal do not match
+  //Then s could never be rotated into goal
+  if length != len(goal) {
+    return false
+  }
+
+  //Loop length times
+  for loop := 0; loop < length; loop++{
+    //Rotate s by 1 character
+    s = rotate(s)
+
+    //Check it against goal
+    if(s == goal){
+      return true
+    }
+  }
+
+  //s could not be rotated into goal
+  return false
+}
+
+//Rotates a given string by 1 character
+func rotate(s string) string{
+  var bytes []byte = []byte(s)
+  bytes = append(bytes[1:len(bytes)],bytes[0])
+  return string(bytes)
+}

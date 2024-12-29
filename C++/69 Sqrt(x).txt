@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int mySqrt(int x) {
+        //The slope at sqrt(0) is undefined so this is an edge case
+        if(x==0){
+            return 0;
+        }
+        
+        //We will be using Newton's method and will break when
+        //2 iterations agree on a value
+        //Inititalize a previous variable to store the previous iteration
+        double previous = 0;
+        
+        //Inititalize a current variable to 1 
+        //(this is out guess for the square root of x)
+        //Since sqrt is the inverse of x^2 we will use the equation x^2-this.x
+        //to calclate sqrt(this.x)
+        double current = 1;
+        
+        //Repeat until previous and current guess agree
+        while(previous!=current){
+            //Set previous to current
+            previous = current;
+            
+            //Calculate the x-intecept of the tangent line of x^2-this.x
+            //This will be our new guess
+            current = (x/current+current)/2;
+        }
+        
+        //Return current truncated
+        return (int)current;
+    }
+};

@@ -1,0 +1,30 @@
+class Solution {
+public:
+    void rotate(std::vector<std::vector<int>>& matrix) {
+        //store the matrix size
+        int size = matrix.size();
+    
+        //flip the image across the diagonal [n,n]
+        //iterate through every row
+        for(int row = 0; row < size; row++){
+            //iterate through each column up to the row'th column
+            for(int column = 0; column < row; column++){
+                //xor swap bottom left [row,column] and the top right [column,row]
+                matrix[row][column] ^= matrix[column][row];
+                matrix[column][row] ^= matrix[row][column];
+                matrix[row][column] ^= matrix[column][row];
+            }
+        }
+        //flip the image horizontally
+        //iterate through each row
+        for(int row = 0; row < size; row++){
+            //iterate through the columns on the left half of the image
+            for(int column = 0; column < size/2; column++){
+                //xor swap the left side [row,column] and right side [row,size-1-column]
+                matrix[row][column] ^= matrix[row][size-1-column];
+                matrix[row][size-1-column] ^= matrix[row][column];
+                matrix[row][column] ^= matrix[row][size-1-column];
+            }
+        }
+    }
+};

@@ -1,0 +1,39 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int val=0, ListNode next=null) {
+ *         this.val = val;
+ *         this.next = next;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode MiddleNode(ListNode head) {
+      //Hare and tortoise
+      ListNode fast = head;
+      ListNode slow = head;
+
+      //A flag to determine which loops that the tortoise will move
+      //by moving the tortoise every other loop,
+      //when the hare reaches the end the tortoise will be half way
+      bool slow_flag = false;
+
+      //Loop until the hare reahces the end
+      while(fast != null){
+        //Only move the tortoise half the time
+        if(slow_flag){
+          slow = slow.next;
+        }
+        //Flip the tortoise flag
+        slow_flag ^= true;
+
+        //Move the hare
+        fast = fast.next;
+      }
+
+      //Return the tortoise
+      return slow;
+    }
+}

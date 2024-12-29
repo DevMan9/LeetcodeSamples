@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int removeDuplicates(std::vector<int>& nums) {
+        //Initialize a variable to track the end of the new vector
+        int end = 1;
+        
+        //Initialize a variable to count the
+        //number of occurances of an element in the vector
+        int count = 1;
+        
+        //Initialize a variable to store the last seen element
+        int last = nums[0];
+        
+        //Iterate through the list
+        //counting the number of occurances of each element
+        for(int i = 1; i < nums.size(); i++){
+            //If the current element is the same as the last
+            //then increment the count
+            //else reset the count, and set last to the new element
+            if(nums[i] == last){
+                count++;
+            }else{
+                count = 1;
+                last = nums[i];
+            }
+
+            //If the count is less than or equal to 2
+            //then put the current element at the end of the new vector
+            //and increment the end of the new vector
+            if(count <= 2){
+                nums[end] = nums[i];
+                end++;
+            }
+        }
+
+        //Return the end of the new vector
+        return end;
+    }
+};

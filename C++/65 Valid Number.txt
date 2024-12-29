@@ -1,0 +1,193 @@
+class Solution {
+public:
+    //Parses a character 
+    //0 - the char is a sign (+-)
+    //1 - the char is a digit (0123456789)
+    //2 - the char is a decimal
+    //3 - the char is a exponent (Ee)
+    int charType(char c){
+    switch(c){
+        case '-':
+        case '+':
+            return 0;
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            return 1;
+        case '.':
+            return 2;
+        case 'e':
+        case 'E':
+            return 3;
+        default:
+            return -1;
+    }
+}
+
+bool isNumber(std::string s) {
+    int state = 0;
+    //0 = expecting sign or digit or decimal
+    //1 = sign found expecting digit or decimal
+    //2 = digit found expecting digit or decimal or exponent or end
+    //3 = decimal found expecting digit or exponent or end
+    //4 = digit found expecting digit or exponent or end
+    //5 = exponent found expecting sign or digit
+    //6 = sign found expecting digit
+    //7 = digit found expecting digit or end
+    //8 = end
+    //9 = decimal found without any digits expecting digit
+    
+    //Initialize a variablt to iterate through the input string
+    int index = 0;
+    
+    //Parse each charater in the string until we reach the end state
+    while (state != 8) {
+        int t = (index<s.length())?charType(s[index]):4;
+        // std::cout<<"State: "<<state<<"\tType read: "<<t<<std::endl;
+        switch(state){
+            case 0:
+                // std::cout<<"Expecting sign or digit or decimal"<<std::endl;
+                //0 = expecting sign or digit
+                switch (t) {
+                    case 0:
+                        state = 1;
+                        break;
+                    case 1:
+                        state = 2;
+                        break;
+                    case 2:
+                        state = 9;
+                        break;
+                    default:
+                        return false;
+                }
+                break;
+            case 1:
+                // std::cout<<"Expecting digit"<<std::endl;
+                //1 = sign found expecting digit
+                switch (t) {
+                    case 1:
+                        state = 2;
+                        break;
+                    case 2:
+                        state = 9;
+                        break;
+                        
+                    default:
+                        return false;
+                }
+                break;
+            case 2:
+                // std::cout<<"Expecting digit or decimal or exponent or end"<<std::endl;
+                switch (t) {
+                    case 1:
+                        break;
+                        
+                    case 2:
+                        state = 3;
+                        break;
+                        
+                    case 3:
+                        state = 5;
+                        break;
+                        
+                    case 4:
+                        state = 8;
+                        break;
+                        
+                    default:
+                        return false;
+                }
+                break;
+            case 3:
+                // std::cout<<"Expecting digit or end"<<std::endl;
+                switch(t){
+                    case 1:
+                        state = 4;
+                        break;
+                    case 3:
+                        state = 5;
+                        break;
+                    case 4:
+                        state = 8;
+                        break;
+                    default:
+                        return false;
+                }
+                break;
+            case 4:
+                // std::cout<<"Expecting digit or exponent or end"<<std::endl;
+                switch (t) {
+                    case 1:
+                        break;
+                    case 3:
+                        state = 5;
+                        break;
+                    case 4:
+                        state = 8;
+                        break;
+                    default:
+                        return false;
+                }
+                break;
+            case 5:
+                // std::cout<<"Expecting sign or digit"<<std::endl;
+                switch(t){
+                    case 0:
+                        state = 6;
+                        break;
+                    case 1:
+                        state = 7;
+                        break;
+                    default:
+                        return false;
+                }
+                break;
+            case 6:
+                // std::cout<<"Expecting digit"<<std::endl;
+                if(t==1){
+                    state = 7;
+                }else{
+                    return false;
+                }
+                break;
+            case 7:
+                // std::cout<<"Expecting digit or end"<<std::endl;
+                switch (t) {
+                    case 1:
+                        break;
+                    case 4:
+                        state = 8;
+                        break;
+                    default:
+                        return false;
+                }
+                break;
+            case 9:
+                switch (t) {
+                    case 1:
+                        state = 4;
+                        break;
+                        
+                    default:
+                        return false;
+                }
+                break;
+        }
+        
+        
+        index++;
+    }
+    
+    
+    
+    return state == 8;
+}
+};

@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int maxSubArray(std::vector<int>& nums) {
+        //Initialize a variable to store the running sum
+        int sum = 0;
+        
+        //Initialize the return variable to the first element of the input vector
+        int ret = nums[0];
+        
+        //Calculate the running sum of nums
+        //resetting the sum each time it goes negative
+        //ans recording the max of sum into the return variable
+        for(int i = 0; i < nums.size(); i++){
+            sum+=nums[i];
+            ret = (sum > ret)?sum:ret;
+            sum=(sum<0)?0:sum;
+        }
+        
+        //return the return variable
+        return ret;
+    }
+};

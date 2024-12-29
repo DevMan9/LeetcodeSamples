@@ -1,0 +1,220 @@
+class Solution {
+public:
+    bool exist(std::vector<std::vector<char>>& board, std::string word) {
+        //Store the dimenstions of the board for ease of access
+        int height = (int)board.size();
+        int width = (int)board[0].size();
+
+        //Iterate through the board checking for the word
+        for(int row = 0; row < height; row++){
+            for(int column = 0; column < width; column++){
+                //Initilaize separate cooridnates that we will use to walk
+                //through the board
+                int x = column;
+                int y = row;
+                
+                //Initialize a variable to store the last moved direction
+                int dir = 0;
+                
+                //Initialize a variable to count how many letters we have matched
+                int match_index = 0;
+                
+                //Starting at row, column, seacrch for the next letter in the word
+                while(match_index>=0&&match_index<word.length()){
+                    //Check if the current value in board is a direction
+                    //We will be storing our backtracking data in the board
+                    //and word
+                    //Directions:
+                    //0 - up (y--)
+                    //1 - right (x++)
+                    //2 - down (y++)
+                    //3 - left (x--)
+                    //4 - backtrack
+                    bool isDir = (board[y][x]-'0'>=0 && board[y][x]-'0'<5);
+
+                    //If the current index is a direction
+                    //then attemt to move in that direction
+                    if(isDir){
+                        //Get the direction and follow it
+                        switch (board[y][x]) {
+                            case '0':
+                                //If we are not at the top of the board
+                                //and the space we want to move to does 
+                                //not contain a direction (prevent double usage)
+                                //then move up
+                                //else increment the current direction
+                                if(y-1>=0&&!(board[y-1][x]-'0'>=0 && board[y-1][x]-'0'<4)){
+                                    dir = 0;
+                                    y--;
+                                }else{
+                                    board[y][x]++;
+                                }
+                                break;
+
+                            case '1':
+                                //If we are not at the right of the board
+                                //and the space we want to move to does 
+                                //not contain a direction 
+                                //then move up
+                                //else increment the current direction
+                                if(x+1<width&&!(board[y][x+1]-'0'>=0 && board[y][x+1]-'0'<4)){
+                                    dir = 1;
+                                    x++;
+                                }else{
+                                    board[y][x]++;
+                                }
+                                break;
+
+                            case '2':
+                                //If we are not at the bottom of the board
+                                //and the space we want to move to does 
+                                //not contain a direction 
+                                //then move up
+                                //else increment the current direction
+                                if(y+1<height&&!(board[y+1][x]-'0'>=0 && board[y+1][x]-'0'<4)){
+                                    dir = 2;
+                                    y++;
+                                }else{
+                                    board[y][x]++;
+                                }
+                                break;
+
+                            case '3':
+                                //If we are not at the left of the board
+                                //and the space we want to move to does 
+                                //not contain a direction 
+                                //then move up
+                                //else increment the current direction
+                                if(x-1>=0&&!(board[y][x-1]-'0'>=0 && board[y][x-1]-'0'<4)){
+                                    dir = 3;
+                                    x--;
+                                }else{
+                                    board[y][x]++;
+                                }
+                                break;
+
+                            case '4':
+                                //All directions have been exhausted
+                                //Find the index around this one that points
+                                //to us and move back to that one
+
+                                //Since all directions have been exhausted
+                                //this letter, though it does match, 
+                                //cannot be used right now, so we unmatch it
+                                match_index--;
+                                
+                                //Reset the current index to it's original letter
+                                //We know the original letter must have been the
+                                //letter at match_index of word
+                                //because we just unmatched it, so it is currently
+                                //the letter we are looking for again
+                                board[y][x] = word[match_index];
+
+                                //Find the index that we moved from to get here
+                                //and move back to it
+                                //If none is found
+                                //then every single possible word has been tried
+                                
+                                //If the index above is '2' (we moved down)
+                                //then move up
+                                if(y-1>=0&&board[y-1][x] == '2'){
+                                    y--;
+                                //If the index to the right is '3' (we moved left)
+                                //then move right
+                                }else if(x+1<width&&board[y][x+1] == '3'){
+                                    x++;
+                                //If the index to the right is '0' (we moved up)
+                                //then move down
+                                }else if(y+1<height&&board[y+1][x] == '0'){
+                                    y++;
+                                //If the index to the right is '1' (we moved right)
+                                //then move left
+                                }else if(x-1>=0&&board[y][x-1] == '1'){
+                                    x--;
+                                //We did not move from anywhere
+                                //Set match_index to -1 to indicate this
+                                }else{
+                                    match_index = -1;
+                                }
+                                
+                                //If there are potentially still more words
+                                //then increment the direction 
+                                if(match_index>-1){
+                                    board[y][x]++;
+                                }
+                                break;
+
+                            default:
+                                //Just in case anything goes wrong
+                                //we don't want an infinite loop
+                                //so set the match_index to its break condition
+                                match_index = -1;
+                                break;
+                        }
+                    //The current index is not a direction
+                    }else{
+                        //if the current index matches the current letter in word
+                        //then increment the match_index and set the value at
+                        //the current index to '0' (up direction)
+                        //else backtrack
+                        if(word[match_index]==board[y][x]){
+                            board[y][x] = '0';
+                            match_index++;
+                        }else{
+                            //We are trying to backtrack
+                            //So if match_index is 0
+                            //then there is nothing to backtrack to
+                            //so break
+                            if(match_index==0){
+                                break;
+                            }
+                            
+                            //We did not match the current index
+                            //Since the current index is not a direction
+                            //dir holds the direction we just moved from
+                            //so just go back the way we came
+                            switch (dir) {
+                                case 0://We just moved up
+                                    //Move down
+                                    y++;
+                                    break;
+                                case 1://We just moved right
+                                    //Move left
+                                    x--;
+                                    break;
+                                case 2://We just moved down
+                                    //Move up
+                                    y--;
+                                    break;
+                                case 3://We just moved left
+                                    //Move right
+                                    x++;
+                                    break;
+
+                                default:
+                                    //Just in case anything goes wrong
+                                    //we don't want an infinite loop
+                                    //so set the match_index to its break condition
+                                    match_index = -1;
+                                    break;
+
+                            }
+                            //increment the board direction
+                            board[y][x]++;
+                        }
+                    }
+
+                }
+                //If we matched a full string
+                //then return true
+                //else move onto the next starting index
+                if(match_index>0){
+                    return true;
+                }
+            }
+        }
+
+        //The word could not be found in the board
+        return false;
+    }
+};

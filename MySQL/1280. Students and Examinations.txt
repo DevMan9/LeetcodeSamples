@@ -1,0 +1,22 @@
+# Write your MySQL query statement below
+SELECT student_id,
+student_name,
+subject_name,
+# Replace nulls with 0s
+IFNULL(attended_exams, 0) AS attended_exams
+
+# Create the table of all students against all subjects
+FROM Students JOIN Subjects 
+
+# Join the counts of attendance to the table
+LEFT JOIN (
+  SELECT *, COUNT(*) AS attended_exams
+  FROM Examinations
+  GROUP BY student_id, subject_name
+)exam_attendance
+
+# Join rows that share both student_id AND subject_name
+USING(student_id, subject_name)
+
+# ORDER BY student_id THEN subject_name
+ORDER BY student_id, subject_name

@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        int root_index = 0;
+        while(root_index<=((int)haystack.length())-((int)needle.length())){
+            int match_index = 0;
+            while(match_index < needle.length() && needle[match_index] == haystack[root_index + match_index]){
+                match_index++;
+            }
+            if(match_index >= needle.length()){
+                return root_index;
+            }
+            root_index++;
+        }
+        return -1;
+    }
+};

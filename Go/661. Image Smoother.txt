@@ -1,0 +1,43 @@
+func imageSmoother(img [][]int) [][]int {
+    //Store the rows and columns for ease of access
+    rows := len(img)
+    cols := len(img[0])
+
+    //Initialize a new image with dimensions rows x cols
+    new_img := make([][]int, rows)
+    for index := range new_img {
+        new_img[index] = make([]int, cols)
+    }
+
+
+    //Smooth the image
+    for row := 0; row < rows; row++ {
+        for col := 0; col < cols; col++ {
+            //Initialize a variable to store the sum of the surrounding pixels
+            sum := 0
+            //Initialize a variable to store the count of surrounding pixels
+            count := 0
+
+            //Sum and count the pixels surrounding this pixel
+            for dr := -1; dr <= 1; dr++ {
+                //Check to see that a surrounding pixel exists
+                if row + dr >= 0 && row + dr < rows {
+                    for dc := -1; dc <= 1; dc++ {
+                        //Check to see that a surrounding pixel exists
+                        if col + dc >= 0 && col + dc < cols {
+                            //Add this pixel to the sum and count
+                            sum += img[row + dr][col + dc]
+                            count++
+                        }
+                    }
+                }
+            }
+
+            //Calculate the average for this pixel
+            new_img[row][col] = sum / count
+        }
+    }
+
+    //Return the smoothed image
+    return new_img
+}

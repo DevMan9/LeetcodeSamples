@@ -1,0 +1,14 @@
+# Write your MySQL query statement below
+WITH MovingAverage AS (
+  SELECT visited_on,
+  COUNT(*) OVER W AS 'counted_days',
+  SUM(SUM(amount)) OVER W AS 'amount',
+  ROUND(AVG(SUM(amount)) OVER W, 2) AS 'average_amount'
+  FROM Customer
+  GROUP BY visited_on
+  WINDOW W AS (ORDER BY visited_on ROWS BETWEEN 6 PRECEDING and CURRENT ROW)
+)
+
+SELECT visited_on, amount, average_amount
+FROM MovingAverage
+WHERE counted_days = 7

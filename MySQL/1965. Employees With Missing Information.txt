@@ -1,0 +1,15 @@
+# Write your MySQL query statement below
+SELECT employee_id
+FROM (
+  SELECT employee_id, name, salary
+  FROM Employees
+  LEFT JOIN Salaries
+  USING(employee_id)
+  UNION
+  SELECT employee_id, name, salary
+  FROM Employees
+  RIGHT JOIN Salaries
+  USING(employee_id)
+)FullJoin
+WHERE ISNULL(name) OR ISNULL(salary)
+ORDER BY employee_id

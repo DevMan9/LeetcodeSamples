@@ -1,0 +1,45 @@
+/**
+ * Definition for isBadVersion()
+ * 
+ * @param {integer} version number
+ * @return {boolean} whether the version is bad
+ * isBadVersion = function(version) {
+ *     ...
+ * };
+ */
+
+/**
+ * @param {function} isBadVersion()
+ * @return {function}
+ */
+var solution = function(isBadVersion) {
+    /**
+     * @param {integer} n Total versions
+     * @return {integer} The first bad version
+     */
+    return function(n) {
+        //Prepare for a binary search of the range [1,n]
+        let top = n;
+        let bot = 1;
+
+        //Binary search
+        while(top>=bot){
+            //Calculate the mid point
+            let mid = Math.floor((top + bot)/2);
+
+            //If the midpoint is bad
+            if(isBadVersion(mid)){
+                //then all versions after are bad
+                //set the new top to just before the mid
+                top = mid - 1;
+            }else{
+                //then all versions before are good
+                //set the new bot to just after the mid
+                bot = mid + 1;
+            }
+        }
+
+        //The bottom now holds the first bad version
+        return bot;
+    };
+};

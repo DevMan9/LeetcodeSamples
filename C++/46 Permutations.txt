@@ -1,0 +1,41 @@
+class Solution {
+public:
+    std::vector<std::vector<int>> permute(std::vector<int>& nums) {
+        //if the size of the input vector is 1
+        //then it is the only permutaion
+        //so return a vector containing the input vector
+        if(nums.size()==1){
+            return {nums};
+        }
+        
+        //initialize the return vector
+        std::vector<std::vector<int>> ret;
+        
+        //loop through each index of the input vector
+        for(int index = 0; index < nums.size(); index++){
+            //initialze vector that will 
+            //contain all but one element from the input vector
+            std::vector<int> nums_minus_one;
+        
+            //populate nums_minus_one with all but one element from the input vector
+            for(int j = 0; j < nums.size(); j++){
+                //exclude the element at index
+                if(j!=index){
+                    nums_minus_one.push_back(nums[j]);
+                }
+            }
+            //generate the permutations for nums_minus_one
+            std::vector<std::vector<int>> tmp = permute(nums_minus_one);
+            
+            //append the removed element to every permuation in the tmp vector
+            for(std::vector<int>& vec:tmp){
+                vec.push_back(nums[index]);
+            }
+            
+            //append the premutations to the return vector
+            ret.insert(ret.begin(), tmp.begin(), tmp.end());
+        }
+        //return the return vector
+        return ret;
+    }
+};

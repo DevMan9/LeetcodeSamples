@@ -1,0 +1,71 @@
+class Solution {
+public:
+    int jump(std::vector<int>& nums) {
+        //if the input vector size is 0 or 1
+        //then no jumps are required to reach the end of the vector
+        //so return 0;
+        if(nums.size()<2){
+            return 0;
+        }
+        
+        //initilaize the current_index to 0
+        //this will track which index we jump to
+        int current_index = 0;
+        
+        //initialize a counter for the number of jumps
+        //we set this to 1 because the 
+        //list must have 2 or more elements at this point
+        //so at least 1 jump must be made to reach the end
+        int jumps = 1;
+        
+        //store the current_jump_distance
+        //we will be using this to iterate through the possible next jumps
+        //from the current_index
+        int current_jump_distance = nums[current_index];
+        
+        //store the largest index that can be jumped to from the current_index
+        int current_index_jumps_to = current_index + current_jump_distance;
+    
+        //while the largest index that can be jumped to 
+        //is less than the final index in the input vector
+        //find the next index we can jump to that will jump the furthest
+        //and jump to that
+        while(current_index_jumps_to < nums.size()-1){
+            //initialize the best_jump to the 
+            //largest index that we can jump to from the current_index
+            int best_jump = current_index_jumps_to;
+            
+            //initialize the best_jump_index to current_index
+            int best_jump_index = current_index;
+            
+            //iterate through each possible next jump and 
+            //record the one that will move us furthes along the vector
+            for(int sub_index = 1; sub_index <= current_jump_distance; sub_index++){
+                //calculate the global_index of the next jump
+                int global_sub_index = current_index + sub_index;
+                
+                //calculate the largest index we can reach from the global_sub_index
+                int sub_jump = global_sub_index + nums[global_sub_index];
+                
+                //if the current next jump moves us 
+                //further than the previously stored jump
+                //then overwrite the previously stored jump
+                if(sub_jump>best_jump){
+                    best_jump = sub_jump;
+                    best_jump_index = global_sub_index;
+                }
+            }
+            
+            //jump to the index that will jump the furthest
+            current_index = best_jump_index;
+            current_index_jumps_to = best_jump;
+            current_jump_distance = nums[current_index];
+            
+            //increment jump
+            jumps++;
+        }
+    
+        //return the number of jumps
+        return jumps;
+    }
+};

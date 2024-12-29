@@ -1,0 +1,46 @@
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var reverseVowels = function(s) {
+    //Create a set of all vowels
+    const vowels = new Set(["a","A","e","E","i","I","o","O","u","U",]);
+
+    //Convert the input into a workable medium
+    let char_array = s.split("");
+
+    //We will be using 2 points,
+    //moving them from the ends of the string towards the center
+    let first = 0;
+    let last = char_array.length - 1;
+
+    //Iterate through the string, swapping vowels as you go.
+    while(first < last){
+        //Move to the next earliest vowel in the string
+        while(first < last && !vowels.has(char_array[first])){
+            first++;
+        }
+        //Move to the prevous latest vowel in the string
+        while(first < last && !vowels.has(char_array[last])){
+            last--;
+        }
+
+        //We end when first passes last
+        if(first < last){
+            //First comes before last
+            
+            //Simple swap with temporary variable
+            let tmp = char_array[first];
+            char_array[first] = char_array[last];
+            char_array[last] = tmp;
+
+            //These vowels have been swapped,
+            //Move to the next characters
+            first++;
+            last--;
+        }
+    }
+
+    //Convert the working medium back into a string
+    return char_array.join("");
+};

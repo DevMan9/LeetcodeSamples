@@ -1,0 +1,15 @@
+# Write your MySQL query statement below
+WITH Windowed AS (
+  SELECT *, 
+  LAG(id, 2) OVER(ORDER BY id DESC) AS 'f2', 
+  LAG(id, 1) OVER(ORDER BY id DESC) AS 'f1', 
+  LEAD(id, 1) OVER(ORDER BY id DESC) AS 'b1', 
+  LEAD(id, 2) OVER(ORDER BY id DESC) AS 'b2'
+  FROM Stadium
+  WHERE people >= 100
+)
+
+SELECT id, visit_date, people
+FROM Windowed
+WHERE f2 - 2 = id OR f1 - 1 = b1 + 1 OR id = b2 + 2
+ORDER BY id

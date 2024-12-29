@@ -1,0 +1,88 @@
+class Solution {
+public:
+    std::string minWindow(std::string s, std::string t) {
+        //Initialize a map to store the number of characters required to match
+        std::unordered_map<char, int> pattern;
+
+        //Count the number of each letter in the pattern string t
+        for(char c:t){
+            pattern[c]++;
+        }
+        
+        //Initialize a variable to store the 
+        //number of unique character we still need to match
+        int chars_to_match = pattern.size();
+
+        //Initialize variables to store the start and end of the candidate substring
+        int start = 0;
+        int end = 0;
+
+        //Initialize variable to store the minimum start and end
+        int best_start = 0;
+        int best_end = (int)s.length()-1;
+
+        //Initialize a flag to store if any match is made
+        bool a_match_was_made = false;
+
+        //Iterate through the input string s
+        while(end<s.length()){
+            //Get the next character we will be adding to the candidate string
+            char c = s[end];
+            
+            //If the current character is part of the pattern string t
+            if(pattern.count(c)){
+                //Decrement the count of the current character
+                //since we just added one
+                pattern[c]--;
+                
+                //If we don't need anymore of this character
+                //then that's 1 less character we need to match
+                if(!pattern[c]){
+                    chars_to_match--;
+                }
+            }
+            
+            //If we have matched every character
+            //then start pulling the start forwards 
+            //until we remove a rrequired character
+            while(!chars_to_match){
+                //A match was made
+                a_match_was_made = true;
+                
+                //If this window is smaller than the previous best window
+                //then overwrite with this window
+                if (end - start < best_end - best_start) {
+                    best_start = start;
+                    best_end = end;
+                }
+                //Get the character we are about to remove
+                c = s[start];
+                
+                //If the current character is part of the pattern
+                if(pattern.count(c)){
+                    //If the required number of the 
+                    //current character is not positive
+                    //then we will need 1 more letter
+                    if(!pattern[c]){
+                        chars_to_match++;
+                    }
+                    
+                    //Since we are removing c
+                    //We will need 1 more c
+                    pattern[c]++;
+                }
+                
+                //Pull the start forwards
+                start++;
+            }
+
+            //Push the end forwards
+            end++;
+        }
+
+        //If a_match_was_made
+        //then return the best substring
+        //else return ""
+        return (a_match_was_made)?s.substr(best_start,best_end-best_start+1):"";
+    }
+};

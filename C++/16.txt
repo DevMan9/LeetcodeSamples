@@ -1,0 +1,70 @@
+class Solution {
+public:
+    int findNearest(std::vector<int>* vec,int value,int start, int end){
+        if(start==end){
+            return start;
+        }
+        int mid = (end-start)/2+start;
+        return (value<=(*vec)[mid])?findNearest(vec, value, start, mid):findNearest(vec, value, mid+1, end);
+    }
+    
+    int threeSumClosest(vector<int>& nums, int target) {
+        std::map<int, int> nummap;
+    std::sort(nums.begin(), nums.end());
+    std::set<int> tset;
+    for(int i = 0;i<nums.size();i++){
+        nummap[nums[i]]=i;
+        tset.insert(nums[i]);
+    }
+    std::vector<int> bs(tset.begin(),tset.end());
+    
+    std::unordered_map<int,int> bs_map;
+    // for(int n:bs){
+    //     std::cout<<n<<", ";
+    // }
+    // std::cout<<std::endl;
+    
+    for(int i = 0;i<bs.size();i++){
+        bs_map[bs[i]]=i;
+    }
+    
+    int ret = nums[0]+nums[1]+nums[2];
+    int min = std::abs(nums[0]+nums[1]+nums[2]-target);
+        
+        if(nums.size()<=3||bs.size()<=1){
+            return ret;
+        }
+    
+    for(int i = 0;i<nums.size();i++){
+        for(int j = i+1;j<nums.size()-1;j++){
+            // std::cout<<std::endl;
+            int rem = 0-(nums[i]+nums[j])+target;
+            // std::cout<<j<<"->"<<nums[j]<<"->"<<bs_map[nums[j]]<<std::endl;
+            int ni = findNearest(&bs, rem, bs_map[nums[j+1]], bs.size()-1);
+            
+            
+            // std::cout<<bs[ni-1]<<"<["<<rem<<"]<"<<bs[ni]<<std::endl;
+            // std::cout<<std::abs(bs[ni-1]-rem)<<"<["<<rem<<"]<"<<std::abs(bs[ni]-rem)<<std::endl;
+            
+            ni = (nummap[bs[ni-1]]<=j||ni>0&&std::abs(bs[ni]-rem)<(std::abs(bs[ni-1]-rem)))?ni:ni-1;
+            
+            ni = nummap[bs[ni]];
+            // std::cout<<ni<<">"<<j<<std::endl;
+            if(ni>j){
+                // std::cout<<i<<","<<j<<","<<ni<<std::endl;
+                // std::cout<<nums[i]<<"+"<<nums[j]<<"+"<<nums[ni]<<std::endl;
+                int test = std::abs(nums[i]+nums[j]+nums[ni]-target);
+                // std::cout<<test<<"<"<<min<<std::endl;
+                if(test<min){
+                    min = test;
+                    ret = nums[i]+nums[j]+nums[ni];
+                    // std::cout<<ret<<std::endl;
+                }
+            }
+            j = nummap[nums[j]];
+        }
+        i = nummap[nums[i]];
+    }
+    return ret;
+    }
+};

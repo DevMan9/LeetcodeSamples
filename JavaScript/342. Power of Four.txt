@@ -1,0 +1,27 @@
+/**
+ * @param {number} n
+ * @return {boolean}
+ */
+var isPowerOfFour = function(n) {
+    //Test that the number is greater than 0.
+    //All powers of 4 are greater than 0.
+    let positive = n > 0;
+
+    //Test that n is a power of 2
+    //All powers of 4 are powers of 2
+    let power_of_two = !(n & (n - 1));
+
+    //Calculate the largest power of 4 (4^15 = 2^30)
+    let largest_power = 1 << 30;
+
+    //Create a bit mask of all odd powers of 2
+    //(101010101010101010101010101010)
+    let mask = ((largest_power - 1) / 3) << 1;
+
+    //Test that n is not an odd power of 2 
+    //(or composed only of odd powers of two, i.e. 5 = 101)
+    let not_odd_power_of_two = !(n & mask);
+
+    //When combined the only numbers that return true are powers of 4.
+    return positive && power_of_two && not_odd_power_of_two;
+};

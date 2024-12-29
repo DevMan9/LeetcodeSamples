@@ -1,0 +1,31 @@
+public class Solution {
+    public int[] SortArrayByParity(int[] nums) {
+        //Initialize *WOW* Two pointers *WOW*
+        int left = 0;
+        int right = nums.Length - 1;
+
+        //Loop until left and right meet
+        while (left < right){
+            //If left num is even
+            if ((nums[left] & 1) != 0) {
+                //Then if right num is odd
+                if ((nums[right] & 1) != 1) {
+                    //Swap the nums
+                    nums[left] ^= nums[right];
+                    nums[right] ^= nums[left];
+                    nums[left] ^= nums[right];
+                    //Move the left pointer forward
+                    left++;
+                }
+                //Move the right pointer backwards
+                right--;
+            }else{
+                //Move the left pointer forward
+                left++;
+            }
+        }
+
+        //Return the sorted array
+        return nums;
+    }
+}

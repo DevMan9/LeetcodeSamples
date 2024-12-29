@@ -1,0 +1,48 @@
+impl Solution {
+    pub fn binary_gap(n: i32) -> i32 {
+        //We will be counting zeros
+        //All powers of 2 have no spacing between 1's as they only contain one 1
+        if ((n - 1) & n) == 0{
+            return 0;
+        }
+
+        //Create a mutable copy of n
+        let mut bin = n;
+
+        //Shift bin right until it has no trailing 0s
+        while bin % 2 == 0 {
+            bin = bin >> 1;
+        }
+
+        //Create a variable to count the number of consecutive 0s and store the max
+        let mut count = 1;
+        let mut max = 0;
+
+        //Iterate the bits until there are no more 1s
+        while bin != 0 {
+            //If the first bit is a 1
+            if bin & 1 != 0{
+                //Check our last run against the max
+                //If it's larger
+                if count > max {
+                    //Then replace it
+                    max = count;
+                }
+                //Reset the count
+                count = 1;
+            }else{
+                //The first bit was a 0
+                //Increment the count
+                count += 1;
+            }
+
+            //Move to the next bit
+            bin = bin >> 1;
+        }
+
+        //Return the max consecutive 0 bits
+        //(because the count started at 1,
+        //we actually counted the distance to the next 1 bit)
+        return max;
+    }
+}

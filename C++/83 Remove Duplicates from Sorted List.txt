@@ -1,0 +1,37 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        //Initialize a variable to iterate the list
+        ListNode* tmp = head;
+            
+        //Iterate the list
+        while(tmp!=nullptr){
+            //Initialize a variable to iterate through duplicates
+            ListNode* next = tmp->next;
+            
+            //Iterate through duplicates
+            while(next!=nullptr&&next->val==tmp->val){
+                next = next->next;
+            }
+            
+            //Set tmp->next to the first element that doesn't share a value
+            tmp->next = next;
+            
+            //Increment the list
+            tmp = next;
+        }
+        
+        //Return the list
+        return head;
+    }
+};

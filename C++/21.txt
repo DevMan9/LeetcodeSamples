@@ -1,0 +1,93 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        //if list1 is empty
+        //then return list2
+        //this works to catch all cases because the while loop checks is list2 is empty
+        if(list1 == nullptr){
+            return list2;
+        }
+        
+        //initialize return node (head of list1)
+        ListNode* ret = list1;
+        
+        //initialize previous node (nullptr because there is nothing preceding list1)
+        ListNode* previous = nullptr;
+        
+        //insert elements from list2 into list1, preserving sort order
+        while(list2 != nullptr){
+            //if current list1 value is less than or equal to current list2 value
+            //then move to next list1 node;
+            if(list1->val <= list2->val){
+                
+                //if list1 is at the end of the list
+                //then put the current list2 node next and separate it from list2
+                //else move to next list1 node
+                if(list1->next == nullptr){
+                    
+                    //add current list2 node to the end of list 1
+                    list1->next = list2;
+                    
+                    //move to the next node in list2
+                    list2 = list2->next;
+                    
+                    //store previous list1 node
+                    previous = list1;
+                    
+                    //move to the next node in list1
+                    list1=list1->next;
+                    
+                    //unlink list1 from list2
+                    list1->next = nullptr;
+                }else{
+                    //store previous list1 node
+                    previous = list1;
+                    
+                    //move to the next node in list1
+                    list1 = list1->next;
+                }
+            }else{
+                //if previous is initialized
+                if(previous != nullptr){
+                    
+                    //insert current list2 node into list1
+                    previous->next = list2;
+                    
+                    //move previous to the node just before the current list1 node
+                    previous = list2;
+                
+                    //move to the next node in list2
+                    list2 = list2->next;
+                
+                    //link previous into list1
+                    previous->next = list1;
+                }else{
+                    //insert current list2 node before entire list1
+                    ret = list2;
+                    
+                    //initialize previous to the new beginning of list1
+                    previous = ret;
+                    
+                    //move to the next node in list2
+                    list2 = list2->next;
+                    
+                    //link the new beginning to list1
+                    ret->next = list1;
+                }
+            }
+        }
+        
+        //return return node
+        return ret;
+    }
+};

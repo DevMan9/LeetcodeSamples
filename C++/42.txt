@@ -1,0 +1,78 @@
+class Solution {
+public:
+    //returns the INDEX of the first largest element of the vector
+    int findMax(std::vector<int>& nums){
+        //if the input vector is empty
+        //then return -1
+        if(nums.size()==0){
+            return -1;
+        }
+        //the input vector must not be empty from this point forward
+        
+        //initialize return vector to first element of the vector
+        int ret = 0;
+        
+        //loop through the input vector to find the first largest element
+        for(int i = 1; i < nums.size(); i++){
+            ret = (nums[ret]<nums[i])?i:ret;
+        }
+        
+        //return the index of the first largest element
+        return ret;
+    }
+
+    int trap(std::vector<int>& height) {
+        //store the size of the input vector
+        int size = height.size();
+        
+        //if there are less than 3 elements
+        //then the vector cannot trap any water
+        if(size < 3){
+            return 0;
+        }
+        
+        //get the index of the first largest element in the input vector
+        int max = findMax(height);
+        
+        //initialize the return variable
+        int ret = 0;
+        
+        //initialize a variable to store the previous_max 
+        int previous_max = height[0];
+        
+        //iterate through the input vector from left to right
+        //stopping at max
+        //max can't trap water because it is the highest point
+        //neither can the first element, so we start at 1
+        for(int i = 1; i < max; i++){
+            //calculate the water trapped at this index
+            int trapped_water = previous_max - height[i];
+            
+            //if the trapped_water is positive
+            //then we add it to the total store in the return variable
+            //else we encountered a new max
+            //what happens when trapped_water is 0 is not important
+            //because neither variable changes
+            if(trapped_water>0){
+                ret += trapped_water;
+            }else{
+                previous_max = height[i];
+            }
+        }
+        
+        //Repeat the previous step, this time from right to left
+        //again, stopping at max
+        previous_max = height[size-1];
+        for(int i = size - 1; i > max; i--){
+            int trapped_water = previous_max - height[i];
+            if(trapped_water>0){
+                ret += trapped_water;
+            }else{
+                previous_max = height[i];
+            }
+        }
+        
+        //return the total trapped_water
+        return ret;
+    }
+};

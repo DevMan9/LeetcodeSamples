@@ -1,0 +1,33 @@
+class Solution {
+public:
+    std::vector<std::vector<std::string>> groupAnagrams(std::vector<std::string>& strs){
+        //Initialize a map for storing anagrams againts their composite letters
+        std::unordered_map<std::string, std::vector<std::string>> anagram_map;
+    
+        //iterate through each string in the input vector
+        for(std::string str:strs){
+            //create a duplicate of str for sorting
+            std::string sorted_str = str;
+            
+            //sort the string
+            //this will make string with the same number of letters 
+            //i.e. anagrams appear indistinguishable
+            std::sort(sorted_str.begin(), sorted_str.end());
+            
+            //push string into its respective anagram vector
+            anagram_map[sorted_str].push_back(str);
+        }
+        
+        //initialize the return vector
+        std::vector<std::vector<std::string>> ret;
+    
+        
+        //get all elements of anagram_map and push them into the return vector
+        for(auto pair:anagram_map){
+            ret.push_back(pair.second);
+        }
+    
+        //return the return vector
+        return ret;
+    }
+};

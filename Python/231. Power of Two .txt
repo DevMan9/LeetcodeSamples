@@ -1,0 +1,15 @@
+class Solution(object):
+    def isPowerOfTwo(self, n):
+        """
+        :type n: int
+        :rtype: bool
+        """
+        #n & (n - 1) is false only when n is a power of 2 because
+        #subtracting 1 from any other binary number will leave the 
+        #leading bit intact
+        #001000 - 1 = 000111
+        #001011 - 1 = 001010
+        #Additionally negative numbers are signed with a 1 somewhere in the number
+        #meaning that there will be two 1s in every single negative binary number
+        #0 is an exception because 0 & anything is false
+        return not (n&(n-1) or n is 0)

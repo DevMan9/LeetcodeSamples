@@ -1,0 +1,23 @@
+class Solution {
+public:
+void generateParenthesisHelper(int n,std::vector<std::string> *s,int depth,std::string runner){
+    if(n == depth){
+        while(depth>0){
+            depth--;
+            runner+=")";
+        }
+        s->push_back(runner);
+    }else{
+        generateParenthesisHelper(n-1, s, depth+1, runner+"(");
+        if(depth>0){
+            generateParenthesisHelper(n-1, s, depth-1, runner+")");
+        }
+    }
+}
+    
+    vector<string> generateParenthesis(int n) {
+        vector<string> ret;
+        generateParenthesisHelper(2*n,&ret,0,"");
+        return ret;
+    }
+};

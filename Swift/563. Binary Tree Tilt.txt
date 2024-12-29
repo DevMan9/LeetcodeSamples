@@ -1,0 +1,61 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public var val: Int
+ *     public var left: TreeNode?
+ *     public var right: TreeNode?
+ *     public init() { self.val = 0; self.left = nil; self.right = nil; }
+ *     public init(_ val: Int) { self.val = val; self.left = nil; self.right = nil; }
+ *     public init(_ val: Int, _ left: TreeNode?, _ right: TreeNode?) {
+ *         self.val = val
+ *         self.left = left
+ *         self.right = right
+ *     }
+ * }
+ */
+class Solution {
+    func findTilt(_ root: TreeNode?) -> Int {
+        //Calculate the sum for each node
+        sum(root)
+        //Calculate the tilt for each node
+        tilt(root)
+
+        //Return the sum of the root node
+        return sum(root)
+    }
+
+    //Recursivly calculate the absolute difference between the right and left node
+    func tilt(_ root: TreeNode?){
+        //End case
+        if root == nil {
+            return
+        }
+
+        //Get the left value if it exists, else store 0
+        let left = root!.left == nil ? 0 : root!.left!.val
+        //Get the right value if it exists, else store 0
+        let right = root!.right == nil ? 0 : root!.right!.val
+
+        //Store the tilt in the current node
+        root!.val = abs(right - left)
+
+        //Calculate the left tilt
+        tilt(root!.left)
+        //Calculate the right tilt
+        tilt(root!.right)
+    }
+
+    //Recursively calculate the sum of a TreeNode
+    func sum(_ root: TreeNode?) -> Int{
+        //End case
+        if root == nil {
+            return 0
+        }
+
+        //Add the left and right values to the current value 
+        root!.val += sum(root!.left) + sum(root!.right)
+
+        //Return the current value
+        return root!.val
+    }
+}

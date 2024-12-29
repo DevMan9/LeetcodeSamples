@@ -1,0 +1,58 @@
+class Solution {
+public:
+    int largestRectangleArea(std::vector<int>& heights) {
+        //Initialize a stack to track left sides of potential rectangles
+        std::stack<std::pair<int,int>> stack;
+        //Push the initial histogram bar onto the stack
+        stack.push({heights[0],0});
+
+        //Initialize a variable to store the max rectangle area
+        int ret = 0;
+
+        //Iterate through the histogram
+        for(int index = 0; index < heights.size(); index++){
+            //Initialize a variable to store the last index that we check against
+            int last = index;
+            
+            //If the current value at the current index is 
+            //less than the top of the stack
+            //calculate the area created by the rectangle from top to index-1
+            while(stack.size()&&stack.top().first>heights[index]){
+                //Calculate the area
+                int area = stack.top().first * (index-stack.top().second);
+                
+                //Set the last index to the top of the stack
+                last = stack.top().second;
+                
+                //If this is the largest rectangle
+                //record its size
+                ret = (area > ret)?area:ret;
+                
+                //Remove this left side
+                stack.pop();
+            }
+            
+            //Push the current height onto the stack
+            //BUT give it the last index that we checked
+            //This effectivly clamps the last index to the 
+            //height of the current index
+            stack.push({heights[index],last});
+        }
+
+        //Check the remaining rectangles against the end of the vector
+        while (stack.size()) {
+            //Caclulate the area
+            int area = stack.top().first * (heights.size()-stack.top().second);
+            
+            //If this is the largest rectangle
+            //record its size
+            ret = (area > ret)?area:ret;
+            
+            //Remove this left side
+            stack.pop();
+        }
+
+        //Return the largest rectangle's area
+        return ret;
+    }
+};
